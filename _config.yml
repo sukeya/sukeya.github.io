@@ -2,3 +2,6 @@ remote_theme: pages-themes/slate@v0.2.0
 
 title: 私の愛した数式
 description: 物理シミュレーションや数学に関するブログです。
+
+plugins:
+  - jekyll-sitemap
