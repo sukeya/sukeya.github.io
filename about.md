@@ -1,8 +1,9 @@
 ---
 layout: default 
 title: About
+permalink: /about/
 ---
 
-# Aboud page
-
-This page tells you a little bit about me.
+# 私について
+- GitHub [すけや](https://github.com/sukeya)
+- Twitter [@sukeya](https://twitter.com/ReZeroRemLover)

@@ -1,41 +1,19 @@
 ---
 layout: default
-title: Home
+title: {{ site.title }}
 ---
-## Welcome to GitHub Pages
-
-You can use the [editor on GitHub](https://github.com/sukeya/sukeya.github.io/edit/main/README.md) to maintain and preview the content for your website in Markdown files.
-
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
-
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/sukeya/sukeya.github.io/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+ご意見、ご感想はGitHubのIssueまたはTwitterにご連絡ください。
+# 投稿一覧
+{% assign posts_group_by_year = site.posts | group_by_exp:"post", "post.date | date: '%Y'"  %}
+{% for year in posts_group_by_year %}
+## {{ year.items.first.date | date: "%Y" }}年
+  {% for post in year.items %}
+    {% assign posts_group_by_month = year.items | group_by_exp:"post", "post.date | date: '%m'"  %}
+    {% for month in posts_group_by_month %}
+### {{ month.items.first.date | date: "%m" }}月
+        {% for post in month.items %}
+- {{ post.date | date: "%e" }}日 [{{ post.title }}]({{ post.url }})
+        {% endfor %}
+    {% endfor %}
+  {% endfor %}
+{% endfor %}
