@@ -3,6 +3,8 @@ layout: default
 title: {{ site.title }}
 ---
 ご意見、ご感想はGitHubのIssueまたはTwitterにご連絡ください。
+私については[こちら](#about)をご覧ください。
+
 # 投稿一覧
 {% assign posts_group_by_year = site.posts | group_by_exp:"post", "post.date | date: '%Y'"  %}
 {% for year in posts_group_by_year %}
@@ -17,3 +19,7 @@ title: {{ site.title }}
     {% endfor %}
   {% endfor %}
 {% endfor %}
+
+# 私について {#about}
+- GitHub [すけや](https://github.com/sukeya)
+- Twitter [@sukeya](https://twitter.com/ReZeroRemLover)
