@@ -23,3 +23,5 @@ title: {{ site.title }}
 # 私について {#about}
 - GitHub [すけや](https://github.com/sukeya)
 - Twitter [@sukeya](https://twitter.com/ReZeroRemLover)
+
+[トップに戻る](#)
