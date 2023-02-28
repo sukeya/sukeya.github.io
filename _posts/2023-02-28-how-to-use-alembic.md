@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  Alembicの使い方
-date:   2023-02-28 22:48:00 +0900
+date:   2023-02-28 12:00:00 +0900
 ---
 
 # Alembicとは
