@@ -13,7 +13,7 @@ title: {{ site.title }}
   {% for posts_at_month in posts_group_by_month %}
 ### {{ posts_at_month.items.first.date | date: "%m" }}月
     {% for post_at_month in posts_at_month.items %}
-- {{ post_at_month.date | date: "%e" }}日 [{{ post_at_month.title }}]({{ post.url }})
+- {{ post_at_month.date | date: "%e" }}日 [{{ post_at_month.title }}]({{ post_at_month.url }})
     {% endfor %}
   {% endfor %}
 {% endfor %}
