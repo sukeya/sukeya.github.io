@@ -1,9 +1,9 @@
 source "https://rubygems.org"
 
-gem "github-pages", "~> 228", group: :jekyll_plugins
+gem "github-pages", group: :jekyll_plugins
 
 group :jekyll_plugins do
-  gem 'jekyll-sitemap', "~> 1.4.0"
+  gem 'jekyll-sitemap'
 end
 
-gem "webrick", "~> 1.8"
+gem "webrick"
