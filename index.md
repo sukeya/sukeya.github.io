@@ -6,16 +6,14 @@ title: {{ site.title }}
 私については[こちら](#about)をご覧ください。
 
 # 投稿一覧
-{% assign posts_group_by_year = site.posts | group_by_exp:"post", "post.date | date: '%Y'"  %}
-{% for year in posts_group_by_year %}
-## {{ year.items.first.date | date: "%Y" }}年
-  {% for post in year.items %}
-    {% assign posts_group_by_month = year.items | group_by_exp:"post", "post.date | date: '%m'"  %}
-    {% for month in posts_group_by_month %}
-### {{ month.items.first.date | date: "%m" }}月
-        {% for post in month.items %}
-- {{ post.date | date: "%e" }}日 [{{ post.title }}]({{ post.url }})
-        {% endfor %}
+{% assign posts_group_by_year = site.posts | group_by_exp:"date", "date | date: '%Y'"  %}
+{% for posts_at_year in posts_group_by_year %}
+## {{ posts_at_year.items.first.date | date: "%Y" }}年
+  {% assign posts_group_by_month = posts_at_year.items | group_by_exp:"date", "date | date: '%m'"  %}
+  {% for posts_at_month in posts_group_by_month %}
+### {{ posts_at_month.items.first.date | date: "%m" }}月
+    {% for post_at_month in posts_at_month.items %}
+- {{ post_at_month.date | date: "%e" }}日 [{{ post_at_month.title }}]({{ post.url }})
     {% endfor %}
   {% endfor %}
 {% endfor %}
