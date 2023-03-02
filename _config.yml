@@ -1,10 +1,17 @@
-remote_theme: pages-themes/slate@v0.2.0
+remote_theme: pages-themes/minimal@v0.2.0
+minima:
+  skin: auto
+minima:
+  social_links:
+    - { platform: github,  user_url: "https://github.com/sukeya" }
+    - { platform: twitter, user_url: "https://twitter.com/ReZeroRemLover" }
 
 title: 私の愛した数式
 description: 物理シミュレーションや数学に関するブログです。
 
 plugins:
   - jekyll-sitemap
+  - jekyll-remote-theme
 
 github: [metadata]
 
