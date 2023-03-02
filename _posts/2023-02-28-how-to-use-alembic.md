@@ -81,8 +81,10 @@ Alembicがサポートしている時間のサンプリングは4種類ある。
 # 使用例
 ## ポリゴンメッシュの書き込み
 以下の2つのライブラリを使う。
-- Alembic::Abc Alembicの基本的なインターフェイスを提供する。
-- Alembic::AbcGeom Alembic::Abcを使って、特定の幾何学の物体(三角形とか)を実装する。
+|ライブラリ名|機能|
+|--|--|
+|Alembic::Abc|Alembicの基本的なインターフェイスを提供する。|
+|Alembic::AbcGeom|Alembic::Abcを使って、特定の幾何学の物体(三角形とか)を実装する。|
 
 各ライブラリにはそのライブラリが公開している全てをインクルードした、`All.h`という名前のヘッダーがある。
 なので、以下のようにインクルードすればよい。
@@ -93,78 +95,83 @@ Alembicがサポートしている時間のサンプリングは4種類ある。
 ```
 
 各ライブラリは自身と同じ名前の名前空間を持つ。
-簡潔さのために省略する。
+例えば、AbcGeomなら`Alembic::AbcGeom`である。
+
+次に`Archive`を作り、その`Archive`の子供として、静的なポリゴンメッシュを持つアニメーションを追加しよう。
 ```
-using namespace Alembic::AbcGeom; // Abc、AbcCoreAbstractを含む
+auto ostream = std::ofstream("polyMesh1.abc");
+if (!ostream)
+{
+  throw std::runtime_error("Cannot open polyMesh1.abc.");
+}
+
+// メタデータの作成
+auto abc_metadata = Alembic::Abc::MetaData();
+// 名前を"PolyMesh"にする。
+abc_metadata.set(Alembic::Abc::kUserDescriptionKey, "PolyMesh");
+
+auto archive_writer = Alembic::AbcCoreOgawa::WriteArchive();
+// ポインタを渡していることに注意！
+auto writer_ptr = archive_writer(&ostream, abc_metadata);
+// polyMesh1.abcへ書き込めるarchiveを作成
+auto archive = Alembic::Abc::OArchive(writer_ptr);
 ```
 
-次に`Archive`を作り、その`Archive`の子供として、静的な多角形メッシュを持つアニメーションを追加しよう。
-
+立方体\[-1, 1\] x \[-1, 1\] x \[-1, 1\]のPolyMesh Objectを作成する。"meshy"は`meshyObj`の名前。
 ```
-// OArchiveを作る。
-// std::iostreamsと同様に、(OArchive、IArchiveなど)入出力に対して、完全に分離され並列化可能なクラス階層を持つ。
-// これによって、動的なシーン操作フレームワークとは反対に、Alembicはストレージ、表現、アーカイブ化に対して重要な抽象化を保っている。
-OArchive archive(
-    // Archiveの書き込みを実装しているクラスのインスタンスを渡す。
-    Alembic::AbcCoreOgawa::WriteArchive(),
+auto abc_top = archive.getTop();
+auto meshyObj = OPolyMesh(abc_top, "meshy");
+```
 
-    // ファイル名
-    // OArchiveなので、このファイル名を持つアーカイブを作成する。
-    "polyMesh1.abc"
+UVと法線のSampleを作成する。
+その前に、UVの名前はSampleに入れる前に付ける必要がある。
+```
+auto& mesh = meshyObj.getSchema();
+mesh.setUVSourceName("test");
+```
+
+UVと法線は`GeomParams`を使う。
+`GeomParams`はインデックスがあってもなくても読み書きできる。
+`kFacevaryingScope`については、[参考文献](#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE)の3、4を参考。
+```
+// 立方体の頂点のUV。
+// AbcGeomのPolyMeshクラスのUVはインデックスを持たない頂点毎、面毎である。
+extern const size_t g_numUVs;
+extern const Abc::float32_t g_uvs[];
+auto uvsamp = OV2fGeomParam::Sample(
+    V2fArraySample((const V2f *)g_uvs, g_numUVs), // reinterpret_castを使うべき
+    kFacevaryingScope
+);
+// 立方体の頂点の法線
+// AbcGeomのPolyMeshクラスの法線はインデックスを持たない頂点毎、面毎である。
+// これは基本的にはRenderManの"facevarying"の型に合うストレージである。
+extern const size_t g_numNormals;
+extern const Abc::float32_t g_normals[];
+auto nsamp = ON3fGeomParam::Sample(
+    N3fArraySample((const N3f *)g_normals, g_numNormals),
+    kFacevaryingScope
 );
 ```
 
-
+メッシュのSampleを設定する。
 ```
-    // Create a PolyMesh class.
-    OPolyMesh meshyObj( OObject( archive, kTop ), "meshy" );
-    OPolyMeshSchema &mesh = meshyObj.getSchema();
-
-    // some apps can arbitrarily name their primary UVs, this function allows
-    // you to do that, and must be done before the first time you set UVs
-    // on the schema
-    mesh.setUVSourceName("test");
-
-    // UVs and Normals use GeomParams, which can be written or read
-    // as indexed or not, as you'd like.
-    OV2fGeomParam::Sample uvsamp( V2fArraySample( (const V2f *)g_uvs,
-                                                  g_numUVs ),
-                                  kFacevaryingScope );
-    // indexed normals
-    ON3fGeomParam::Sample nsamp( N3fArraySample( (const N3f *)g_normals,
-                                                 g_numNormals ),
-                                 kFacevaryingScope );
-
-    // Set a mesh sample.
-    // We're creating the sample inline here,
-    // but we could create a static sample and leave it around,
-    // only modifying the parts that have changed.
-    OPolyMeshSchema::Sample mesh_samp(
-        V3fArraySample( ( const V3f * )g_verts, g_numVerts ),
-        Int32ArraySample( g_indices, g_numIndices ),
-        Int32ArraySample( g_counts, g_numCounts ),
-        uvsamp, nsamp );
-
-    // not actually the right data; just making it up
-    Box3d cbox;
-    cbox.extendBy( V3d( 1.0, -1.0, 0.0 ) );
-    cbox.extendBy( V3d( -1.0, 1.0, 3.0 ) );
-
-    // Set the sample twice
-    mesh.set( mesh_samp );
-    mesh.set( mesh_samp );
-
-    // do it twice to make sure getChildBoundsProperty works correctly
-    mesh.getChildBoundsProperty().set( cbox );
-    mesh.getChildBoundsProperty().set( cbox );
-
-    // Alembic objects close themselves automatically when they go out
-    // of scope. So - we don't have to do anything to finish
-    // them off!
-    std::cout << "Writing: " << archive.getName() << std::endl;
-}
+auto mesh_samp = OPolyMeshSchema::Sample(
+    V3fArraySample((const V3f *)g_verts, g_numVerts),
+    Int32ArraySample(g_indices, g_numIndices),
+    Int32ArraySample(g_counts, g_numCounts),
+    uvsamp,
+    nsamp
+);
+mesh.set(mesh_samp);
 ```
+
+Alembicのオブジェクトはスコープから出るときに自動的に破棄される。
+なので、特に何もしなくて良い！
+
+プログラム全体は参考文献の2にある。
 
 # 参考文献
 1. [Introduction &mdash; Alembic 1.7.0 documentation](http://docs.alembic.io/python/examples.html#properties)
 2. [alembic/lib/Alembic/AbcGeom/Tests/PolyMeshTest.cpp](https://github.com/alembic/alembic/blob/master/lib/Alembic/AbcGeom/Tests/PolyMeshTest.cpp)
+3. [alembic/lib/Alembic/AbcGeom/GeometryScope.h](https://github.com/alembic/alembic/blob/master/lib/Alembic/AbcGeom/GeometryScope.h)
+4. [Geometric Primitives](https://renderman.pixar.com/resources/RenderMan_20/geometricPrimitives.html)
