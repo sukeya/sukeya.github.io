@@ -12,6 +12,7 @@ description: 物理シミュレーションや数学に関するブログです�
 plugins:
   - jekyll-sitemap
   - jekyll-remote-theme
+  - jekyll-seo-tag
 
 github: [metadata]
 
