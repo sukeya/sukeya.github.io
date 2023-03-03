@@ -1,4 +1,4 @@
-remote_theme: pages-themes/minimal@v0.2.0
+theme: minima
 minima:
   skin: auto
 minima:
@@ -16,3 +16,14 @@ plugins:
 github: [metadata]
 
 permalink: /:year/:month/:day/:title
+
+lsi: false
+safe: true
+#source: [your repo's top level directory]
+incremental: false
+highlighter: rouge
+gist:
+  noscript: false
+kramdown:
+  math_engine: mathjax
+  syntax_highlighter: rouge

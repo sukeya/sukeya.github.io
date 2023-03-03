@@ -3,35 +3,35 @@ layout: post
 title:  Alembicの使い方
 date:   2023-03-02 17:39:00 +0900
 ---
-# Alembicとは
+## Alembicとは
 Alembicはレンダリングや物理シミュレーションなどのCGソフトウェア間で共有できる、
 時間ごとの物体の幾何情報を保存したオープンソースのファイル形式である。
 
-# 主な概念
-## Archive
+## 主な概念
+### Archive
 ディスク上の実際のファイル。
 すべてのシーンデータを持つトップレベルのコンテナ。
 複数のObjectを持つ。
 
-## Object
+### Object
 Alembicの階層化の主な単位。
 例えば、Archiveをファイルシステム(例えば、ex4)とするなら、Objectはディレクトリである。
 Objectは直接データを持たないが、より直接的にデータを持つ構造体のための構造を提供する。
 複数のPropertyを持つ。
 Archive直下のObject(TopObject)以外の全てのObjectは他のObjectの子供である。
 
-### Schema
+#### Schema
 ある複雑なObjectを実装するよう期待されたPropertyの最小限の集まり。
 SchemaはCompound Propertyである。
 
-## Property
+### Property
 複数のSampleを持つ。
 SimpleとCompoundの2種類の型がある。
 
-### Simple Property
+#### Simple Property
 ScalarとArrayの2種類ある。
 
-#### Scalar Property
+##### Scalar Property
 型と要素の数が固定され、書く前にわかる(?)複数のSampleを持つ。
 例として、以下がある。
 - FloatProperty (各Sampleは32ビットの浮動小数点数; 長さ 1)
@@ -44,7 +44,7 @@ ScalarとArrayの2種類ある。
 
 ScalarPropertyの最大の長さは256である。
 
-#### Array Properties
+##### Array Properties
 型が固定され、書く前にわかる(?)複数のSampleを持つが、長さが可変のSimple Propertyである。
 例として、以下がある。
 -  DoubleArrayProperty (各Sampleは可変長配列で, 各配列要素は1つの64ビットの浮動小数点数)
@@ -55,31 +55,31 @@ ScalarPropertyの最大の長さは256である。
 
 ただし、同じSampleを保存しない。
 
-### Compound Property
+#### Compound Property
 (Compound Propertyを含む)複数のPropertyを持つ特別なProperty(というよりコンテナに近い)。
 
-## Sample
+### Sample
 生のデータとある時刻を一つに集約したコンテナである。
 Propertyと同様に、SampleもScalarとArrayの2種類ある。
 
-## Time Sampling
+### Time Sampling
 Alembicファイルは異なる時間のPropertyのSampleの列からなる。
 Alembicがサポートしている時間のサンプリングは4種類ある。
 
-### Uniform
+#### Uniform
 構築時に定義された時間刻み毎にサンプリングする。
 
-### Identity
+#### Identity
 デフォルト。各サンプルのインデックスがサンプリングの時刻と同じ。
 
-### Cyclic
+#### Cyclic
 時間刻み幅毎にある有限個だけサンプリングする: 例えば、シャッターの開閉。
 
-### Acyclic
+#### Acyclic
 時間刻み幅が任意で、どんなCyclicにも従わない。
 
-# 使用例
-## ポリゴンメッシュの書き込み
+## 使用例
+### ポリゴンメッシュの書き込み
 以下の2つのライブラリを使う。
 
 |ライブラリ名|機能|
@@ -171,7 +171,7 @@ Alembicのオブジェクトはスコープから出るときに自動的に破�
 
 プログラム全体は参考文献の2にある。
 
-# 参考文献
+## 参考文献
 1. [Introduction &mdash; Alembic 1.7.0 documentation](http://docs.alembic.io/python/examples.html#properties)
 2. [alembic/lib/Alembic/AbcGeom/Tests/PolyMeshTest.cpp](https://github.com/alembic/alembic/blob/master/lib/Alembic/AbcGeom/Tests/PolyMeshTest.cpp)
 3. [alembic/lib/Alembic/AbcGeom/GeometryScope.h](https://github.com/alembic/alembic/blob/master/lib/Alembic/AbcGeom/GeometryScope.h)
