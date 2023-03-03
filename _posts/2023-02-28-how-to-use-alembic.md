@@ -3,6 +3,8 @@ layout: post
 title:  Alembicの使い方
 date:   2023-03-02 17:39:00 +0900
 ---
+この記事はAlembicのv1.8.3を参照している。
+
 ## Alembicとは
 Alembicはレンダリングや物理シミュレーションなどのCGソフトウェア間で共有できる、
 時間ごとの物体の幾何情報を保存したオープンソースのファイル形式である。
@@ -100,20 +102,13 @@ Alembicがサポートしている時間のサンプリングは4種類ある。
 
 次に`Archive`を作り、その`Archive`の子供として、静的なポリゴンメッシュを持つアニメーションを追加しよう。
 ```
-auto ostream = std::ofstream("polyMesh1.abc");
-if (!ostream)
-{
-  throw std::runtime_error("Cannot open polyMesh1.abc.");
-}
-
 // メタデータの作成
 auto abc_metadata = Alembic::Abc::MetaData();
 // 名前を"PolyMesh"にする。
 abc_metadata.set(Alembic::Abc::kUserDescriptionKey, "PolyMesh");
 
 auto archive_writer = Alembic::AbcCoreOgawa::WriteArchive();
-// ポインタを渡していることに注意！
-auto writer_ptr = archive_writer(&ostream, abc_metadata);
+auto writer_ptr = archive_writer("polyMesh1.abc", abc_metadata);
 // polyMesh1.abcへ書き込めるarchiveを作成
 auto archive = Alembic::Abc::OArchive(writer_ptr);
 ```
@@ -155,6 +150,8 @@ auto nsamp = ON3fGeomParam::Sample(
 ```
 
 メッシュのSampleを設定する。
+引数は先頭から順に、頂点の座標と頂点の数、面を構成する頂点のインデックスのリストとそのリストのサイズ、面を構成する頂点の数のリストとそのリストのサイズである。
+速度は`OPolyMeshSchema::Sample`の`setVelocityies`メンバ関数で設定する。
 ```
 auto mesh_samp = OPolyMeshSchema::Sample(
     V3fArraySample((const V3f *)g_verts, g_numVerts),
@@ -170,6 +167,44 @@ Alembicのオブジェクトはスコープから出るときに自動的に破�
 なので、特に何もしなくて良い！
 
 プログラム全体は参考文献の2にある。
+
+### ポリゴンメッシュの読み込み
+インクルードするヘッダーと名前空間は前例を参照。
+
+読み込み用アーカイブを作成する。
+```
+auto archive_reader = Alembic::AbcCoreOgawa::ReadArchive();
+auto reader_ptr = archive_reader("polyMesh1.abc");
+auto archive = Alembic::Abc::IArchive(reader_ptr);
+```
+
+UV, 法線を取得する。
+```
+auto meshyObj = IPolyMesh(archive.getTop(), "meshy");
+IPolyMeshSchema &mesh = meshyObj.getSchema();
+IN3fGeomParam N = mesh.getNormalsParam();
+IV2fGeomParam uv = mesh.getUVsParam();
+```
+
+頂点の座標のリスト、面を構成する頂点のインデックスのリスト、面を構成する頂点の数のリスト、AABB、速度のリスト(もしあれば)を取得する。
+```
+IPolyMeshSchema::Sample mesh_samp;
+mesh.get(mesh_samp);
+```
+
+`getExpandedValue()`はオプションで`ISampleSelector`を取る。
+`getVals()`は`TypedArraySamplePtr`を返す。
+```
+N3fArraySamplePtr nsp = N.getExpandedValue().getVals();
+```
+
+各法線は以下のようにして取得できる。
+```
+for ( size_t i = 0 ; i < nsp->size() ; ++i )
+{
+    std::cout << i << "th normal: " << (*nsp)[i] << std::endl;
+}
+```
 
 ## 参考文献
 1. [Introduction &mdash; Alembic 1.7.0 documentation](http://docs.alembic.io/python/examples.html#properties)
