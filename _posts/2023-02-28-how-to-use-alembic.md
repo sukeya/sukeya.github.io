@@ -192,10 +192,9 @@ IPolyMeshSchema::Sample mesh_samp;
 mesh.get(mesh_samp);
 ```
 
-`getExpandedValue()`はオプションで`ISampleSelector`を取る。
-`getVals()`は`TypedArraySamplePtr`を返す。
+以下のコードで、法線のリストのポインター(正確には`N3fArraySamplePtr`)を取得できる。
 ```
-N3fArraySamplePtr nsp = N.getExpandedValue().getVals();
+auto nsp = N.getExpandedValue().getVals();
 ```
 
 各法線は以下のようにして取得できる。
@@ -204,6 +203,32 @@ for ( size_t i = 0 ; i < nsp->size() ; ++i )
 {
     std::cout << i << "th normal: " << (*nsp)[i] << std::endl;
 }
+```
+
+インデックスを付けたいときは、`getExpandedValue`の代わりに`getIndexedValue`を使う。
+```
+auto uvsamp = uv.getIndexedValue();
+```
+
+値は以下のように取得する。
+```
+V2f uv2 = (*(uvsamp.getVals()))[2];
+TESTING_ASSERT( uv2 == V2f( 1.0f, 1.0f ) );
+```
+
+頂点のリストのサイズは以下で取得できる。
+```
+mesh_samp.getPositions()->size();
+```
+
+最初の頂点の座標は以下で取得できる。
+```
+(*(mesh_samp.getPositions()))[0];
+```
+
+取得するだけなら、以下のように簡潔に書ける。
+```
+mesh_samp.getPositions()->get()[0];
 ```
 
 ## 参考文献
