@@ -6,7 +6,7 @@ date:   2023-03-02 17:39:00 +0900
 この記事はAlembicのv1.8.3を参照している。
 
 ## Alembicとは
-Alembicはレンダリングや物理シミュレーションなどのCGソフトウェア間で共有できる、
+Alembicはレンダリングや物理シミュレーションなどを行うCGソフトウェア間で共有できる、
 時間ごとの物体の幾何情報を保存したオープンソースのファイル形式である。
 
 ## 主な概念
@@ -16,7 +16,7 @@ Alembicはレンダリングや物理シミュレーションなどのCGソフ�
 複数のObjectを持つ。
 
 ### Object
-Alembicの階層化の主な単位。
+Alembicの階層の主な単位。
 例えば、Archiveをファイルシステム(例えば、ex4)とするなら、Objectはディレクトリである。
 Objectは直接データを持たないが、より直接的にデータを持つ構造体のための構造を提供する。
 複数のPropertyを持つ。
@@ -131,7 +131,7 @@ UVと法線は`GeomParams`を使う。
 `kFacevaryingScope`については、[参考文献](#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE)の3、4を参考。
 ```
 // 立方体の頂点のUV。
-// AbcGeomのPolyMeshクラスのUVはインデックスを持たない頂点毎、面毎である。
+// UVの値は指定した面を構成する頂点の順に、各面の各頂点の値を列挙する。
 extern const size_t g_numUVs;
 extern const Abc::float32_t g_uvs[];
 auto uvsamp = OV2fGeomParam::Sample(
@@ -139,7 +139,7 @@ auto uvsamp = OV2fGeomParam::Sample(
     kFacevaryingScope
 );
 // 立方体の頂点の法線
-// AbcGeomのPolyMeshクラスの法線はインデックスを持たない頂点毎、面毎である。
+// 法線の値は指定した面を構成する頂点の順に、各面の各頂点の値を列挙する。
 // これは基本的にはRenderManの"facevarying"の型に合うストレージである。
 extern const size_t g_numNormals;
 extern const Abc::float32_t g_normals[];
