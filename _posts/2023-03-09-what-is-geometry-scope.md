@@ -3,7 +3,7 @@ layout: post
 title:  Geometry Scopeとは
 date:   2023-03-09 16:20:00 +0900
 ---
-「[Alembicの使い方]({% post_url ./2023-02-28-how-to-use-alembic.md %})」のポリゴンメッシュの読み込みの例で、UVマップと法線のSampleの作成で`GeometryScope`を指定した。
+「[Alembicの使い方]({% post_url /github/workspace/_posts/2023-02-28-how-to-use-alembic.md %})」のポリゴンメッシュの読み込みの例で、UVマップと法線のSampleの作成で`GeometryScope`を指定した。
 指定方法の参照先として参考文献にRenderManのURLを載せたが、私自身も使わざるを得なくなり、「Alembicの使い方」が肥大化するのを防ぐため新たにポストを作ることにした。
 
 ## 結論
