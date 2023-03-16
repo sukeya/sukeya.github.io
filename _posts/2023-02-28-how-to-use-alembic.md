@@ -4,6 +4,8 @@ title:  Alembicの使い方
 date:   2023-03-02 17:39:00 +0900
 ---
 この記事はAlembicのv1.8.3を参照している。
+意味がわからなくても最後まで目を通してから、もう一度読むことをお勧めする。
+私が理解している`PolyMesh`(ポリゴンメッシュ)と`Xform`(メッシュの変形)に関連する項目のみ取り上げる。
 
 ## Alembicとは
 Alembicはレンダリングや物理シミュレーションなどを行うCGソフトウェア間で共有できる、
@@ -13,21 +15,21 @@ Alembicはレンダリングや物理シミュレーションなどを行うCG�
 ### Archive
 ディスク上の実際のファイル。
 すべてのシーンデータを持つトップレベルのコンテナ。
-複数のObjectを持つ。
+1つの`Object`を持つ。
 
 ### Object
 Alembicの階層の主な単位。
-例えば、Archiveをファイルシステム(例えば、ex4)とするなら、Objectはディレクトリである。
-Objectは直接データを持たないが、より直接的にデータを持つ構造体のための構造を提供する。
-複数のPropertyを持つ。
-Archive直下のObject(TopObject)以外の全てのObjectは他のObjectの子供である。
+`Object`は`Archive`の`Object`をルートとした多分木になっており、親と子供たちを取得することが出来る。
+1つの`CompoundProperty`を持つ。
+`ObjectHeader`と呼ばれるメタデータを持ち、`SchemaObject`を判定するために使われる。
 
-#### Schema
-ある複雑なObjectを実装するよう期待されたPropertyの最小限の集まり。
-SchemaはCompound Propertyである。
+### Schema
+ある複雑なオブジェクト(例: ポリゴンメッシュ)を実装するために作られた`CompoundProperty`。
+
+#### SchemaObject
+`Schema`を`CompundProperty`として持つ`Object`のこと。
 
 ### Property
-複数のSampleを持つ。
 SimpleとCompoundの2種類の型がある。
 
 #### Simple Property
@@ -46,26 +48,33 @@ ScalarとArrayの2種類ある。
 
 ScalarPropertyの最大の長さは256である。
 
-##### Array Properties
-型が固定され、書く前にわかる(?)複数のSampleを持つが、長さが可変のSimple Propertyである。
+##### TypedArrayProperty
+時刻毎の`Sample`を持つ`Property`。
+`ArrayProperty`もあるが、主に使うのはこっちの方。
+テンプレートパラメータに値の型(正確には[TypedPropertyTraits.h](https://github.com/alembic/alembic/blob/master/lib/Alembic/Abc/TypedPropertyTraits.h)で定義された型)が入っている。
 例として、以下がある。
--  DoubleArrayProperty (各Sampleは可変長配列で, 各配列要素は1つの64ビットの浮動小数点数)
--  V3fArrayProperty (各Sampleは可変長配列で, 各配列要素は1つのImath::Vec3f(3つの32ビットの浮動小数点数))
--  M44fArrayProperty (各Sampleは可変長配列で, 各配列要素は1つのImath::M44f(16個の32ビットの浮動小数点数))
+-  `DoubleArrayProperty` (各時刻で、要素が1つの64ビットの浮動小数点数の配列を持つ)
+-  `V3fArrayProperty` ((各時刻で、要素が1つの`Imath::Vec3f`(3つの32ビットの浮動小数点数)の配列を持つ)
+-  `M44fArrayProperty` (各時刻で、要素が1つのImath::M44f(16個の32ビットの浮動小数点数)の配列を持つ)
 - 多角形メッシュの頂点のリスト
 - 流体シミュレーションの粒子のリスト
 
 ただし、同じSampleを保存しない。
 
-#### Compound Property
-(Compound Propertyを含む)複数のPropertyを持つ特別なProperty(というよりコンテナに近い)。
+値を取得するには`SampleSelector`という、ある時点の時刻を表すクラスを与える必要がある。
+
+#### CompoundProperty
+(Compound Propertyを含む)複数のPropertyを持つProperty。
 
 ### Sample
-生のデータとある時刻を一つに集約したコンテナである。
+ある時刻の生のデータ。
 Propertyと同様に、SampleもScalarとArrayの2種類ある。
+例として、以下がある。
+- `DoubleArraySample` (要素が1つの64ビットの浮動小数点数の配列)
+- `V3fArraySample` (要素が1つの`Imath::Vec3f`(3つの32ビットの浮動小数点数)の配列)
+- `M44fArraySample` (要素が1つの`Imath::M44f`(16個の32ビットの浮動小数点数)の配列)
 
 ### Time Sampling
-Alembicファイルは異なる時間のPropertyのSampleの列からなる。
 Alembicがサポートしている時間のサンプリングは4種類ある。
 
 #### Uniform
