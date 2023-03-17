@@ -24,24 +24,19 @@ Alembicは以下のように機能毎にディレクトリと名前空間が分�
 |AbcCoreOgawa|Ogawaをファイル形式に使った場合の入出力の実装|
 |AbcGeom|Alembic::Abcを使って、幾何学の物体(`PolyMesh`とか)や`Xform`を実装している|
 
+### ファイルの入出力について
 OgawaはHDF5よりシングルスレッドだと平均で5倍、マルチスレッドだと同じ操作を行った場合と比較して25倍速く読み込む。また、ファイルサイズが平均で5-15%小さくなり、小さいオブジェクトが多いほどファイルサイズも小さくなる。特に理由がなければ、Ogawaを使うことをお勧めする。
 
-Here are some examples of what you can do via layering:
+### AbcCoreLayerで出来ること
+以下の表に列挙する。
 
-You can add additional properties to a shape.
-Example: Adding UVs to a polymesh that currently lack them
-
-You can override properties.
-Example: Override static points on a polymesh with animated points.
-
-You can add new objects.
-Example: Add a shape to an existing hierarchy.
-
-You can prune objects.
-Example: Remove shapes you don't like, or entire branches of the hierarchy.
-
-You can prune properties.
-Example: Removing incorrect normals.
+|出来ること|例|
+|--|--|
+|形状に追加のプロパティを追加できる|UVがないポリゴンメッシュにUVを追加|
+|プロパティの上書き|ポリゴンメッシュ上の静的な点を動く点に変更|
+|新しいオブジェクトの追加|新しい形状を既存の階層に追加|
+|オブジェクトの削除|好みじゃない形状や階層のブランチ全体の削除|
+|プロパティの削除|不正な法線の削除|
 
 You can replace an object hierarchy with a different one.
 Example:  You can replace separate curves groups with one big one.
