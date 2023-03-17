@@ -19,9 +19,11 @@ Alembicは以下のように機能毎にディレクトリと名前空間が分�
 |--|--|
 |Alembic::Abc|Alembicの基本的なインターフェイスを提供する。|
 |Alembic::AbcCoreAbstract|時間に関するクラス以外ユーザーが見る必要はない|
-|Alembic::AbcCoreHDF5|HDF5をファイル形式に使う場合の入出力を実装している|
-|Alembic::AbcCoreOgawa|ファイルの入出力の実装|
+|Alembic::AbcCoreHDF5|HDF5をファイル形式に使った場合の入出力の実装|
+|Alembic::AbcCoreOgawa|Ogawaをファイル形式に使った場合の入出力の実装|
 |Alembic::AbcGeom|Alembic::Abcを使って、幾何学の物体(`PolyMesh`とか)や`Xform`を実装している|
+
+OgawaはHDF5よりシングルスレッドだと平均で5倍、マルチスレッドだと同じ操作を行った場合と比較して25倍速く読み込む。また、ファイルサイズが平均で5-15%小さくなり、小さいオブジェクトが多いほどファイルサイズも小さくなる。特に理由がなければ、Ogawaを使うことをお勧めする。
 
 ## 主な概念
 ### Archive
