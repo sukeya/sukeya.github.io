@@ -24,7 +24,7 @@ Alembicの階層の主な単位。
 `ObjectHeader`と呼ばれるメタデータを持ち、`SchemaObject`を判定するために使われる。
 
 ### Schema
-ある複雑なオブジェクト(例: ポリゴンメッシュ)を実装するために作られた`CompoundProperty`。
+ポリゴンメッシュような、ある複雑なオブジェクトを実装するために作られた`CompoundProperty`。
 
 #### SchemaObject
 `Schema`を`CompundProperty`として持つ`Object`のこと。
@@ -74,20 +74,29 @@ Propertyと同様に、SampleもScalarとArrayの2種類ある。
 - `V3fArraySample` (要素が1つの`Imath::Vec3f`(3つの32ビットの浮動小数点数)の配列)
 - `M44fArraySample` (要素が1つの`Imath::M44f`(16個の32ビットの浮動小数点数)の配列)
 
-### Time Sampling
-Alembicがサポートしている時間のサンプリングは4種類ある。
+### TimeSampling
+Propertyが持つ時間を管理するクラス。
+時間の配列と`TimeSamplingType`を持つ。
+`TimeSamplingType`の種類は以下の通り。
 
-#### Uniform
-構築時に定義された時間刻み毎にサンプリングする。
+|TimeSamplingType|意味|
+|--|--|
+|一様|Sample間の時間間隔が一定|
+|周期的|Sample間の時間間隔が周期的に変化する|
+|不規則|Sample間の時間間隔が不規則に変化する|
 
-#### Identity
-デフォルト。各サンプルのインデックスがサンプリングの時刻と同じ。
+### SampleSelector
+Property内のSampleを取得するために使うクラス。
+`TimeSampling`が持つ時間の配列のインデックスを直接与えるか、時刻を与えることで作る。
+時刻を渡す場合、追加で`TimeIndexType`フラグを渡すこともできる。
+`TimeIndexType`フラグの意味は以下の通り。
 
-#### Cyclic
-時間刻み幅毎にある有限個だけサンプリングする: 例えば、シャッターの開閉。
+|TimeIndexType|意味|
+|--|--|
+|kNearIndex|与えられた時刻に最も近い時刻のインデックス|
+|kFloorIndex|与えられた時刻より大きくない、最大の時刻のインデックス|
+|kCeilIndex|与えられた時刻より小さくない、最小の時刻のインデックス|
 
-#### Acyclic
-時間刻み幅が任意で、どんなCyclicにも従わない。
 
 ## 使用例
 ### ポリゴンメッシュの書き込み
