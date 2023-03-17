@@ -17,13 +17,39 @@ Alembicは以下のように機能毎にディレクトリと名前空間が分�
 
 |名前空間|内容|
 |--|--|
-|Alembic::Abc|Alembicの基本的なインターフェイスを提供する。|
-|Alembic::AbcCoreAbstract|時間に関するクラス以外ユーザーが見る必要はない|
-|Alembic::AbcCoreHDF5|HDF5をファイル形式に使った場合の入出力の実装|
-|Alembic::AbcCoreOgawa|Ogawaをファイル形式に使った場合の入出力の実装|
-|Alembic::AbcGeom|Alembic::Abcを使って、幾何学の物体(`PolyMesh`とか)や`Xform`を実装している|
+|Abc|Alembicの基本的なインターフェイスを提供する。|
+|AbcCoreAbstract|時間に関するクラス以外ユーザーが見る必要はない|
+|AbcCoreHDF5|HDF5をファイル形式に使った場合の入出力の実装|
+|AbcCoreLayer|Alembicファイルへの変更を別のAlembicファイルに書き込んだり、複数のAlembicファイルを読み込んで一つのAlembicファイルにまとめる機能の実装|
+|AbcCoreOgawa|Ogawaをファイル形式に使った場合の入出力の実装|
+|AbcGeom|Alembic::Abcを使って、幾何学の物体(`PolyMesh`とか)や`Xform`を実装している|
 
 OgawaはHDF5よりシングルスレッドだと平均で5倍、マルチスレッドだと同じ操作を行った場合と比較して25倍速く読み込む。また、ファイルサイズが平均で5-15%小さくなり、小さいオブジェクトが多いほどファイルサイズも小さくなる。特に理由がなければ、Ogawaを使うことをお勧めする。
+
+Here are some examples of what you can do via layering:
+
+You can add additional properties to a shape.
+Example: Adding UVs to a polymesh that currently lack them
+
+You can override properties.
+Example: Override static points on a polymesh with animated points.
+
+You can add new objects.
+Example: Add a shape to an existing hierarchy.
+
+You can prune objects.
+Example: Remove shapes you don't like, or entire branches of the hierarchy.
+
+You can prune properties.
+Example: Removing incorrect normals.
+
+You can replace an object hierarchy with a different one.
+Example:  You can replace separate curves groups with one big one.
+
+You can replace property hierarchy.
+Example:  Don't like a bunch of properties in user properties?  It can be replaced with a bunch of other properties, without needing to prune individual properties.
+
+AbcCoreLayer provides a SetPrune and SetReplace convenience function in Util.h, for setting up the MetaData appropriately.
 
 ## 主な概念
 ### Archive
