@@ -11,6 +11,18 @@ date:   2023-03-02 17:39:00 +0900
 Alembicはレンダリングや物理シミュレーションなどを行うCGソフトウェア間で共有できる、
 時間ごとの物体の幾何情報を保存したオープンソースのファイル形式である。
 
+## ライブラリの構成
+Alembicは以下のように機能毎にディレクトリと名前空間が分けられている。
+以下の表に必要なものだけを抜粋した。
+
+|名前空間|内容|
+|--|--|
+|Alembic::Abc|Alembicの基本的なインターフェイスを提供する。|
+|Alembic::AbcCoreAbstract|時間に関するクラス以外ユーザーが見る必要はない|
+|Alembic::AbcCoreHDF5|HDF5をファイル形式に使う場合の入出力を実装している|
+|Alembic::AbcCoreOgawa|ファイルの入出力の実装|
+|Alembic::AbcGeom|Alembic::Abcを使って、幾何学の物体(`PolyMesh`とか)や`Xform`を実装している|
+
 ## 主な概念
 ### Archive
 ディスク上の実際のファイル。
@@ -55,7 +67,7 @@ ScalarPropertyの最大の長さは256である。
 例として、以下がある。
 -  `DoubleArrayProperty` (各時刻で、要素が1つの64ビットの浮動小数点数の配列を持つ)
 -  `V3fArrayProperty` ((各時刻で、要素が1つの`Imath::Vec3f`(3つの32ビットの浮動小数点数)の配列を持つ)
--  `M44fArrayProperty` (各時刻で、要素が1つのImath::M44f(16個の32ビットの浮動小数点数)の配列を持つ)
+-  `M44fArrayProperty` (各時刻で、要素が1つの`Imath::M44f`(16個の32ビットの浮動小数点数)の配列を持つ)
 - 多角形メッシュの頂点のリスト
 - 流体シミュレーションの粒子のリスト
 
@@ -64,7 +76,7 @@ ScalarPropertyの最大の長さは256である。
 値を取得するには`SampleSelector`という、ある時点の時刻を表すクラスを与える必要がある。
 
 #### CompoundProperty
-(Compound Propertyを含む)複数のPropertyを持つProperty。
+(`CompoundProperty`を含む)複数のPropertyを持つProperty。
 
 ### Sample
 ある時刻の生のデータ。
@@ -100,23 +112,13 @@ Property内のSampleを取得するために使うクラス。
 
 ## 使用例
 ### ポリゴンメッシュの書き込み
-以下の2つのライブラリを使う。
-
-|ライブラリ名|機能|
-|--|--|
-|Alembic::Abc|Alembicの基本的なインターフェイスを提供する。|
-|Alembic::AbcGeom|Alembic::Abcを使って、特定の幾何学の物体(三角形とか)を実装する。|
-
-各ライブラリにはそのライブラリが公開している全てをインクルードした、`All.h`という名前のヘッダーがある。
+各ディレクトリには、そのライブラリが公開している全てをインクルードした`All.h`という名前のヘッダーがある。
 なので、以下のようにインクルードすればよい。
 ```
 // Alembic Includes
 #include <Alembic/AbcGeom/All.h>
 #include <Alembic/AbcCoreOgawa/All.h>
 ```
-
-各ライブラリは自身と同じ名前の名前空間を持つ。
-例えば、AbcGeomなら`Alembic::AbcGeom`である。
 
 次に`Archive`を作り、その`Archive`の子供として、静的なポリゴンメッシュを持つアニメーションを追加しよう。
 ```
