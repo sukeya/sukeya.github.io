@@ -37,14 +37,10 @@ OgawaはHDF5よりシングルスレッドだと平均で5倍、マルチスレ�
 |新しいオブジェクトの追加|新しい形状を既存の階層に追加|
 |オブジェクトの削除|好みじゃない形状や階層のブランチ全体の削除|
 |プロパティの削除|不正な法線の削除|
+|オブジェクト階層の置き換え|分けられた曲線のグループを一つの大きな曲線に置き換える|
+|プロパティ階層の置き換え|ユーザープロパティ内のプロパティを他のプロパティに置き換える|
 
-You can replace an object hierarchy with a different one.
-Example:  You can replace separate curves groups with one big one.
-
-You can replace property hierarchy.
-Example:  Don't like a bunch of properties in user properties?  It can be replaced with a bunch of other properties, without needing to prune individual properties.
-
-AbcCoreLayer provides a SetPrune and SetReplace convenience function in Util.h, for setting up the MetaData appropriately.
+AbcCoreLayerは`MetaData`を適切に設定するために、`Util.h`内に`SetPrune`と`SetReplace`という便利な関数を提供している。
 
 ## 主な概念
 ### Archive
