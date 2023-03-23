@@ -112,9 +112,9 @@ Propertyが持つ時間を管理するクラス。
 
 |TimeSamplingType|意味|
 |--|--|
-|一様|Sample間の時間間隔が一定|
-|周期的|Sample間の時間間隔が周期的に変化する|
-|不規則|Sample間の時間間隔が不規則に変化する|
+|Uniform(一様)|Sample間の時間間隔が一定|
+|Cyclic(周期的)|Sample間の時間間隔が周期的に変化する|
+|Acyclic(不規則)|Sample間の時間間隔が不規則に変化する|
 
 ### SampleSelector
 Property内のSampleを取得するために使うクラス。
