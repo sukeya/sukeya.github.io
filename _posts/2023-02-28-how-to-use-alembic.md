@@ -85,7 +85,7 @@ ScalarPropertyの最大の長さは256である。
 テンプレートパラメータに値の型(正確には[TypedPropertyTraits.h](https://github.com/alembic/alembic/blob/master/lib/Alembic/Abc/TypedPropertyTraits.h)で定義された型)が入っている。
 例として、以下がある。
 -  `DoubleArrayProperty` (各時刻で、要素が1つの64ビットの浮動小数点数の配列を持つ)
--  `V3fArrayProperty` ((各時刻で、要素が1つの`Imath::Vec3f`(3つの32ビットの浮動小数点数)の配列を持つ)
+-  `V3fArrayProperty` (各時刻で、要素が1つの`Imath::Vec3f`(3つの32ビットの浮動小数点数)の配列を持つ)
 -  `M44fArrayProperty` (各時刻で、要素が1つの`Imath::M44f`(16個の32ビットの浮動小数点数)の配列を持つ)
 - 多角形メッシュの頂点のリスト
 - 流体シミュレーションの粒子のリスト
@@ -112,9 +112,9 @@ Propertyが持つ時間を管理するクラス。
 
 |TimeSamplingType|意味|
 |--|--|
-|Uniform(一様)|Sample間の時間間隔が一定|
-|Cyclic(周期的)|Sample間の時間間隔が周期的に変化する|
-|Acyclic(不規則)|Sample間の時間間隔が不規則に変化する|
+|Uniform (一様)|Sample間の時間間隔が一定|
+|Cyclic (周期的)|Sample間の時間間隔が周期的に変化する|
+|Acyclic (不規則)|Sample間の時間間隔が不規則に変化する|
 
 ### SampleSelector
 Property内のSampleを取得するために使うクラス。
@@ -127,6 +127,54 @@ Property内のSampleを取得するために使うクラス。
 |kNearIndex|与えられた時刻に最も近い時刻のインデックス|
 |kFloorIndex|与えられた時刻より大きくない、最大の時刻のインデックス|
 |kCeilIndex|与えられた時刻より小さくない、最小の時刻のインデックス|
+
+
+## 主なスキーマオブジェクト
+### PolyMesh
+
+### Xform
+変形を管理するスキーマオブジェクト。
+子に変形させる`PolyMesh`や自身を持つ。
+`Xform`が親子である場合、親が変形させた後に子供が変形させる(テストを見る限り、この変形しか見当たらなかった)。
+変形の順序は`getInheritsXforms`関数で判定できる。
+
+#### XformSchema
+`Xform`のスキーマは`XformSchema`で、`getValue`関数で`XformSample`を取得できる。
+
+#### XformSample
+`XformSample`は`XformOp`のリストを持つ。
+`getNumOps`関数で総数を取得し、`operator[]`関数でインスタンスを取得する。
+
+直に値を取得することもできるが、操作が追加された順に取り出さなければならないため、用心して使う事。
+
+`getNumOpChannels`関数で自身が持つ`XformOp`の`channel`の総数がわかる。
+
+#### XformOp
+`XformOp`は平行移動、回転、拡大縮小、線形変換を表す。
+操作の種類は`getType`関数で判定できる。
+列挙値と意味は以下の通り。
+
+|XformOperationType|意味|
+|--|--|
+|kScaleOperation|拡大縮小|
+|kTranslateOperation|平行移動|
+|kRotateOperation|回転|
+|kMatrixOperation|行列|
+|kRotateXOperation|x軸回転|
+|kRotateYOperation|y軸回転|
+|kRotateZOperation|z軸回転|
+
+`XformOp`は`channel`という`double`のリストを持ち、各操作を表現するために使われる。
+各操作の`channel`数は以下の通り。
+
+|操作|`channel`数|
+|--|--|
+|平行移動と拡大縮小|3|
+|回転|4|
+|行列|16|
+|軸回転|1|
+
+行列は行優先で格納される。
 
 
 ## 使用例
