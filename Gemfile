@@ -8,3 +8,4 @@ end
 
 gem "webrick"
 gem "minima"
+gem 'jekyll-seo-tag'
