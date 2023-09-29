@@ -14,7 +14,7 @@ date:   2023-03-09 16:20:00 +0900
 |kConstantScope|`Polygon`全体で1つだけの値|
 |kUniformScope|各多角形に対して1つの値|
 |kVaryingScope, kVertexScope|各多角形の頂点に対して1つの値があり、多角形内で線形に補間される|
-|kFacevaryingScope|kVaryingScopeと同様に多角形の頂点に1つの値があり、多角形内で線形に保管されるが、多角形の頂点の値は多角形毎に異なってもよい|
+|kFacevaryingScope|kVaryingScopeと同様に多角形の頂点に1つの値があり、多角形内で線形に補間されるが、多角形の頂点の値は多角形毎に異なってもよい|
 
 ## 余談
 `GeneralPolygon`とは、穴と凹みを持つ多角形のリストである。
