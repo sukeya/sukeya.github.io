@@ -21,5 +21,5 @@ date:   2023-03-09 16:20:00 +0900
 例えば、ブーメランのようにある内角が180度を超えている多角形やアメリカ国防総省の建物のように多角形の穴が空いている多角形である。
 
 ## 参考
-1. https://renderman.pixar.com/resources/RenderMan_20/geometricPrimitives.html
-2. https://github.com/alembic/alembic/blob/master/lib/Alembic/AbcGeom/GeometryScope.h
+1. [Geometric Primitives](https://renderman.pixar.com/resources/RenderMan_20/geometricPrimitives.html)
+2. [Alembic/AbcGeom/GeometryScope.h](https://github.com/alembic/alembic/blob/master/lib/Alembic/AbcGeom/GeometryScope.h)
