@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  thrust::device_eventの実装場所
-date:   2023-10-02 11:10:00 +0900
+date:   2023-10-03 23:59:00 +0900
 ---
 `thrust`リポジトリで話をする。
 
