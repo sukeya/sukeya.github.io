@@ -1,10 +1,8 @@
-# Thrustの非同期実行
-
-初めまして。<br>
-趣味で雪の物理シミュレーションをC++で書いています。<br>
-アドベントカレンダーが空いていたので軽い気持ちで参加しました。<br>
-よろしくお願いします。
-
+---
+layout: post
+title:  Thrustの非同期実行
+date:   2023-12-03 00:00:00 +0900
+---
 Thrustの非同期実行についてですが、日本語の文献が<br>
 [thrustにasyncサポートが入っていた](https://in-neuro.hatenablog.com/entry/2020/01/09/163007)<br>
 くらいしか見当たらなかったので、具体例を交えながら環境構築から解説したいと思います。
@@ -42,7 +40,7 @@ hoge/-- CMakeLists.txt
 ```
 
 `CMakeLists.txt`に以下を書きます。
-```
+```cmake:CMakeLists.txt
 cmake_minimum_required(VERSION 3.27.7)
 
 # CUDAアーキテクチャを指定する。
@@ -67,12 +65,13 @@ thrust_create_target(Thrust)
 
 # CUDAライブラリを作る。
 add_library(double double.cu)
-# ラムダ式をデバイスコードで使えるようにし、SIMDを無効にする。
-# SIMDの無効化は必要ありませんが、Eigenなど線形代数ライブラリを使う際に必要になります。
 target_compile_options(
   double
   PRIVATE
+    # ラムダ式をデバイスコードで使えるようにする。
     -expt-extended-lambda
+    # SIMDを無効にする。
+    # SIMDの無効化は必要ありませんが、Eigenなど線形代数ライブラリを使う際に必要になります。
     "$<$<COMPILE_LANG_AND_ID:CXX,GNU>:-fno-tree-vectorize>"
     "$<$<COMPILE_LANG_AND_ID:CXX,Clang>:-fno-vectorize>"
 )
@@ -172,8 +171,8 @@ Thrustには`copy`や`transform`といった、STLのような関数が用意さ
 
 これらを踏まえて、以下のように実装してみます。
 
-double.cu
-```
+
+```cuda:double.cu
 #include <thrust/async/copy.h>
 #include <thrust/async/transform.h>
 #include <thrust/device_vector.h>
@@ -244,8 +243,8 @@ thrust::device_event Double(thrust::host_vector<float>& floats, thrust::host_vec
 
 あとは、`main`関数で各配列を作って、`Double`関数に渡して、結果が正しいか確認するだけです。
 
-main.cpp
-```
+
+```cpp:main.cpp
 #include "double.h"
 
 #include <cassert>
@@ -285,7 +284,7 @@ int main() {
 一般に非同期実行というと身構える方が多いと思われますが、上の解説を見ると意外と簡単にできると思われたのではないでしょうか。<br>
 また、実行ポリシーで実行順序を指定できるのも魅力的です。
 
-非同期処理の利点というよりThrustを使う利点になりますが、実は`rocThrust`という、CUDAをHIPとROCmに置き換えたThrustをAMDが開発しています。<br>
+非同期処理の利点というよりThrustを使う利点になりますが、実はrocThrustという、CUDAをHIPとROCmに置き換えたThrustをAMDが開発しています。<br>
 現時点では、Thrust 1.17.2まで対応していますので非同期実行もできます。<br>
 詳しくは参考文献4をご覧ください。
 
@@ -295,7 +294,7 @@ int main() {
 残念ながら欠点があります。<br>
 1つ目の欠点はCUDAがデバイスの時かつデバイス側でしか使えないことです。<br>
 ThrustはoneTBBをデバイスとして使うこともできますが、非同期処理はoneTBBでは実装されていません。<br>
-シリアルや`OpenMP`も同様です。<br>
+シリアルやOpenMPも同様です。<br>
 「eventとfuture」節で触れましたが、これが`host_event`がない理由だと考えられます。<br>
 しかし、この欠点はさほど問題にならないでしょう。
 
@@ -317,7 +316,7 @@ Thrustのリポジトリをご覧になるとわかるのですが、なんと�
 
 
 ## まとめ
-`trivially relocatable`な型なら、お手軽に非同期実行できます。
+データが`trivially relocatable`な型なら、お手軽に非同期実行できます。
 
 ## ソースコード
 [GitHub](https://github.com/sukeya/ThrustAsyncProgram)に置いています。
