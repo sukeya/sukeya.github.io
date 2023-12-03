@@ -179,63 +179,46 @@ Thrustには`copy`や`transform`といった、STLのような関数が用意さ
 
 #include "double.h"
 
-thrust::device_event Double(thrust::host_vector<float>& floats, thrust::host_vector<int>& ints) {
+template <class T>
+thrust::device_event Double(thrust::host_vector<T>& ts) {
   // デバイス側の配列を用意
-  auto device_floats = thrust::device_vector<float>();
-  auto device_ints   = thrust::device_vector<int>();
+  auto device_ts = thrust::device_vector<T>();
 
   // メモリの確保と初期化
-  device_floats.resize(floats.size());
-  device_ints.resize(ints.size());
+  device_ts.resize(ts.size());
 
   // ホストからデバイスへの非同期コピー
-  auto copy_ints_event = thrust::async::copy(
+  auto copy_ts_event = thrust::async::copy(
       thrust::host,
       thrust::device,
-      ints.begin(),
-      ints.end(),
-      device_ints.begin()
-  );
-  auto copy_floats_event = thrust::async::copy(
-      thrust::host,
-      thrust::device,
-      floats.begin(),
-      floats.end(),
-      device_floats.begin()
+      ts.begin(),
+      ts.end(),
+      device_ts.begin()
   );
 
   // デバイス側での計算
-  auto double_ints_event = thrust::async::transform(
-      thrust::device.after(copy_ints_event),
-      device_ints.begin(),
-      device_ints.end(),
-      device_ints.begin(),
-      [] __device__(int i) { return i * i; }
-  );
-  auto double_floats_event = thrust::async::transform(
-      thrust::device.after(copy_floats_event),
-      device_floats.begin(),
-      device_floats.end(),
-      device_floats.begin(),
-      [] __device__(float d) { return d * d; }
+  auto double_ts_event = thrust::async::transform(
+      thrust::device.after(copy_ts_event),
+      device_ts.begin(),
+      device_ts.end(),
+      device_ts.begin(),
+      [] __device__(T d) { return d * d; }
   );
 
   // デバイスからホストへの非同期コピー
-  auto copy_back_ints_event = thrust::async::copy(
-      thrust::device.after(double_ints_event),
-      device_ints.begin(),
-      device_ints.end(),
-      ints.begin()
-  );
-  auto copy_back_floats_event = thrust::async::copy(
-      thrust::device.after(double_floats_event),
-      device_floats.begin(),
-      device_floats.end(),
-      floats.begin()
+  auto copy_back_ts_event = thrust::async::copy(
+      thrust::device.after(double_ts_event),
+      device_ts.begin(),
+      device_ts.end(),
+      ts.begin()
   );
   
+  return copy_back_ts_event;
+}
+
+thrust::device_event Double(thrust::host_vector<float>& floats, thrust::host_vector<int>& ints) {
   // 非同期実行の完了をまとめる
-  return thrust::when_all(copy_back_ints_event, copy_back_floats_event);
+  return thrust::when_all(Double(floats), Double(ints));
 }
 ```
 `int`と`float`の配列のそれぞれに対して、デバイスへのコピーが完了したら、2乗する計算を行い、終わればホストへコピーする処理を順番に実行ポリシーに指定しています。<br>
