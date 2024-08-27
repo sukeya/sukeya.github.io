@@ -1,11 +1,4 @@
----
-layout: post
-title:  Thrustの非同期実行
-date:   2023-12-03 00:00:00 +0900
----
-Thrustの非同期実行についてですが、日本語の文献が<br>
-[thrustにasyncサポートが入っていた](https://in-neuro.hatenablog.com/entry/2020/01/09/163007)<br>
-くらいしか見当たらなかったので、具体例を交えながら環境構築から解説したいと思います。
+Thrustの非同期実行についてですが、日本語の文献が『[thrustにasyncサポートが入っていた](https://in-neuro.hatenablog.com/entry/2020/01/09/163007)』くらいしか見当たらなかったので、具体例を交えながら環境構築から解説したいと思います。
 
 ## 環境構築
 CMakeを使うやり方をご紹介します。<br>

@@ -1,0 +1,9 @@
+site_name: 私の愛した数式
+site_url: https://sukeya.github.io/
+nav:
+  - '概要': index.md
+  - OSS:
+    - platanus: /platanus/
+  - 'ブログ':
+    - 'Thrustの非同期実行': ./blog/thrust-async.md
+theme: readthedocs
