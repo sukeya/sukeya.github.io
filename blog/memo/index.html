@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://sukeya.github.io/blog/memo/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>メモ - 私の愛した数式</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "\u30e1\u30e2";
+        var mkdocs_page_input_path = "blog/memo.md";
+        var mkdocs_page_url = "/blog/memo/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> 私の愛した数式
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">概要</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">OSS</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="/platanus/">platanus</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">ブログ</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../thrust-async/">Thrustの非同期実行</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../config-apple-magic-keyboard-in-ubuntu/">Apple Magic Keyboardの設定</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../how-to-use-alembic/">Alembicの使い方</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">私の愛した数式</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">メモ</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/sukeya/sukeya.github.io/blob/main/docs/blog/memo.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="_1">メモ</h1>
+<p>小ネタ集です。</p>
+<h2 id="blenderalembic">BlenderでAlembicを出力した場合</h2>
+<ul>
+<li>速度は出力されない</li>
+<li>剛体運動はXformSampleに記録される</li>
+<li>ソフトボディの運動はXformSampleに記録されない</li>
+<li>ソフトボディと剛体がある時、例え剛体であっても各フレームごとのポリゴンメッシュの情報(点、法線、面)が出力される。</li>
+</ul>
+<h2 id="thrust">Thrust</h2>
+<ul>
+<li>oneTBBをデバイスとして使う場合、コンパイルオプション<code>-expt-extended-lambda</code>をnvccに渡してもラムダ式をデバイスコードで使うことはできない。</li>
+<li>入れ子になった<code>host_vector</code>と<code>device_vector</code>はお互いにコピーできない(コンパイルエラーになる)。</li>
+</ul>
+<h2 id="c">C++</h2>
+<ul>
+<li><a href="https://mikio.hatenablog.com/entry/2021/07/13/224907">C++標準async+futureとスレッドプールの性能比較</a></li>
+<li>ユーザー定義とdefault宣言で定義されたコピーコンストラクタをマクロで切り替えることはできない。</li>
+<li><code>struct A final {}</code>は合法。</li>
+<li>ラムダ関数は静的な変数を自動的にキャプチャする。</li>
+<li>以下のような再帰的な構造体は合法。</li>
+</ul>
+<pre><code>template &lt;int D&gt;
+struct A
+{
+    static_assert(D &gt; 1);
+
+    double d;
+    A&lt;D-1&gt; a;
+};
+
+template &lt;&gt;
+struct A&lt;1&gt;
+{
+    int d;
+};
+</code></pre>
+<ul>
+<li>テンプレートクラスの静的なメンバ定数は<code>inline</code>にすると明示的に実体を定義せずに済む。</li>
+<li>メンバ変数に<code>const</code>を付けると<code>default</code>宣言されたムーブ代入演算子が削除される。</li>
+</ul>
+<h3 id="boost">Boost</h3>
+<ul>
+<li>Boost.TestをCMakeの<code>find_package</code>で見つけたい時は、<code>components</code>に<code>unit_test_framework</code>を指定しないといけない。</li>
+</ul>
+<h2 id="git">Git</h2>
+<ul>
+<li>git push --force-with-lease</li>
+<li><code>git rm</code>でサブモジュールを消せる。</li>
+<li>fast-forwardでのマージを取り消したい時は、<code>git reflog --keep (ブランチ名)@{番号}</code>とすれば良い。</li>
+<li>最新のコミットしか要らないリポジトリをクローンしたい時、<code>--depth 1</code>をつければ良い。</li>
+<li>追跡していないファイルを消したい時は<code>git clean</code>。</li>
+<li>追跡しているファイルを全てステージングしたい時は<code>git add -u</code>。</li>
+</ul>
+<h2 id="petc">PETc</h2>
+<h3 id="petscc">PETScのC++の機能を使うには</h3>
+<p>PETScには<code>PetscCallThrow</code>という、エラーが発生すると<code>std::runtime_error</code>を投げる関数がある。
+この関数は<code>PETSC_CLANGUAGE_CXX</code>というマクロが定義されていないと使えない。
+他にもC++用の関数があるかもしれないので定義することをお勧めする。
+ちなみに、ヘッダーをインクルードする時は<code>extern "C"</code>をつけない。</p>
+<h3 id="petscconfigure">PETScのconfigureの実行オプション</h3>
+<p><a href="https://petsc.org/release/install/install/">公式サイト</a>に用途に応じて使うオプションが示されているが、どんなオプションがあるのか示されていない。
+どんなオプションがあるのか調べるための一番手っ取り早い方法は、<a href="https://gitlab.com/petsc/petsc/-/tree/main/config/examples">CIのテスト</a>を見ることである。
+地道な方法はソースコードを見ることだが、<code>BuildSystem</code>があまりに複雑なので時間がかかるだろう。
+個人的には<a href="https://gitlab.com/petsc/petsc/-/tree/main/config/BuildSystem/config/packages">package</a>を見ると、ライブラリ毎のオプションがどういう風に使われているかわかるので、ここを見ることをお勧めする。</p>
+<h2 id="_2">参考</h2>
+<ol>
+<li><a href="https://github.com/NVIDIA/thrust/releases/tag/1.9.4">Thrust 1.9.4 リリースノート</a></li>
+<li><a href="https://oneapi-src.github.io/oneTBB/main/tbb_userguide/Predefined_Node_Types.html">Predefined Node Types (oneTBB Documentation)</a></li>
+<li><a href="https://stackoverflow.com/questions/17041317/undo-git-fast-forward-merge">Undo git fast forward merge</a></li>
+<li><a href="https://wandbox.org/permlink/NiQFySYiXqODLaVr">テンプレート変数がラムダ関数にキャプチャされることによるエラーの例</a></li>
+<li><a href="https://wandbox.org/permlink/VXCWD2IQlLIdz5wT">再帰的な構造体の例</a></li>
+</ol>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/sukeya/sukeya.github.io" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

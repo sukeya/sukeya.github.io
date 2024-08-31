@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://sukeya.github.io/blog/how-to-use-alembic/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Alembicの使い方 - 私の愛した数式</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Alembic\u306e\u4f7f\u3044\u65b9";
+        var mkdocs_page_input_path = "blog/how-to-use-alembic.md";
+        var mkdocs_page_url = "/blog/how-to-use-alembic/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> 私の愛した数式
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">概要</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">OSS</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="/platanus/">platanus</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">ブログ</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../thrust-async/">Thrustの非同期実行</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../config-apple-magic-keyboard-in-ubuntu/">Apple Magic Keyboardの設定</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Alembicの使い方</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#alembic_1">Alembicとは</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#_1">ライブラリの構成</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#_2">ファイルの入出力について</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#abccorelayer">AbcCoreLayerで出来ること</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#_3">主な概念</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#archive">Archive</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#object">Object</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#schema">Schema</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#schemaobject">SchemaObject</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#property">Property</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#simple-property">Simple Property</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#compoundproperty">CompoundProperty</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#sample">Sample</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#timesampling">TimeSampling</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#sampleselector">SampleSelector</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#_4">主なスキーマオブジェクト</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#polymesh">PolyMesh</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#polymeshschema">PolyMeshSchema</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#xform">Xform</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#xformschema">XformSchema</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#xformsample">XformSample</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#xformop">XformOp</a>
+    </li>
+        </ul>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#_7">使用例</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#_8">ポリゴンメッシュの書き込み</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#_9">ポリゴンメッシュの読み込み</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#_10">参考文献</a>
+    </li>
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">私の愛した数式</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">ブログ</li>
+      <li class="breadcrumb-item active">Alembicの使い方</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/sukeya/sukeya.github.io/blob/main/docs/blog/how-to-use-alembic.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="alembic">Alembicの使い方</h1>
+<p>この記事はAlembicのv1.8.3を参照しています。
+意味がわからなくても最後まで目を通してから、もう一度読むことをお勧めします。
+私が理解している<code>PolyMesh</code>(ポリゴンメッシュ)と<code>Xform</code>(メッシュの変形)に関連する項目のみ取り上げます。</p>
+<p>また、<a href="https://i-saint.hatenablog.com/entry/2016/02/09/215542">alembic for realtime rendering</a>やAlembic初期のドキュメント<a href="https://code.google.com/archive/p/alembic/wikis/AlembicPoint9UsersGuide.wiki">alembic - AlembicPoint9UsersGuide.wiki</a>を読むと良いかもしれません。</p>
+<h2 id="alembic_1">Alembicとは</h2>
+<p>Alembicはレンダリングや物理シミュレーションなどを行う3DCGソフトウェア間でやりとり出来る、
+時間ごとの物体の幾何情報を保存したオープンソースのファイル形式である。</p>
+<h2 id="_1">ライブラリの構成</h2>
+<p>Alembicは以下のように機能毎にディレクトリと名前空間が分けられている。
+以下の表に必要なものだけを抜粋した。</p>
+<table>
+<thead>
+<tr>
+<th>名前空間</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Abc</td>
+<td>Alembicの基本的なインターフェイスを提供する</td>
+</tr>
+<tr>
+<td>AbcCoreAbstract</td>
+<td>時間に関するクラス以外ユーザーが見る必要はない</td>
+</tr>
+<tr>
+<td>AbcCoreHDF5</td>
+<td>HDF5をファイル形式に使った場合の入出力の実装</td>
+</tr>
+<tr>
+<td>AbcCoreLayer</td>
+<td>Alembicファイルへの変更を別のAlembicファイルに書き込んだり、複数のAlembicファイルを読み込んで一つのAlembicファイルにまとめる機能の実装</td>
+</tr>
+<tr>
+<td>AbcCoreOgawa</td>
+<td>Ogawaをファイル形式に使った場合の入出力の実装</td>
+</tr>
+<tr>
+<td>AbcGeom</td>
+<td>Abcを使って、物体の幾何情報や剛体変形を実装している</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_2">ファイルの入出力について</h3>
+<p>OgawaはHDF5よりシングルスレッドだと平均で5倍、マルチスレッドだと同じ操作を行った場合と比較して25倍速く読み込む。
+また、ファイルサイズが平均で5-15%小さくなり、小さいオブジェクトが多いほどファイルサイズも小さくなる。
+特に理由がなければ、Ogawaを使うことをお勧めする。</p>
+<h3 id="abccorelayer">AbcCoreLayerで出来ること</h3>
+<p>以下の表に列挙する。</p>
+<table>
+<thead>
+<tr>
+<th>出来ること</th>
+<th>例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>形状に追加のプロパティを追加できる</td>
+<td>UVがないポリゴンメッシュにUVを追加</td>
+</tr>
+<tr>
+<td>プロパティの上書き</td>
+<td>ポリゴンメッシュ上の静的な点を動く点に変更</td>
+</tr>
+<tr>
+<td>新しいオブジェクトの追加</td>
+<td>新しい形状を既存の階層に追加</td>
+</tr>
+<tr>
+<td>オブジェクトの削除</td>
+<td>好みじゃない形状や階層のブランチ全体の削除</td>
+</tr>
+<tr>
+<td>プロパティの削除</td>
+<td>不正な法線の削除</td>
+</tr>
+<tr>
+<td>オブジェクト階層の置き換え</td>
+<td>分けられた曲線のグループを一つの大きな曲線に置き換える</td>
+</tr>
+<tr>
+<td>プロパティ階層の置き換え</td>
+<td>ユーザープロパティ内のプロパティを他のプロパティに置き換える</td>
+</tr>
+</tbody>
+</table>
+<p>また、Alembicファイルは追記が出来ないため、<code>Points</code>など時系列で保存できない場合は時系列順にファイルに名前を付けて、この機能で読み込むと良い。</p>
+<p>AbcCoreLayerは<code>MetaData</code>を適切に設定するために、<code>Util.h</code>内に<code>SetPrune</code>と<code>SetReplace</code>という便利な関数を提供しているらしい。</p>
+<h2 id="_3">主な概念</h2>
+<p>Alembicでは、入力時に使うクラスには<code>I</code>が、出力時に使うものには<code>O</code>が名前の先頭に付く。
+ここでは区別する必要がないため、省略する。</p>
+<h3 id="archive"><code>Archive</code></h3>
+<p>ディスク上の実際のファイル。
+すべてのシーンデータを持つトップレベルのコンテナ。
+1つの<code>Object</code>を持つ。</p>
+<h3 id="object"><code>Object</code></h3>
+<p>Alembicの階層の主な単位。
+<code>Object</code>は<code>Archive</code>の<code>Object</code>をルートとした多分木になっており、親と子供たちを取得することが出来る。
+1つの<code>CompoundProperty</code>を持つ。
+<code>ObjectHeader</code>と呼ばれるメタデータを持ち、<code>SchemaObject</code>を判定するために使われる。</p>
+<h3 id="schema"><code>Schema</code></h3>
+<p>ポリゴンメッシュような、ある複雑なオブジェクトを実装するために作られた<code>CompoundProperty</code>。</p>
+<h4 id="schemaobject"><code>SchemaObject</code></h4>
+<p><code>Schema</code>を<code>CompundProperty</code>として持つ<code>Object</code>のこと。</p>
+<h3 id="property">Property</h3>
+<p>SimpleとCompoundの2種類の型がある。
+値を取得するには<code>SampleSelector</code>という、ある時点の時刻を表すクラスを与える必要がある。</p>
+<h4 id="simple-property">Simple Property</h4>
+<p>ScalarとArrayの2種類ある。</p>
+<h5 id="scalarproperty"><code>ScalarProperty</code></h5>
+<p>型と要素の数が固定され、コンパイル時に決まる複数のSampleを持つ。
+例として、以下がある。</p>
+<ul>
+<li>FloatProperty (各Sampleは32ビットの浮動小数点数; 長さ 1)</li>
+<li>StringProperty (各Sampleは任意の長さを持つ、1つのstring; 長さ 1)</li>
+<li>M44dProperty (各Sampleは16個の64ビットの浮動小数点数; 長さ 16)</li>
+<li>以下の3つのSampleを持つProperty<ul>
+<li>剛体の質量(1つの数値; 長さ 1)</li>
+<li>色(値が浮動小数点数のRGBのベクトル;長さ 3)</li>
+<li>バウンディングボックス(値が浮動小数点数の2つの3次元ベクトル; 長さ 6)</li>
+</ul>
+</li>
+</ul>
+<p>ScalarPropertyの最大の長さは256である。</p>
+<h5 id="typedarrayproperty"><code>TypedArrayProperty</code></h5>
+<p>時刻毎の<code>Sample</code>を持つ<code>Property</code>。
+<code>ArrayProperty</code>もあるが、主に使うのはこっちの方。
+テンプレートパラメータに値の型(正確には<a href="https://github.com/alembic/alembic/blob/master/lib/Alembic/Abc/TypedPropertyTraits.h">TypedPropertyTraits.h</a>で定義された型)が入っている。
+例として、以下がある。</p>
+<ul>
+<li><code>DoubleArrayProperty</code> (各時刻で、要素が1つの64ビットの浮動小数点数の配列を持つ)</li>
+<li><code>V3fArrayProperty</code> (各時刻で、要素が1つの<code>Imath::Vec3f</code>(3つの32ビットの浮動小数点数)の配列を持つ)</li>
+<li><code>M44fArrayProperty</code> (各時刻で、要素が1つの<code>Imath::M44f</code>(16個の32ビットの浮動小数点数)の配列を持つ)</li>
+<li>多角形メッシュの頂点のリスト</li>
+<li>流体シミュレーションの粒子のリスト</li>
+</ul>
+<p>ただし、同じSampleを保存しない。</p>
+<h4 id="compoundproperty"><code>CompoundProperty</code></h4>
+<p>(<code>CompoundProperty</code>を含む)複数のPropertyを持つProperty。</p>
+<h3 id="sample">Sample</h3>
+<p>ある時刻の生のデータ。
+Propertyと同様に、SampleもScalarとArrayの2種類ある。
+例として、以下がある。</p>
+<ul>
+<li><code>DoubleArraySample</code> (要素が1つの64ビットの浮動小数点数の配列)</li>
+<li><code>V3fArraySample</code> (要素が1つの<code>Imath::Vec3f</code>(3つの32ビットの浮動小数点数)の配列)</li>
+<li><code>M44fArraySample</code> (要素が1つの<code>Imath::M44f</code>(16個の32ビットの浮動小数点数)の配列)</li>
+</ul>
+<h3 id="timesampling"><code>TimeSampling</code></h3>
+<p>Propertyが持つ時間を管理するクラス。
+時間の配列と<code>TimeSamplingType</code>を持つ。
+<code>TimeSamplingType</code>の種類は以下の通り。</p>
+<table>
+<thead>
+<tr>
+<th>TimeSamplingType</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Uniform (一様)</td>
+<td>Sample間の時間間隔が一定</td>
+</tr>
+<tr>
+<td>Cyclic (周期的)</td>
+<td>Sample間の時間間隔が周期的に変化する</td>
+</tr>
+<tr>
+<td>Acyclic (不規則)</td>
+<td>Sample間の時間間隔が不規則に変化する</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sampleselector"><code>SampleSelector</code></h3>
+<p>Property内のSampleを取得するために使うクラス。
+<code>TimeSampling</code>が持つ時間の配列のインデックスを直接与えるか、時刻を与えることで作る。
+時刻を渡す場合、追加で<code>TimeIndexType</code>フラグを渡すこともできる。
+<code>TimeIndexType</code>フラグの意味は以下の通り。</p>
+<table>
+<thead>
+<tr>
+<th>TimeIndexType</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>kNearIndex</td>
+<td>与えられた時刻に最も近い時刻のインデックス</td>
+</tr>
+<tr>
+<td>kFloorIndex</td>
+<td>与えられた時刻より大きくない、最大の時刻のインデックス</td>
+</tr>
+<tr>
+<td>kCeilIndex</td>
+<td>与えられた時刻より小さくない、最小の時刻のインデックス</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_4">主なスキーマオブジェクト</h2>
+<h3 id="polymesh">PolyMesh</h3>
+<p>ポリゴンメッシュを管理するスキーマオブジェクト。
+時刻毎に頂点、面、頂点や面の法線を持ち、UV、頂点ごとの速度、AABBも持つことが出来る。</p>
+<h4 id="polymeshschema">PolyMeshSchema</h4>
+<p><code>PolyMesh</code>のスキーマで、<code>PolyMesh</code>クラスの<code>getSchema</code>メンバ関数で取得できる。</p>
+<p>このクラスの<code>getTopologyVariance</code>メンバ関数でポリゴンメッシュが変化するか判定できる。
+以下は戻り値とその意味の表である。
+戻り値は名前空間<code>Alembic::AbcGeom::MeshTopologyVariance</code>を省略している。</p>
+<table>
+<thead>
+<tr>
+<th>戻り値</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>kConstantTopology</td>
+<td>変化しない</td>
+</tr>
+<tr>
+<td>kHomogen(e)ousTopology</td>
+<td>頂点の位置は変わるが、トポロジーは変化しない</td>
+</tr>
+<tr>
+<td>kHeterogen(e)ousTopology</td>
+<td>頂点の位置もトポロジーも変化する</td>
+</tr>
+</tbody>
+</table>
+<p><code>XformSchema</code>と同じように、<code>getValue</code>メンバ関数である時刻のポリゴンメッシュを取得できるが、いくつか注意点がある。</p>
+<h5 id="_5">面</h5>
+<p>Alembicでは、任意の多角形を持つことが出来る。
+つまり、三角形や四角形を持つポリゴンメッシュをAlembicに保存できる。
+このことを実現するために、面を以下のリストで表現している。</p>
+<ol>
+<li>それぞれの面を構成する頂点のインデックスを持つ<strong>1次元</strong>のリスト</li>
+<li>それぞれの面に含まれる頂点の個数のリスト</li>
+</ol>
+<p>1つ目のリストは面のインデックスとリストのインデックスを対応させた2次元のリストをフラットにしたものでもある。
+具体例として、三角形と四角形をそれぞれ1つずつ持ち、1辺を共有するメッシュは以下の通り。</p>
+<ol>
+<li>[0, 1, 2, 1, 3, 4, 2]</li>
+<li>[3, 4]</li>
+</ol>
+<p>1つ目のリストを持つPropertyは<code>getFaceIndicesProperty</code>メンバ関数で取得でき、2つ目のリストを持つPropertyは<code>getFaceIndicesProperty</code>メンバ関数で取得できる。</p>
+<h5 id="_6">法線</h5>
+<p>実は法線とUVはこれまで説明してきたクラスのどれでもない。
+法線は<code>TypedGeomParam</code>というSchemaに似たようなクラスのインスタンスで、<code>PolyMeshSchema</code>クラスの<code>getNormalsParam</code>メンバ関数で取得できる。
+法線の値の意味は<code>TypedGeomParam</code>クラスの<code>getScope</code>の戻り値によって異なり、以下の通り。</p>
+<table>
+<thead>
+<tr>
+<th>戻り値</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>kConstantScope</td>
+<td>ポリゴンメッシュ全体で1つだけの値</td>
+</tr>
+<tr>
+<td>kUniformScope</td>
+<td>各多角形に対して1つの値</td>
+</tr>
+<tr>
+<td>kVaryingScope, kVertexScope</td>
+<td>各多角形の頂点に対して1つの値があり、多角形内で線形に補間される</td>
+</tr>
+<tr>
+<td>kFacevaryingScope</td>
+<td><code>kVaryingScope</code>と同様に多角形の頂点に1つの値があり、多角形内で線形に補間されるが、多角形の頂点の値は多角形毎に異なってもよい</td>
+</tr>
+</tbody>
+</table>
+<p>法線の値の取得は以下の例を参照。</p>
+<h3 id="xform">Xform</h3>
+<p>変形を管理するスキーマオブジェクト。
+子に変形させる<code>PolyMesh</code>や自身を持つ。
+<code>Xform</code>が親子である場合、親が変形させた後に子供が変形させる(テストを見る限り、この変形しか見当たらなかった)。
+変形の順序は<code>getInheritsXforms</code>関数で判定できる。</p>
+<h4 id="xformschema">XformSchema</h4>
+<p><code>Xform</code>のスキーマで、<code>Xform</code>クラスの<code>getSchema</code>メンバ関数で取得できる。</p>
+<h4 id="xformsample">XformSample</h4>
+<p><code>XformSchema</code>クラスの<code>getValue</code>メンバ関数で<code>XformSample</code>を取得できる。
+<code>XformSample</code>は<code>XformOp</code>のリストを持つ。
+<code>getNumOps</code>メンバ関数で総数を取得し、<code>operator[]</code>メンバ関数でインスタンスを取得する。</p>
+<p>直に値を取得することもできるが、操作が追加された順に取り出さなければならないため、用心して使う事。</p>
+<p><code>getNumOpChannels</code>メンバ関数で自身が持つ<code>XformOp</code>の<code>channel</code>の総数がわかる。</p>
+<h4 id="xformop">XformOp</h4>
+<p><code>XformOp</code>は平行移動、回転、拡大縮小、線形変換を表す。
+操作の種類は<code>getType</code>メンバ関数で判定できる。
+列挙値と意味は以下の通り。</p>
+<table>
+<thead>
+<tr>
+<th>XformOperationType</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>kScaleOperation</td>
+<td>拡大縮小</td>
+</tr>
+<tr>
+<td>kTranslateOperation</td>
+<td>平行移動</td>
+</tr>
+<tr>
+<td>kRotateOperation</td>
+<td>回転</td>
+</tr>
+<tr>
+<td>kMatrixOperation</td>
+<td>行列</td>
+</tr>
+<tr>
+<td>kRotateXOperation</td>
+<td>x軸回転</td>
+</tr>
+<tr>
+<td>kRotateYOperation</td>
+<td>y軸回転</td>
+</tr>
+<tr>
+<td>kRotateZOperation</td>
+<td>z軸回転</td>
+</tr>
+</tbody>
+</table>
+<p><code>XformOp</code>は<code>channel</code>という<code>double</code>のリストを持ち、各操作を表現するために使われる。
+各操作の<code>channel</code>数は以下の通り。</p>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th><code>channel</code>数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>平行移動と拡大縮小</td>
+<td>3</td>
+</tr>
+<tr>
+<td>回転</td>
+<td>4</td>
+</tr>
+<tr>
+<td>行列</td>
+<td>16</td>
+</tr>
+<tr>
+<td>軸回転</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p>行列は行優先で格納される。</p>
+<h2 id="_7">使用例</h2>
+<h3 id="_8">ポリゴンメッシュの書き込み</h3>
+<p>各ディレクトリには、そのライブラリが公開している全てをインクルードした<code>All.h</code>という名前のヘッダーがある。
+なので、以下のようにインクルードすればよい。</p>
+<pre><code class="language-cpp">// Alembic Includes
+#include &lt;Alembic/AbcGeom/All.h&gt;
+#include &lt;Alembic/AbcCoreOgawa/All.h&gt;
+</code></pre>
+<p>次に<code>Archive</code>を作り、その<code>Archive</code>の子供として、静的なポリゴンメッシュを持つアニメーションを追加しよう。</p>
+<pre><code class="language-cpp">// メタデータの作成
+auto abc_metadata = Alembic::Abc::MetaData();
+// 名前を&quot;PolyMesh&quot;にする。
+abc_metadata.set(Alembic::Abc::kUserDescriptionKey, &quot;PolyMesh&quot;);
+
+auto archive_writer = Alembic::AbcCoreOgawa::WriteArchive();
+auto writer_ptr = archive_writer(&quot;polyMesh1.abc&quot;, abc_metadata);
+// polyMesh1.abcへ書き込めるarchiveを作成
+auto archive = Alembic::Abc::OArchive(writer_ptr);
+</code></pre>
+<p>立方体[-1, 1] x [-1, 1] x [-1, 1]のPolyMesh Objectを作成する。"meshy"は<code>meshyObj</code>の名前。</p>
+<pre><code class="language-cpp">auto abc_top = archive.getTop();
+auto meshyObj = OPolyMesh(abc_top, &quot;meshy&quot;);
+</code></pre>
+<p>UVと法線のSampleを作成する。
+その前に、UVの名前はSampleに入れる前に付ける必要がある。</p>
+<pre><code class="language-cpp">auto&amp; mesh = meshyObj.getSchema();
+mesh.setUVSourceName(&quot;test&quot;);
+</code></pre>
+<p>UVと法線は<code>GeomParams</code>を使う。
+<code>GeomParams</code>はインデックスがあってもなくても読み書きできる。
+<code>kFacevaryingScope</code>については、<a href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE">参考文献</a>の3、4を参考。</p>
+<pre><code class="language-cpp">// 立方体の頂点のUV。
+// UVの値は指定した面を構成する頂点の順に、各面の各頂点の値を列挙する。
+extern const size_t g_numUVs;
+extern const Abc::float32_t g_uvs[];
+auto uvsamp = OV2fGeomParam::Sample(
+    V2fArraySample((const V2f *)g_uvs, g_numUVs), // reinterpret_castを使うべき
+    kFacevaryingScope
+);
+// 立方体の頂点の法線
+// 法線の値は指定した面を構成する頂点の順に、各面の各頂点の値を列挙する。
+// これは基本的にはRenderManの&quot;facevarying&quot;の型に合うストレージである。
+extern const size_t g_numNormals;
+extern const Abc::float32_t g_normals[];
+auto nsamp = ON3fGeomParam::Sample(
+    N3fArraySample((const N3f *)g_normals, g_numNormals),
+    kFacevaryingScope
+);
+</code></pre>
+<p>メッシュのSampleを設定する。
+引数は先頭から順に、頂点の座標と頂点の数、面を構成する頂点のインデックスのリストとそのリストのサイズ、面を構成する頂点の数のリストとそのリストのサイズである。
+速度は<code>OPolyMeshSchema::Sample</code>の<code>setVelocityies</code>メンバ関数で設定する。</p>
+<pre><code class="language-cpp">auto mesh_samp = OPolyMeshSchema::Sample(
+    V3fArraySample((const V3f *)g_verts, g_numVerts),
+    Int32ArraySample(g_indices, g_numIndices),
+    Int32ArraySample(g_counts, g_numCounts),
+    uvsamp,
+    nsamp
+);
+mesh.set(mesh_samp);
+</code></pre>
+<p>Alembicのオブジェクトはスコープから出るときに自動的に破棄される。
+なので、特に何もしなくて良い。</p>
+<p>プログラム全体は参考文献の2にある。</p>
+<h3 id="_9">ポリゴンメッシュの読み込み</h3>
+<p>インクルードするヘッダーと名前空間は前例を参照。</p>
+<p>読み込み用アーカイブを作成する。</p>
+<pre><code class="language-cpp">auto archive_reader = Alembic::AbcCoreOgawa::ReadArchive();
+auto reader_ptr = archive_reader(&quot;polyMesh1.abc&quot;);
+auto archive = Alembic::Abc::IArchive(reader_ptr);
+</code></pre>
+<p>UV, 法線を取得する。</p>
+<pre><code class="language-cpp">auto meshyObj         = IPolyMesh(archive.getTop(), &quot;meshy&quot;);
+IPolyMeshSchema&amp; mesh = meshyObj.getSchema();
+auto N                = mesh.getNormalsParam();
+auto uv               = mesh.getUVsParam();
+</code></pre>
+<p>頂点の座標のリスト、面を構成する頂点のインデックスのリスト、面を構成する頂点の数のリスト、AABB、もしあれば速度のリストを取得する。</p>
+<pre><code class="language-cpp">IPolyMeshSchema::Sample mesh_samp;
+mesh.get(mesh_samp);
+</code></pre>
+<p>以下のコードで、法線のリストのポインター(正確には<code>N3fArraySamplePtr</code>)を取得できる。</p>
+<pre><code class="language-cpp">auto nsp = N.getExpandedValue().getVals();
+</code></pre>
+<p>各法線は以下のようにして取得できる。</p>
+<pre><code class="language-cpp">for ( size_t i = 0 ; i &lt; nsp-&gt;size() ; ++i )
+{
+    std::cout &lt;&lt; i &lt;&lt; &quot;th normal: &quot; &lt;&lt; (*nsp)[i] &lt;&lt; std::endl;
+}
+</code></pre>
+<p>インデックスを付けたいときは、<code>getExpandedValue</code>の代わりに<code>getIndexedValue</code>を使う。</p>
+<pre><code class="language-cpp">auto uvsamp = uv.getIndexedValue();
+</code></pre>
+<p>値は以下のように取得する。</p>
+<pre><code class="language-cpp">V2f uv2 = (*(uvsamp.getVals()))[2];
+TESTING_ASSERT( uv2 == V2f( 1.0f, 1.0f ) );
+</code></pre>
+<p>頂点のリストのサイズは以下で取得できる。</p>
+<pre><code class="language-cpp">mesh_samp.getPositions()-&gt;size();
+</code></pre>
+<p>最初の頂点の座標は以下で取得できる。</p>
+<pre><code class="language-cpp">(*(mesh_samp.getPositions()))[0];
+</code></pre>
+<p>取得するだけなら、以下のように簡潔に書ける。</p>
+<pre><code class="language-cpp">mesh_samp.getPositions()-&gt;get()[0];
+</code></pre>
+<h2 id="_10">参考文献</h2>
+<ol>
+<li><a href="http://docs.alembic.io/python/examples.html#properties">Introduction &mdash; Alembic 1.7.0 documentation</a></li>
+<li><a href="https://github.com/alembic/alembic/blob/master/lib/Alembic/AbcGeom/Tests/PolyMeshTest.cpp">alembic/lib/Alembic/AbcGeom/Tests/PolyMeshTest.cpp</a></li>
+<li><a href="https://github.com/alembic/alembic/blob/master/lib/Alembic/AbcGeom/Foundation.h">alembic/lib/Alembic/AbcGeom/Foundation.h</a></li>
+<li><a href="https://github.com/alembic/alembic/blob/master/lib/Alembic/AbcGeom/GeometryScope.h">alembic/lib/Alembic/AbcGeom/GeometryScope.h</a></li>
+<li><a href="https://renderman.pixar.com/resources/RenderMan_20/geometricPrimitives.html">Geometric Primitives</a></li>
+<li><a href="https://github.com/alembic/alembic/blob/master/lib/Alembic/AbcGeom/GeometryScope.h">Alembic/AbcGeom/GeometryScope.h</a></li>
+</ol>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../config-apple-magic-keyboard-in-ubuntu/" class="btn btn-neutral float-left" title="Apple Magic Keyboardの設定"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/sukeya/sukeya.github.io" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../config-apple-magic-keyboard-in-ubuntu/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

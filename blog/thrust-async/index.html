@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://sukeya.github.io/blog/thrust-async/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Thrustの非同期実行 - 私の愛した数式</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Thrust\u306e\u975e\u540c\u671f\u5b9f\u884c";
+        var mkdocs_page_input_path = "blog/thrust-async.md";
+        var mkdocs_page_url = "/blog/thrust-async/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> 私の愛した数式
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">概要</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">OSS</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="/platanus/">platanus</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">ブログ</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Thrustの非同期実行</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#_1">環境構築</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#thrust_1">Thrustのダウンロード</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#cmake">CMakeプロジェクトの作成</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#thrust_2">Thrustの非同期実行の書き方</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#eventfuture">eventとfuture</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#_2">非同期なアルゴリズムと実行ポリシー</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#_3">利点</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#_4">欠点</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#_5">実は...</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#_6">まとめ</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#_7">ソースコード</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#_8">参考文献</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../config-apple-magic-keyboard-in-ubuntu/">Apple Magic Keyboardの設定</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../how-to-use-alembic/">Alembicの使い方</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">私の愛した数式</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">ブログ</li>
+      <li class="breadcrumb-item active">Thrustの非同期実行</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/sukeya/sukeya.github.io/blob/main/docs/blog/thrust-async.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="thrust">Thrustの非同期実行</h1>
+<p>Thrustの非同期実行についてですが、日本語の文献が『<a href="https://in-neuro.hatenablog.com/entry/2020/01/09/163007">thrustにasyncサポートが入っていた</a>』くらいしか見当たらなかったので、具体例を交えながら環境構築から解説したいと思います。</p>
+<h2 id="_1">環境構築</h2>
+<p>CMakeを使うやり方をご紹介します。
+Windowsでは試していないため、ご了承下さい。</p>
+<p>以下のソフトウェアをインストールしてください。</p>
+<ul>
+<li>CUDA &gt;= 12.3</li>
+<li>CMake &gt;= 3.27.7</li>
+<li>GCC &gt;= 5.1 または Clang &gt;= 3.4</li>
+</ul>
+<p>Gitもインストールをお勧めしますが、なくても問題ありません。</p>
+<h3 id="thrust_1">Thrustのダウンロード</h3>
+<p><a href="https://github.com/NVIDIA/thrust/tree/main">Thrust</a>をダウンロードします。
+1.9.4以上のバージョンを選んで下さい。
+Gitを使う方は再帰的にサブモジュールをクローンしてください。</p>
+<p>なぜソースコードをダウンロードするかというと、CMakeがThrustを見つけてくれなかったためです。
+見つけ方をご存じの方は教えていただけると幸いです。</p>
+<h2 id="cmake">CMakeプロジェクトの作成</h2>
+<p>例として、<code>float</code>と<code>int</code>の配列を作成し、GPUで各要素の2乗を計算し、結果が正しいか確認するプログラムを作成します。
+以下のようにCMakeプロジェクトを作成します。</p>
+<pre><code>hoge/-- CMakeLists.txt
+     |- double.cu
+     |- double.h
+     |- main.cpp
+     |- thrust/
+</code></pre>
+<p>CMakeLists.txtに以下を書きます。</p>
+<pre><code class="language-cmake">cmake_minimum_required(VERSION 3.27.7)
+
+# CUDAアーキテクチャを指定する。
+# 最初に設定しないと、プロジェクトが作成できません。
+if(NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
+  set(CMAKE_CUDA_ARCHITECTURES native)
+endif()
+
+project(my_program VERSION 0.1.0 LANGUAGES CXX CUDA)
+
+# ここの設定はお好みで。
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_OPTIMIZE_DEPENDENCIES ON)
+
+# CUDAを見つける。
+find_package(CUDAToolkit 12 REQUIRED)
+
+# Thrustを見つける。
+add_subdirectory(thrust)
+find_package(Thrust REQUIRED CONFIG)
+thrust_create_target(Thrust)
+
+# CUDAライブラリを作る。
+add_library(double double.cu)
+target_compile_options(
+  double
+  PRIVATE
+    # C++14以上が必要
+    cxx_std_14
+    # ラムダ式をデバイスコードで使えるようにする。
+    -expt-extended-lambda
+    # SIMDを無効にする。
+    # SIMDの無効化は必須ではありませんが、Eigenなど線形代数ライブラリを使う際に必要になります。
+    &quot;$&lt;$&lt;COMPILE_LANG_AND_ID:CXX,GNU&gt;:-fno-tree-vectorize&gt;&quot;
+    &quot;$&lt;$&lt;COMPILE_LANG_AND_ID:CXX,Clang&gt;:-fno-vectorize&gt;&quot;
+)
+# ここはお好みで。
+target_compile_features(
+  double
+  PRIVATE
+    cuda_std_20
+)
+# 誰もインストールしないはずなので、簡略に。
+target_include_directories(
+  double
+  PUBLIC 
+    ${CMAKE_CURRENT_SOURCE_DIR}
+)
+# CUDAランタイムとThrustをリンクする。
+# 当たり前ですが、ThrustにはCUDAはないので。
+target_link_libraries(
+  double
+  PUBLIC
+    CUDA::cudart
+    Thrust
+)
+
+# my_programを作る。
+add_executable(my_program main.cpp)
+target_link_libraries(
+  my_program
+  PRIVATE
+    double
+)
+# ここはお好みで。
+target_compile_features(
+  my_program
+  PRIVATE
+    cxx_std_20
+)
+# ここはお好みで。
+target_compile_options(
+  my_program
+  PRIVATE
+    &quot;$&lt;$&lt;CONFIG:Debug&gt;:-g;-O0;-Wall;-Wextra&gt;&quot;
+    &quot;$&lt;$&lt;CONFIG:Release&gt;:-DNDEBUG;-O3;-march=native;-mtune=native&gt;&quot;
+)
+# CUDA 5.0以前のバージョンでは、デバイスコードで使用する関数の実装までインクルードする必要が
+# ありましたが、CUDA 5.0以降では、デバイスコードで使用する関数の宣言のみをインクルードするだけで
+# 十分になりました。
+# このことをコンパイラとリンカーに伝えるために、CUDA_SEPARABLE_COMPILATIONプロパティをONに
+# しています。
+# ただし、このプロパティは実行ファイルにのみONに設定して下さい。
+# 詳しくは参考文献1を参照してください。
+set_property(TARGET my_program PROPERTY CUDA_SEPARABLE_COMPILATION ON)
+</code></pre>
+<h2 id="thrust_2">Thrustの非同期実行の書き方</h2>
+<p>いよいよ本題です。</p>
+<h3 id="eventfuture">eventとfuture</h3>
+<p>Thrustには<code>event</code>と<code>future</code>があります。
+<code>future</code>は<code>reduce</code>から返され、その他のアルゴリズムは<code>event</code>を返します。
+どちらも<code>wait()</code>メンバ関数を持ち、非同期実行が終わるまで待ちます。
+<code>future</code>はさらに<code>get()</code>メンバ関数を持ち、実行結果を取得できます。
+詳しく知りたい方は参考文献2のプログラムをご覧ください。
+<code>event</code>は<code>unique_eager_event</code>クラスに, <code>future</code>は<code>unique_eager_future</code>クラスに対応しています。</p>
+<p>ヘッダーはそれぞれthrust/event.h, thrust/future.hです。
+今回は計算結果を<code>host_vector</code>に格納するので、使うのは実行が完了したか確認するだけの<code>event</code>です。</p>
+<p>double.h</p>
+<pre><code class="language-cpp">#include &lt;thrust/event.h&gt;
+#include &lt;thrust/host_vector.h&gt;
+
+thrust::device_event Double(thrust::host_vector&lt;float&gt;&amp; doubles, thrust::host_vector&lt;int&gt;&amp; ints);
+</code></pre>
+<p>ここで<code>device_event</code>を使っていますが、ホストでも使えます。
+<code>host_event</code>はありません。
+後の「欠点」の節でこのことに触れます。
+<code>__global__</code>はあってもなくてもいいです。</p>
+<h3 id="_2">非同期なアルゴリズムと実行ポリシー</h3>
+<p>Thrustには<code>copy</code>や<code>transform</code>といった、STLのような関数が用意されています。
+これらを非同期に実行したい場合は、<code>async</code>名前空間のものを使えばいいです。
+例えば、<code>thrust::copy</code>の非同期版は<code>thrust::async::copy</code>です。</p>
+<p>実行ポリシーとは、アルゴリズムにホストで実行するのか、デバイスで実行するのか、それとも逐次的に処理するのかを指定するクラスです。
+クラス名はそれぞれ<code>host</code>、<code>device</code>、<code>seq</code>です。
+アルゴリズムに明示的に指定することで、無駄なデータのコピーを減らせます。
+実装はタグディスパッチで、自分でカスタマイズすることも可能です。
+詳しくは参考文献3をご覧ください。</p>
+<p>実行ポリシー自体は同期的なアルゴリズムに対しても使えますが、非同期なら<code>host</code>と<code>device</code>の<code>after</code>メンバ関数に<code>event</code>と<code>future</code>を指定することで実行順序を指定できます。
+<code>event</code>と<code>future</code>の個数は何個でもいいです。
+また、<code>thrust::when_all</code>関数で複数の<code>event</code>と<code>future</code>を一つの<code>event</code>にまとめることもできます。</p>
+<p>これらを踏まえて、以下のように実装してみます。</p>
+<p>double.cu</p>
+<pre><code class="language-cuda">#include &lt;thrust/async/copy.h&gt;
+#include &lt;thrust/async/transform.h&gt;
+#include &lt;thrust/device_vector.h&gt;
+
+#include &quot;double.h&quot;
+
+template &lt;class T&gt;
+thrust::device_event Double(thrust::host_vector&lt;T&gt;&amp; ts) {
+  // デバイス側の配列を用意
+  auto device_ts = thrust::device_vector&lt;T&gt;();
+
+  // メモリの確保と初期化
+  device_ts.resize(ts.size());
+
+  // ホストからデバイスへの非同期コピー
+  auto copy_ts_event = thrust::async::copy(
+      thrust::host,
+      thrust::device,
+      ts.begin(),
+      ts.end(),
+      device_ts.begin()
+  );
+
+  // デバイス側での計算
+  auto double_ts_event = thrust::async::transform(
+      thrust::device.after(copy_ts_event),
+      device_ts.begin(),
+      device_ts.end(),
+      device_ts.begin(),
+      [] __device__(T d) { return d * d; }
+  );
+
+  // デバイスからホストへの非同期コピー
+  auto copy_back_ts_event = thrust::async::copy(
+      thrust::device.after(double_ts_event),
+      device_ts.begin(),
+      device_ts.end(),
+      ts.begin()
+  );
+
+  return copy_back_ts_event;
+}
+
+thrust::device_event Double(thrust::host_vector&lt;float&gt;&amp; floats, thrust::host_vector&lt;int&gt;&amp; ints) {
+  // 非同期実行の完了をまとめる
+  return thrust::when_all(Double(floats), Double(ints));
+}
+</code></pre>
+<p><code>int</code>と<code>float</code>の配列のそれぞれに対して、デバイスへのコピーが完了したら、2乗する計算を行い、終わればホストへコピーする処理を順番に実行ポリシーに指定しています。
+最後に、両方の配列がホストへコピーされたことを確認するための<code>event</code>を作成しています。</p>
+<p>あとは、<code>main</code>関数で各配列を作って、<code>Double</code>関数に渡して、結果が正しいか確認するだけです。</p>
+<p>main.cpp</p>
+<pre><code class="language-cpp">#include &quot;double.h&quot;
+
+#include &lt;cassert&gt;
+#include &lt;cmath&gt;
+#include &lt;iostream&gt;
+
+int main() {
+  auto floats = thrust::host_vector&lt;float&gt;();
+  auto ints   = thrust::host_vector&lt;int&gt;();
+
+  std::size_t size = 10000;
+
+  floats.reserve(size);
+  ints.reserve(size);
+
+  for (std::size_t i = 0; i &lt; size; ++i) {
+    floats.push_back(i);
+    ints.push_back(i);
+  }
+
+  auto event = Double(floats, ints);
+
+  event.wait();
+
+  for (std::size_t i = 0; i &lt; size; ++i) {
+    assert(std::abs(floats[i] - i * i) &lt; 1e-5);
+    assert(ints[i] == static_cast&lt;int&gt;(i * i));
+  }
+  std::cout &lt;&lt; &quot;Success!\n&quot;;
+
+  return 0;
+}
+</code></pre>
+<p>本当は浮動小数点数の値の比較をもう少し丁寧にするべきですが、本題と関係ないので良しとします。</p>
+<h2 id="_3">利点</h2>
+<p>一般に非同期実行というと身構える方が多いと思われますが、上の解説を見ると意外と簡単にできると思われたのではないでしょうか。
+また、実行ポリシーで実行順序を指定できるのも魅力的です。</p>
+<p>非同期処理の利点というよりThrustを使う利点になりますが、実はrocThrustという、CUDAをHIPとROCmに置き換えたThrustをAMDが開発しています。
+現時点では、Thrust 1.17.2まで対応していますので非同期実行もできます。
+詳しくは参考文献4をご覧ください。</p>
+<h2 id="_4">欠点</h2>
+<p>残念ながら欠点があります。
+1つ目の欠点はCUDAがデバイスの時かつデバイス側でしか使えないことです。
+ThrustはoneTBBをデバイスとして使うこともできますが、非同期処理はoneTBBでは実装されていません。
+シリアルやOpenMPも同様です。
+「eventとfuture」節で触れましたが、これが<code>host_event</code>がない理由だと考えられます。
+しかし、この欠点はさほど問題にならないでしょう。</p>
+<p>2つ目の欠点は<code>async::copy</code>が転送するデータの型に対して<a href="https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2023/p1144r9.html">trivially relocatable</a>であることを要求していることです。
+trivially relocatableな型とは、簡単に言うとコピーとムーブ、破棄が<code>default</code>で出来て、仮想メンバ関数と仮想継承を持たず、全てのメンバ変数と基底クラスもtrivially relocatableな型です。
+これは<code>memcpy</code>でホストとデバイス間でデータ転送できるようにするために導入されました。
+Thrustでは、<code>THRUST_PROCLAIM_TRIVIALLY_RELOCATABLE</code>マクロ関数を使って、与えた型がtrivially relocatableであると宣言する必要があります。
+制約が強いもののパフォーマンスは向上し、<a href="https://github.com/AcademySoftwareFoundation/Imath/pull/337#issuecomment-1689218474">私が行った実験</a>ではそうでないものに比べて実行時間が約30%減っています。
+詳しくは参考文献5をご覧ください。</p>
+<h2 id="_5">実は...</h2>
+<p>Thrustのリポジトリをご覧になるとわかるのですが、なんとアーカイブにされてます。
+どうやら半年前から<a href="https://github.com/NVIDIA/cccl">CCCL</a>という、CUBとlibcudacxxも一緒にしたリポジトリに移ったようです。
+このことに気づいたのが一昨日だったので、昨日CCCLでもビルドできるか試していたのですが、上述のやり方ではエラーが出てしまいました。
+どうにか解決したかったのですが、時間もなかったのでとりあえずThrustに対して書きました。
+もしご存じの方がいらっしゃったら、教えていただけると幸いです。</p>
+<h2 id="_6">まとめ</h2>
+<p>データがtrivially relocatableな型なら、お手軽に非同期実行できます。</p>
+<h2 id="_7">ソースコード</h2>
+<p><a href="https://github.com/sukeya/ThrustAsyncProgram">GitHub</a>に置いています。</p>
+<h2 id="_8">参考文献</h2>
+<ol>
+<li>https://developer.nvidia.com/blog/separate-compilation-linking-cuda-device-code/</li>
+<li>https://github.com/NVIDIA/thrust/blob/main/thrust/system/cuda/detail/future.inl</li>
+<li>https://github.com/NVIDIA/thrust/blob/main/thrust/execution_policy.h</li>
+<li>https://github.com/ROCmSoftwarePlatform/rocThrust</li>
+<li>https://github.com/NVIDIA/thrust/releases/tag/1.9.4</li>
+</ol>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../.." class="btn btn-neutral float-left" title="概要"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../config-apple-magic-keyboard-in-ubuntu/" class="btn btn-neutral float-right" title="Apple Magic Keyboardの設定">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/sukeya/sukeya.github.io" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../.." style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../config-apple-magic-keyboard-in-ubuntu/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
