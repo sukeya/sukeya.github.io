@@ -1,43 +1,18 @@
----
-layout: post
-title:  X(旧Twitter)に投稿した小ネタ
-date:   2023-10-02 11:10:00 +0900
----
+# メモ
 小ネタ集です。
 
-## Alembic
-- たまたま見つけた[ブログ](https://i-saint.hatenablog.com/entry/2016/02/09/215542)に詳しく書かれてあった。
-- [初期のドキュメント](https://code.google.com/archive/p/alembic/wikis/AlembicPoint9UsersGuide.wiki)
 
-### Blenderで出力した場合
+## BlenderでAlembicを出力した場合
 - 速度は出力されない
 - 剛体運動はXformSampleに記録される
 - ソフトボディの運動はXformSampleに記録されない
 - ソフトボディと剛体がある時、例え剛体であっても各フレームごとのポリゴンメッシュの情報(点、法線、面)が出力される。
 
 
-## CUDA
-- CMakeによるコンパイル時に
-```
-In function `__sti____cudaRegisterAll()' * undefined reference to `__cudaRegisterLinkedBinary *
-```
-とエラーが出た時、`CUDA_SEPARABLE_COMPILATION`プロパティを実行ファイルにのみ付けるとエラーが治る。
-
-- CMakeを使う場合、`project`の前に`CMAKE_CUDA_ARCHITECHTURES`を設定しなければならない。
-
-### Thrust
+## Thrust
 - oneTBBをデバイスとして使う場合、コンパイルオプション`-expt-extended-lambda`をnvccに渡してもラムダ式をデバイスコードで使うことはできない。
-- 非同期処理はCUDAとC++14以上が必要。CUDA以外に対しては実装されていない。
-- 非同期処理を行うにはデータ型が[自明に再配置可能(trivially relocatable)](https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2023/p1144r8.html)でなければならない。
-- 複数のイベントの完了を待つイベントを作成するには`thrust::when_all`関数に完了を待ちたいイベントを渡せば良い。戻り値のイベントは`thrust::device_event`。
 - 入れ子になった`host_vector`と`device_vector`はお互いにコピーできない(コンパイルエラーになる)。
-- CMakeと一緒に使う時は[このドキュメント](https://github.com/NVIDIA/thrust/blob/main/thrust/cmake/README.md)を参考にしたほうがいい。
 
-## ROCm
-- ROCmをラップしたThrustを提供している。現時点でThrust 1.11まで対応しているため、非同期処理も行える。
-
-## oneTBB
-- FlowGraphは`async_node`が現時点でプレビューなので、非同期な処理を書くのに向いてない。
 
 ## C++
 - [C++標準async+futureとスレッドプールの性能比較](https://mikio.hatenablog.com/entry/2021/07/13/224907)
@@ -75,6 +50,20 @@ struct A<1>
 - 最新のコミットしか要らないリポジトリをクローンしたい時、`--depth 1`をつければ良い。
 - 追跡していないファイルを消したい時は`git clean`。
 - 追跡しているファイルを全てステージングしたい時は`git add -u`。
+
+
+## PETc
+### PETScのC++の機能を使うには
+PETScには`PetscCallThrow`という、エラーが発生すると`std::runtime_error`を投げる関数がある。
+この関数は`PETSC_CLANGUAGE_CXX`というマクロが定義されていないと使えない。
+他にもC++用の関数があるかもしれないので定義することをお勧めする。
+ちなみに、ヘッダーをインクルードする時は`extern "C"`をつけない。
+
+### PETScのconfigureの実行オプション
+[公式サイト](https://petsc.org/release/install/install/)に用途に応じて使うオプションが示されているが、どんなオプションがあるのか示されていない。
+どんなオプションがあるのか調べるための一番手っ取り早い方法は、[CIのテスト](https://gitlab.com/petsc/petsc/-/tree/main/config/examples)を見ることである。
+地道な方法はソースコードを見ることだが、`BuildSystem`があまりに複雑なので時間がかかるだろう。
+個人的には[package](https://gitlab.com/petsc/petsc/-/tree/main/config/BuildSystem/config/packages)を見ると、ライブラリ毎のオプションがどういう風に使われているかわかるので、ここを見ることをお勧めする。
 
 
 ## 参考
