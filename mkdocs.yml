@@ -11,4 +11,18 @@ nav:
     - 'Apple Magic Keyboardの設定': ./blog/config-apple-magic-keyboard-in-ubuntu.md
     - 'Alembicの使い方': ./blog/how-to-use-alembic.md
     - 'perf_event_paranoidを変更できない時の対処法': ./blog/cannot-change-perf-event-paranoid.md
-theme: readthedocs
+not_in_nav: |
+  thrust.md
+  memo.md
+theme:
+  name: material
+  features:
+    - content.code.copy
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences

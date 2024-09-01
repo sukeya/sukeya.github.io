@@ -293,7 +293,7 @@ mesh.setUVSourceName("test");
 
 UVと法線は`GeomParams`を使う。
 `GeomParams`はインデックスがあってもなくても読み書きできる。
-`kFacevaryingScope`については、[参考文献](#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE)の3、4を参考。
+`kFacevaryingScope`については、参考文献の3、4を参考。
 ```cpp
 // 立方体の頂点のUV。
 // UVの値は指定した面を構成する頂点の順に、各面の各頂点の値を列挙する。

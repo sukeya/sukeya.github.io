@@ -39,7 +39,7 @@ hoge/-- CMakeLists.txt
 
 CMakeLists.txtに以下を書きます。
 
-```cmake
+```cmake title="CMakeLists.txt"
 cmake_minimum_required(VERSION 3.27.7)
 
 # CUDAアーキテクチャを指定する。
@@ -143,9 +143,7 @@ Thrustには`event`と`future`があります。
 ヘッダーはそれぞれthrust/event.h, thrust/future.hです。
 今回は計算結果を`host_vector`に格納するので、使うのは実行が完了したか確認するだけの`event`です。
 
-double.h
-
-```cpp
+```cpp title="double.h"
 #include <thrust/event.h>
 #include <thrust/host_vector.h>
 
@@ -175,9 +173,7 @@ Thrustには`copy`や`transform`といった、STLのような関数が用意さ
 
 これらを踏まえて、以下のように実装してみます。
 
-double.cu
-
-```cuda
+```cuda title="double.cu"
 #include <thrust/async/copy.h>
 #include <thrust/async/transform.h>
 #include <thrust/device_vector.h>
@@ -232,9 +228,7 @@ thrust::device_event Double(thrust::host_vector<float>& floats, thrust::host_vec
 
 あとは、`main`関数で各配列を作って、`Double`関数に渡して、結果が正しいか確認するだけです。
 
-main.cpp
-
-```cpp
+```cpp title="main.cpp"
 #include "double.h"
 
 #include <cassert>

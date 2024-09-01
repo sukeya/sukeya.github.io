@@ -8,13 +8,16 @@
 
 ## やり方
 まず、`perf`があるディレクトリに移動します。シンボリックリンクでも構いません。
-```
+
+```sh
 # which perf
 /usr/bin/perf
 # cd /usr/bin
 ```
+
 次に、`perf_users`というグループを作成し、このグループに`perf`を追加します。これによって、`perf`を実行できるユーザーを制限できます。
-```
+
+```sh
 # sudo groupadd perf_users
 # ls -alhF
 -rwxr-xr-x  2 root root  11M Oct 19 15:12 perf
@@ -25,8 +28,10 @@
 # ls -alhF
 -rwxr-x---  2 root perf_users  11M Oct 19 15:12 perf
 ```
+
 `perf`に必要な権限を与え、`perf_users`のメンバーがパフォーマンスモニタリングできるようにします。
-```
+
+```sh
 # setcap "cap_perfmon=ep" perf
 # setcap -v "cap_perfmon=ep" perf
 perf: OK
