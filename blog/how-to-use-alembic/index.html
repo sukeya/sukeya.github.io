@@ -1,160 +1,1171 @@
-<!DOCTYPE html>
-<html class="writer-html5" lang="en" >
-<head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://sukeya.github.io/blog/how-to-use-alembic/" />
-      <link rel="shortcut icon" href="../../img/favicon.ico" />
-    <title>Alembicの使い方 - 私の愛した数式</title>
-    <link rel="stylesheet" href="../../css/theme.css" />
-    <link rel="stylesheet" href="../../css/theme_extra.css" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
     
-      <script>
-        // Current page data
-        var mkdocs_page_name = "Alembic\u306e\u4f7f\u3044\u65b9";
-        var mkdocs_page_input_path = "blog/how-to-use-alembic.md";
-        var mkdocs_page_url = "/blog/how-to-use-alembic/";
-      </script>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://sukeya.github.io/blog/how-to-use-alembic/">
+      
+      
+        <link rel="prev" href="../config-apple-magic-keyboard-in-ubuntu/">
+      
+      
+        <link rel="next" href="../cannot-change-perf-event-paranoid/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.34">
     
-    <!--[if lt IE 9]>
-      <script src="../../js/html5shiv.min.js"></script>
-    <![endif]-->
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
-      <script>hljs.highlightAll();</script> 
-</head>
+    
+      
+        <title>Alembicの使い方 - 私の愛した数式</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.35f28582.min.css">
+      
+      
 
-<body class="wy-body-for-nav" role="document">
 
-  <div class="wy-grid-for-nav">
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
-    <div class="wy-side-scroll">
-      <div class="wy-side-nav-search">
-          <a href="../.." class="icon icon-home"> 私の愛した数式
-        </a><div role="search">
-  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
-  </form>
-</div>
-      </div>
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
 
-      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <ul>
-                <li class="toctree-l1"><a class="reference internal" href="../..">概要</a>
-                </li>
-              </ul>
-              <p class="caption"><span class="caption-text">OSS</span></p>
-              <ul>
-                  <li class="toctree-l1"><a class="" href="/platanus/">platanus</a>
-                  </li>
-              </ul>
-              <p class="caption"><span class="caption-text">ブログ</span></p>
-              <ul class="current">
-                  <li class="toctree-l1"><a class="reference internal" href="../thrust-async/">Thrustの非同期実行</a>
-                  </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../config-apple-magic-keyboard-in-ubuntu/">Apple Magic Keyboardの設定</a>
-                  </li>
-                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Alembicの使い方</a>
-    <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#alembic_1">Alembicとは</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#_1">ライブラリの構成</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#_2">ファイルの入出力について</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#abccorelayer">AbcCoreLayerで出来ること</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#_3">主な概念</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#archive">Archive</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#object">Object</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#schema">Schema</a>
-        <ul>
-    <li class="toctree-l4"><a class="reference internal" href="#schemaobject">SchemaObject</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#property">Property</a>
-        <ul>
-    <li class="toctree-l4"><a class="reference internal" href="#simple-property">Simple Property</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#compoundproperty">CompoundProperty</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#sample">Sample</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#timesampling">TimeSampling</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#sampleselector">SampleSelector</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#_4">主なスキーマオブジェクト</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#polymesh">PolyMesh</a>
-        <ul>
-    <li class="toctree-l4"><a class="reference internal" href="#polymeshschema">PolyMeshSchema</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#xform">Xform</a>
-        <ul>
-    <li class="toctree-l4"><a class="reference internal" href="#xformschema">XformSchema</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#xformsample">XformSample</a>
-    </li>
-    <li class="toctree-l4"><a class="reference internal" href="#xformop">XformOp</a>
-    </li>
-        </ul>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#_7">使用例</a>
-        <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#_8">ポリゴンメッシュの書き込み</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#_9">ポリゴンメッシュの読み込み</a>
-    </li>
-        </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#_10">参考文献</a>
-    </li>
-    </ul>
-                  </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../cannot-change-perf-event-paranoid/">perf_event_paranoidを変更できない時の対処法</a>
-                  </li>
-              </ul>
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#alembic" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="私の愛した数式" class="md-header__button md-logo" aria-label="私の愛した数式" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            私の愛した数式
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Alembicの使い方
+            
+          </span>
+        </div>
       </div>
     </div>
-    </nav>
-
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../..">私の愛した数式</a>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
         
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
       </nav>
-      <div class="wy-nav-content">
-        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
-  <ul class="wy-breadcrumbs">
-    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
-          <li class="breadcrumb-item">ブログ</li>
-      <li class="breadcrumb-item active">Alembicの使い方</li>
-    <li class="wy-breadcrumbs-aside">
-          <a href="https://github.com/sukeya/sukeya.github.io/blob/main/docs/blog/how-to-use-alembic.md" class="icon icon-github"> Edit on GitHub</a>
-    </li>
-  </ul>
-  <hr/>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-            <div class="section" itemprop="articleBody">
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/sukeya/sukeya.github.io" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
               
-                <h1 id="alembic">Alembicの使い方</h1>
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="私の愛した数式" class="md-nav__button md-logo" aria-label="私の愛した数式" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    私の愛した数式
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/sukeya/sukeya.github.io" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    概要
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    OSS
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            OSS
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="/platanus/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    platanus
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    ブログ
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            ブログ
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../thrust-async/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Thrustの非同期実行
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../config-apple-magic-keyboard-in-ubuntu/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Apple Magic Keyboardの設定
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Alembicの使い方
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Alembicの使い方
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#alembic_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Alembicとは
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      ライブラリの構成
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ライブラリの構成">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      ファイルの入出力について
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#abccorelayer" class="md-nav__link">
+    <span class="md-ellipsis">
+      AbcCoreLayerで出来ること
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      主な概念
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="主な概念">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#archive" class="md-nav__link">
+    <span class="md-ellipsis">
+      Archive
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#object" class="md-nav__link">
+    <span class="md-ellipsis">
+      Object
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#schema" class="md-nav__link">
+    <span class="md-ellipsis">
+      Schema
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Schema">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#schemaobject" class="md-nav__link">
+    <span class="md-ellipsis">
+      SchemaObject
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#property" class="md-nav__link">
+    <span class="md-ellipsis">
+      Property
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Property">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#simple-property" class="md-nav__link">
+    <span class="md-ellipsis">
+      Simple Property
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Simple Property">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#scalarproperty" class="md-nav__link">
+    <span class="md-ellipsis">
+      ScalarProperty
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#typedarrayproperty" class="md-nav__link">
+    <span class="md-ellipsis">
+      TypedArrayProperty
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compoundproperty" class="md-nav__link">
+    <span class="md-ellipsis">
+      CompoundProperty
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sample" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sample
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#timesampling" class="md-nav__link">
+    <span class="md-ellipsis">
+      TimeSampling
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sampleselector" class="md-nav__link">
+    <span class="md-ellipsis">
+      SampleSelector
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      主なスキーマオブジェクト
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="主なスキーマオブジェクト">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#polymesh" class="md-nav__link">
+    <span class="md-ellipsis">
+      PolyMesh
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PolyMesh">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#polymeshschema" class="md-nav__link">
+    <span class="md-ellipsis">
+      PolyMeshSchema
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PolyMeshSchema">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      面
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      法線
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xform" class="md-nav__link">
+    <span class="md-ellipsis">
+      Xform
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Xform">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xformschema" class="md-nav__link">
+    <span class="md-ellipsis">
+      XformSchema
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xformsample" class="md-nav__link">
+    <span class="md-ellipsis">
+      XformSample
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xformop" class="md-nav__link">
+    <span class="md-ellipsis">
+      XformOp
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      使用例
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="使用例">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      ポリゴンメッシュの書き込み
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      ポリゴンメッシュの読み込み
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      参考文献
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cannot-change-perf-event-paranoid/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    perf_event_paranoidを変更できない時の対処法
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#alembic_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Alembicとは
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      ライブラリの構成
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ライブラリの構成">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      ファイルの入出力について
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#abccorelayer" class="md-nav__link">
+    <span class="md-ellipsis">
+      AbcCoreLayerで出来ること
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      主な概念
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="主な概念">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#archive" class="md-nav__link">
+    <span class="md-ellipsis">
+      Archive
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#object" class="md-nav__link">
+    <span class="md-ellipsis">
+      Object
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#schema" class="md-nav__link">
+    <span class="md-ellipsis">
+      Schema
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Schema">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#schemaobject" class="md-nav__link">
+    <span class="md-ellipsis">
+      SchemaObject
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#property" class="md-nav__link">
+    <span class="md-ellipsis">
+      Property
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Property">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#simple-property" class="md-nav__link">
+    <span class="md-ellipsis">
+      Simple Property
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Simple Property">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#scalarproperty" class="md-nav__link">
+    <span class="md-ellipsis">
+      ScalarProperty
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#typedarrayproperty" class="md-nav__link">
+    <span class="md-ellipsis">
+      TypedArrayProperty
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compoundproperty" class="md-nav__link">
+    <span class="md-ellipsis">
+      CompoundProperty
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sample" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sample
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#timesampling" class="md-nav__link">
+    <span class="md-ellipsis">
+      TimeSampling
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sampleselector" class="md-nav__link">
+    <span class="md-ellipsis">
+      SampleSelector
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      主なスキーマオブジェクト
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="主なスキーマオブジェクト">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#polymesh" class="md-nav__link">
+    <span class="md-ellipsis">
+      PolyMesh
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PolyMesh">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#polymeshschema" class="md-nav__link">
+    <span class="md-ellipsis">
+      PolyMeshSchema
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PolyMeshSchema">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      面
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      法線
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xform" class="md-nav__link">
+    <span class="md-ellipsis">
+      Xform
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Xform">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xformschema" class="md-nav__link">
+    <span class="md-ellipsis">
+      XformSchema
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xformsample" class="md-nav__link">
+    <span class="md-ellipsis">
+      XformSample
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xformop" class="md-nav__link">
+    <span class="md-ellipsis">
+      XformOp
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      使用例
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="使用例">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      ポリゴンメッシュの書き込み
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      ポリゴンメッシュの読み込み
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      参考文献
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="alembic">Alembicの使い方</h1>
 <p>この記事はAlembicのv1.8.3を参照しています。
 意味がわからなくても最後まで目を通してから、もう一度読むことをお勧めします。
 私が理解している<code>PolyMesh</code>(ポリゴンメッシュ)と<code>Xform</code>(メッシュの変形)に関連する項目のみ取り上げます。</p>
@@ -524,108 +1535,108 @@ Propertyと同様に、SampleもScalarとArrayの2種類ある。
 <h3 id="_8">ポリゴンメッシュの書き込み</h3>
 <p>各ディレクトリには、そのライブラリが公開している全てをインクルードした<code>All.h</code>という名前のヘッダーがある。
 なので、以下のようにインクルードすればよい。</p>
-<pre><code class="language-cpp">// Alembic Includes
-#include &lt;Alembic/AbcGeom/All.h&gt;
-#include &lt;Alembic/AbcCoreOgawa/All.h&gt;
-</code></pre>
-<p>次に<code>Archive</code>を作り、その<code>Archive</code>の子供として、静的なポリゴンメッシュを持つアニメーションを追加しよう。</p>
-<pre><code class="language-cpp">// メタデータの作成
-auto abc_metadata = Alembic::Abc::MetaData();
-// 名前を&quot;PolyMesh&quot;にする。
-abc_metadata.set(Alembic::Abc::kUserDescriptionKey, &quot;PolyMesh&quot;);
-
-auto archive_writer = Alembic::AbcCoreOgawa::WriteArchive();
-auto writer_ptr = archive_writer(&quot;polyMesh1.abc&quot;, abc_metadata);
-// polyMesh1.abcへ書き込めるarchiveを作成
-auto archive = Alembic::Abc::OArchive(writer_ptr);
-</code></pre>
-<p>立方体[-1, 1] x [-1, 1] x [-1, 1]のPolyMesh Objectを作成する。"meshy"は<code>meshyObj</code>の名前。</p>
-<pre><code class="language-cpp">auto abc_top = archive.getTop();
-auto meshyObj = OPolyMesh(abc_top, &quot;meshy&quot;);
-</code></pre>
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1">// Alembic Includes</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;Alembic/AbcGeom/All.h&gt;</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;Alembic/AbcCoreOgawa/All.h&gt;</span>
+</span></code></pre></div>
+<p>次に<code>Archive</code>を作り、その<code>Archive</code>の子供として、静的なポリゴンメッシュを持つアニメーションを追加しよう。
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1">// メタデータの作成</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="k">auto</span><span class="w"> </span><span class="n">abc_metadata</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Alembic</span><span class="o">::</span><span class="n">Abc</span><span class="o">::</span><span class="n">MetaData</span><span class="p">();</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="c1">// 名前を&quot;PolyMesh&quot;にする。</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">abc_metadata</span><span class="p">.</span><span class="n">set</span><span class="p">(</span><span class="n">Alembic</span><span class="o">::</span><span class="n">Abc</span><span class="o">::</span><span class="n">kUserDescriptionKey</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;PolyMesh&quot;</span><span class="p">);</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="k">auto</span><span class="w"> </span><span class="n">archive_writer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Alembic</span><span class="o">::</span><span class="n">AbcCoreOgawa</span><span class="o">::</span><span class="n">WriteArchive</span><span class="p">();</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="k">auto</span><span class="w"> </span><span class="n">writer_ptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">archive_writer</span><span class="p">(</span><span class="s">&quot;polyMesh1.abc&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">abc_metadata</span><span class="p">);</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="c1">// polyMesh1.abcへ書き込めるarchiveを作成</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="k">auto</span><span class="w"> </span><span class="n">archive</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Alembic</span><span class="o">::</span><span class="n">Abc</span><span class="o">::</span><span class="n">OArchive</span><span class="p">(</span><span class="n">writer_ptr</span><span class="p">);</span>
+</span></code></pre></div></p>
+<p>立方体[-1, 1] x [-1, 1] x [-1, 1]のPolyMesh Objectを作成する。"meshy"は<code>meshyObj</code>の名前。
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">auto</span><span class="w"> </span><span class="n">abc_top</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">archive</span><span class="p">.</span><span class="n">getTop</span><span class="p">();</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="k">auto</span><span class="w"> </span><span class="n">meshyObj</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">OPolyMesh</span><span class="p">(</span><span class="n">abc_top</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;meshy&quot;</span><span class="p">);</span>
+</span></code></pre></div></p>
 <p>UVと法線のSampleを作成する。
-その前に、UVの名前はSampleに入れる前に付ける必要がある。</p>
-<pre><code class="language-cpp">auto&amp; mesh = meshyObj.getSchema();
-mesh.setUVSourceName(&quot;test&quot;);
-</code></pre>
+その前に、UVの名前はSampleに入れる前に付ける必要がある。
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">auto</span><span class="o">&amp;</span><span class="w"> </span><span class="n">mesh</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">meshyObj</span><span class="p">.</span><span class="n">getSchema</span><span class="p">();</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="n">mesh</span><span class="p">.</span><span class="n">setUVSourceName</span><span class="p">(</span><span class="s">&quot;test&quot;</span><span class="p">);</span>
+</span></code></pre></div></p>
 <p>UVと法線は<code>GeomParams</code>を使う。
 <code>GeomParams</code>はインデックスがあってもなくても読み書きできる。
-<code>kFacevaryingScope</code>については、<a href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE">参考文献</a>の3、4を参考。</p>
-<pre><code class="language-cpp">// 立方体の頂点のUV。
-// UVの値は指定した面を構成する頂点の順に、各面の各頂点の値を列挙する。
-extern const size_t g_numUVs;
-extern const Abc::float32_t g_uvs[];
-auto uvsamp = OV2fGeomParam::Sample(
-    V2fArraySample((const V2f *)g_uvs, g_numUVs), // reinterpret_castを使うべき
-    kFacevaryingScope
-);
-// 立方体の頂点の法線
-// 法線の値は指定した面を構成する頂点の順に、各面の各頂点の値を列挙する。
-// これは基本的にはRenderManの&quot;facevarying&quot;の型に合うストレージである。
-extern const size_t g_numNormals;
-extern const Abc::float32_t g_normals[];
-auto nsamp = ON3fGeomParam::Sample(
-    N3fArraySample((const N3f *)g_normals, g_numNormals),
-    kFacevaryingScope
-);
-</code></pre>
+<code>kFacevaryingScope</code>については、参考文献の3、4を参考。
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1">// 立方体の頂点のUV。</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="c1">// UVの値は指定した面を構成する頂点の順に、各面の各頂点の値を列挙する。</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="k">extern</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">g_numUVs</span><span class="p">;</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="k">extern</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">Abc</span><span class="o">::</span><span class="n">float32_t</span><span class="w"> </span><span class="n">g_uvs</span><span class="p">[];</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="k">auto</span><span class="w"> </span><span class="n">uvsamp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">OV2fGeomParam</span><span class="o">::</span><span class="n">Sample</span><span class="p">(</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">    </span><span class="n">V2fArraySample</span><span class="p">((</span><span class="k">const</span><span class="w"> </span><span class="n">V2f</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="n">g_uvs</span><span class="p">,</span><span class="w"> </span><span class="n">g_numUVs</span><span class="p">),</span><span class="w"> </span><span class="c1">// reinterpret_castを使うべき</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">    </span><span class="n">kFacevaryingScope</span>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="p">);</span>
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="c1">// 立方体の頂点の法線</span>
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="c1">// 法線の値は指定した面を構成する頂点の順に、各面の各頂点の値を列挙する。</span>
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="c1">// これは基本的にはRenderManの&quot;facevarying&quot;の型に合うストレージである。</span>
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="k">extern</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">g_numNormals</span><span class="p">;</span>
+</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="k">extern</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">Abc</span><span class="o">::</span><span class="n">float32_t</span><span class="w"> </span><span class="n">g_normals</span><span class="p">[];</span>
+</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="k">auto</span><span class="w"> </span><span class="n">nsamp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ON3fGeomParam</span><span class="o">::</span><span class="n">Sample</span><span class="p">(</span>
+</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="w">    </span><span class="n">N3fArraySample</span><span class="p">((</span><span class="k">const</span><span class="w"> </span><span class="n">N3f</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="n">g_normals</span><span class="p">,</span><span class="w"> </span><span class="n">g_numNormals</span><span class="p">),</span>
+</span><span id="__span-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="w">    </span><span class="n">kFacevaryingScope</span>
+</span><span id="__span-4-17"><a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="p">);</span>
+</span></code></pre></div></p>
 <p>メッシュのSampleを設定する。
 引数は先頭から順に、頂点の座標と頂点の数、面を構成する頂点のインデックスのリストとそのリストのサイズ、面を構成する頂点の数のリストとそのリストのサイズである。
-速度は<code>OPolyMeshSchema::Sample</code>の<code>setVelocityies</code>メンバ関数で設定する。</p>
-<pre><code class="language-cpp">auto mesh_samp = OPolyMeshSchema::Sample(
-    V3fArraySample((const V3f *)g_verts, g_numVerts),
-    Int32ArraySample(g_indices, g_numIndices),
-    Int32ArraySample(g_counts, g_numCounts),
-    uvsamp,
-    nsamp
-);
-mesh.set(mesh_samp);
-</code></pre>
+速度は<code>OPolyMeshSchema::Sample</code>の<code>setVelocityies</code>メンバ関数で設定する。
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">auto</span><span class="w"> </span><span class="n">mesh_samp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">OPolyMeshSchema</span><span class="o">::</span><span class="n">Sample</span><span class="p">(</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">    </span><span class="n">V3fArraySample</span><span class="p">((</span><span class="k">const</span><span class="w"> </span><span class="n">V3f</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="n">g_verts</span><span class="p">,</span><span class="w"> </span><span class="n">g_numVerts</span><span class="p">),</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">    </span><span class="n">Int32ArraySample</span><span class="p">(</span><span class="n">g_indices</span><span class="p">,</span><span class="w"> </span><span class="n">g_numIndices</span><span class="p">),</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">    </span><span class="n">Int32ArraySample</span><span class="p">(</span><span class="n">g_counts</span><span class="p">,</span><span class="w"> </span><span class="n">g_numCounts</span><span class="p">),</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">    </span><span class="n">uvsamp</span><span class="p">,</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">    </span><span class="n">nsamp</span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="p">);</span>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="n">mesh</span><span class="p">.</span><span class="n">set</span><span class="p">(</span><span class="n">mesh_samp</span><span class="p">);</span>
+</span></code></pre></div></p>
 <p>Alembicのオブジェクトはスコープから出るときに自動的に破棄される。
 なので、特に何もしなくて良い。</p>
 <p>プログラム全体は参考文献の2にある。</p>
 <h3 id="_9">ポリゴンメッシュの読み込み</h3>
 <p>インクルードするヘッダーと名前空間は前例を参照。</p>
-<p>読み込み用アーカイブを作成する。</p>
-<pre><code class="language-cpp">auto archive_reader = Alembic::AbcCoreOgawa::ReadArchive();
-auto reader_ptr = archive_reader(&quot;polyMesh1.abc&quot;);
-auto archive = Alembic::Abc::IArchive(reader_ptr);
-</code></pre>
-<p>UV, 法線を取得する。</p>
-<pre><code class="language-cpp">auto meshyObj         = IPolyMesh(archive.getTop(), &quot;meshy&quot;);
-IPolyMeshSchema&amp; mesh = meshyObj.getSchema();
-auto N                = mesh.getNormalsParam();
-auto uv               = mesh.getUVsParam();
-</code></pre>
-<p>頂点の座標のリスト、面を構成する頂点のインデックスのリスト、面を構成する頂点の数のリスト、AABB、もしあれば速度のリストを取得する。</p>
-<pre><code class="language-cpp">IPolyMeshSchema::Sample mesh_samp;
-mesh.get(mesh_samp);
-</code></pre>
-<p>以下のコードで、法線のリストのポインター(正確には<code>N3fArraySamplePtr</code>)を取得できる。</p>
-<pre><code class="language-cpp">auto nsp = N.getExpandedValue().getVals();
-</code></pre>
-<p>各法線は以下のようにして取得できる。</p>
-<pre><code class="language-cpp">for ( size_t i = 0 ; i &lt; nsp-&gt;size() ; ++i )
-{
-    std::cout &lt;&lt; i &lt;&lt; &quot;th normal: &quot; &lt;&lt; (*nsp)[i] &lt;&lt; std::endl;
-}
-</code></pre>
-<p>インデックスを付けたいときは、<code>getExpandedValue</code>の代わりに<code>getIndexedValue</code>を使う。</p>
-<pre><code class="language-cpp">auto uvsamp = uv.getIndexedValue();
-</code></pre>
-<p>値は以下のように取得する。</p>
-<pre><code class="language-cpp">V2f uv2 = (*(uvsamp.getVals()))[2];
-TESTING_ASSERT( uv2 == V2f( 1.0f, 1.0f ) );
-</code></pre>
-<p>頂点のリストのサイズは以下で取得できる。</p>
-<pre><code class="language-cpp">mesh_samp.getPositions()-&gt;size();
-</code></pre>
-<p>最初の頂点の座標は以下で取得できる。</p>
-<pre><code class="language-cpp">(*(mesh_samp.getPositions()))[0];
-</code></pre>
-<p>取得するだけなら、以下のように簡潔に書ける。</p>
-<pre><code class="language-cpp">mesh_samp.getPositions()-&gt;get()[0];
-</code></pre>
+<p>読み込み用アーカイブを作成する。
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">auto</span><span class="w"> </span><span class="n">archive_reader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Alembic</span><span class="o">::</span><span class="n">AbcCoreOgawa</span><span class="o">::</span><span class="n">ReadArchive</span><span class="p">();</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="k">auto</span><span class="w"> </span><span class="n">reader_ptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">archive_reader</span><span class="p">(</span><span class="s">&quot;polyMesh1.abc&quot;</span><span class="p">);</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="k">auto</span><span class="w"> </span><span class="n">archive</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Alembic</span><span class="o">::</span><span class="n">Abc</span><span class="o">::</span><span class="n">IArchive</span><span class="p">(</span><span class="n">reader_ptr</span><span class="p">);</span>
+</span></code></pre></div></p>
+<p>UV, 法線を取得する。
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">auto</span><span class="w"> </span><span class="n">meshyObj</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="n">IPolyMesh</span><span class="p">(</span><span class="n">archive</span><span class="p">.</span><span class="n">getTop</span><span class="p">(),</span><span class="w"> </span><span class="s">&quot;meshy&quot;</span><span class="p">);</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="n">IPolyMeshSchema</span><span class="o">&amp;</span><span class="w"> </span><span class="n">mesh</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">meshyObj</span><span class="p">.</span><span class="n">getSchema</span><span class="p">();</span>
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="k">auto</span><span class="w"> </span><span class="n">N</span><span class="w">                </span><span class="o">=</span><span class="w"> </span><span class="n">mesh</span><span class="p">.</span><span class="n">getNormalsParam</span><span class="p">();</span>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="k">auto</span><span class="w"> </span><span class="n">uv</span><span class="w">               </span><span class="o">=</span><span class="w"> </span><span class="n">mesh</span><span class="p">.</span><span class="n">getUVsParam</span><span class="p">();</span>
+</span></code></pre></div></p>
+<p>頂点の座標のリスト、面を構成する頂点のインデックスのリスト、面を構成する頂点の数のリスト、AABB、もしあれば速度のリストを取得する。
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="n">IPolyMeshSchema</span><span class="o">::</span><span class="n">Sample</span><span class="w"> </span><span class="n">mesh_samp</span><span class="p">;</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="n">mesh</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">mesh_samp</span><span class="p">);</span>
+</span></code></pre></div></p>
+<p>以下のコードで、法線のリストのポインター(正確には<code>N3fArraySamplePtr</code>)を取得できる。
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">auto</span><span class="w"> </span><span class="n">nsp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">N</span><span class="p">.</span><span class="n">getExpandedValue</span><span class="p">().</span><span class="n">getVals</span><span class="p">();</span>
+</span></code></pre></div></p>
+<p>各法線は以下のようにして取得できる。
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">nsp</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">()</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="w"> </span><span class="p">)</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="p">{</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;th normal: &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">nsp</span><span class="p">)[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="p">}</span>
+</span></code></pre></div></p>
+<p>インデックスを付けたいときは、<code>getExpandedValue</code>の代わりに<code>getIndexedValue</code>を使う。
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="k">auto</span><span class="w"> </span><span class="n">uvsamp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">uv</span><span class="p">.</span><span class="n">getIndexedValue</span><span class="p">();</span>
+</span></code></pre></div></p>
+<p>値は以下のように取得する。
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="n">V2f</span><span class="w"> </span><span class="n">uv2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">uvsamp</span><span class="p">.</span><span class="n">getVals</span><span class="p">()))[</span><span class="mi">2</span><span class="p">];</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="n">TESTING_ASSERT</span><span class="p">(</span><span class="w"> </span><span class="n">uv2</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">V2f</span><span class="p">(</span><span class="w"> </span><span class="mf">1.0f</span><span class="p">,</span><span class="w"> </span><span class="mf">1.0f</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">);</span>
+</span></code></pre></div></p>
+<p>頂点のリストのサイズは以下で取得できる。
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="n">mesh_samp</span><span class="p">.</span><span class="n">getPositions</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">();</span>
+</span></code></pre></div></p>
+<p>最初の頂点の座標は以下で取得できる。
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">mesh_samp</span><span class="p">.</span><span class="n">getPositions</span><span class="p">()))[</span><span class="mi">0</span><span class="p">];</span>
+</span></code></pre></div></p>
+<p>取得するだけなら、以下のように簡潔に書ける。
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="n">mesh_samp</span><span class="p">.</span><span class="n">getPositions</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">get</span><span class="p">()[</span><span class="mi">0</span><span class="p">];</span>
+</span></code></pre></div></p>
 <h2 id="_10">参考文献</h2>
 <ol>
 <li><a href="http://docs.alembic.io/python/examples.html#properties">Introduction &mdash; Alembic 1.7.0 documentation</a></li>
@@ -635,55 +1646,57 @@ TESTING_ASSERT( uv2 == V2f( 1.0f, 1.0f ) );
 <li><a href="https://renderman.pixar.com/resources/RenderMan_20/geometricPrimitives.html">Geometric Primitives</a></li>
 <li><a href="https://github.com/alembic/alembic/blob/master/lib/Alembic/AbcGeom/GeometryScope.h">Alembic/AbcGeom/GeometryScope.h</a></li>
 </ol>
-              
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
             </div>
-          </div><footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href="../config-apple-magic-keyboard-in-ubuntu/" class="btn btn-neutral float-left" title="Apple Magic Keyboardの設定"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-        <a href="../cannot-change-perf-event-paranoid/" class="btn btn-neutral float-right" title="perf_event_paranoidを変更できない時の対処法">Next <span class="icon icon-circle-arrow-right"></span></a>
-    </div>
-
-  <hr/>
-
-  <div role="contentinfo">
-    <!-- Copyright etc -->
-  </div>
-
-  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
-</footer>
           
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
         </div>
-      </div>
-
-    </section>
-
-  </div>
-
-  <div class="rst-versions" role="note" aria-label="Versions">
-  <span class="rst-current-version" data-toggle="rst-current-version">
-    
-        <span>
-          <a href="https://github.com/sukeya/sukeya.github.io" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
-        </span>
-    
-    
-      <span><a href="../config-apple-magic-keyboard-in-ubuntu/" style="color: #fcfcfc">&laquo; Previous</a></span>
-    
-    
-      <span><a href="../cannot-change-perf-event-paranoid/" style="color: #fcfcfc">Next &raquo;</a></span>
-    
-  </span>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
 </div>
-    <script src="../../js/jquery-3.6.0.min.js"></script>
-    <script>var base_url = "../..";</script>
-    <script src="../../js/theme_extra.js"></script>
-    <script src="../../js/theme.js"></script>
-      <script src="../../search/main.js"></script>
-    <script>
-        jQuery(function () {
-            SphinxRtdTheme.Navigation.enable(true);
-        });
-    </script>
-
-</body>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.copy"], "search": "../../assets/javascripts/workers/search.07f07601.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.56dfad97.min.js"></script>
+      
+    
+  </body>
 </html>
