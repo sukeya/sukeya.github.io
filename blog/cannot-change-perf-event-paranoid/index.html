@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://sukeya.github.io/blog/cannot-change-perf-event-paranoid/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>perf_event_paranoidを変更できない時の対処法 - 私の愛した数式</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "perf_event_paranoid\u3092\u5909\u66f4\u3067\u304d\u306a\u3044\u6642\u306e\u5bfe\u51e6\u6cd5";
+        var mkdocs_page_input_path = "blog/cannot-change-perf-event-paranoid.md";
+        var mkdocs_page_url = "/blog/cannot-change-perf-event-paranoid/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> 私の愛した数式
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">概要</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">OSS</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="" href="/platanus/">platanus</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">ブログ</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../thrust-async/">Thrustの非同期実行</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../config-apple-magic-keyboard-in-ubuntu/">Apple Magic Keyboardの設定</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../how-to-use-alembic/">Alembicの使い方</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">perf_event_paranoidを変更できない時の対処法</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#_1">前提</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#_2">やり方</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#_3">解説</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#_4">参考文献</a>
+    </li>
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">私の愛した数式</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">ブログ</li>
+      <li class="breadcrumb-item active">perf_event_paranoidを変更できない時の対処法</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/sukeya/sukeya.github.io/blob/main/docs/blog/cannot-change-perf-event-paranoid.md" class="icon icon-github"> Edit on GitHub</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="perf_event_paranoid">perf_event_paranoidを変更できない時の対処法</h1>
+<p>この記事は<code>perf</code>を使いたいが、何らかの理由で<code>/proc/sys/kernel/perf_event_paranoid</code>を変更できない方向けです。Ubuntu 22.04で検証済みです。</p>
+<h2 id="_1">前提</h2>
+<p>以下を仮定します。
+- 特権(sudoを使える)を持っている
+- perfをインストール済み</p>
+<h2 id="_2">やり方</h2>
+<p>まず、<code>perf</code>があるディレクトリに移動します。シンボリックリンクでも構いません。</p>
+<pre><code># which perf
+/usr/bin/perf
+# cd /usr/bin
+</code></pre>
+<p>次に、<code>perf_users</code>というグループを作成し、このグループに<code>perf</code>を追加します。これによって、<code>perf</code>を実行できるユーザーを制限できます。</p>
+<pre><code># sudo groupadd perf_users
+# ls -alhF
+-rwxr-xr-x  2 root root  11M Oct 19 15:12 perf
+# chgrp perf_users perf
+# ls -alhF
+-rwxr-xr-x  2 root perf_users  11M Oct 19 15:12 perf
+# chmod o-rwx perf
+# ls -alhF
+-rwxr-x---  2 root perf_users  11M Oct 19 15:12 perf
+</code></pre>
+<p><code>perf</code>に必要な権限を与え、<code>perf_users</code>のメンバーがパフォーマンスモニタリングできるようにします。</p>
+<pre><code># setcap &quot;cap_perfmon=ep&quot; perf
+# setcap -v &quot;cap_perfmon=ep&quot; perf
+perf: OK
+# getcap perf
+perf cap_perfmon=ep
+</code></pre>
+<h2 id="_3">解説</h2>
+<p>Linuxでは、特権をケーパビリティ(capabilities)と呼ばれる、異なる単位に分割していて、非特権ユーザーのプロセスやファイルに対してスレッド毎に個別に有効または無効に出来ます。</p>
+<p><code>CAP_PERFMON</code>というケーパビリティを持った非特権プロセスはパフォーマンスモニタリングに関して特権を持つプロセスとして扱われます。<code>CAP_PERFMON</code>はパフォーマンスモニタリングのために必要な最小限の特権しか持たず、モニタリングのための安全な方法を提供します。</p>
+<p>より詳しく調べたい時は必要な特権を指定します。例えば、<code>/proc/kallsyms</code>ファイルからカーネル空間のメモリアドレスを読みたい時は<code>CAP_SYSLOG</code>ケーパビリティを指定します。</p>
+<p><code>=ep</code>はファイルへのケーパビリティの設定で、スレッド起動時に<code>CAP_PERFMON</code>を有効にするという設定らしいです。</p>
+<p>Linux v5.9以前では<code>CAP_SYS_PTRACE</code>が必要でしたが、それ以降では必要ありません。</p>
+<h2 id="_4">参考文献</h2>
+<ol>
+<li><a href="https://www.kernel.org/doc/html/latest/admin-guide/perf-security.html#privileged-perf-users-groups">Perf events and tool security</a></li>
+<li><a href="https://manpages.ubuntu.com/manpages/bionic/ja/man7/capabilities.7.html">capabilities - Linux のケーパビリティ (capability) の概要</a></li>
+</ol>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../how-to-use-alembic/" class="btn btn-neutral float-left" title="Alembicの使い方"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/sukeya/sukeya.github.io" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href="../how-to-use-alembic/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
