@@ -39,7 +39,7 @@ hoge/-- CMakeLists.txt
 
 CMakeLists.txtに以下を書きます。
 
-```cmake title="CMakeLists.txt"
+```cmake title="CMakeLists.txt" linenums="1"
 cmake_minimum_required(VERSION 3.27.7)
 
 # CUDAアーキテクチャを指定する。
@@ -143,7 +143,7 @@ Thrustには`event`と`future`があります。
 ヘッダーはそれぞれthrust/event.h, thrust/future.hです。
 今回は計算結果を`host_vector`に格納するので、使うのは実行が完了したか確認するだけの`event`です。
 
-```cpp title="double.h"
+```cpp title="double.h" linenums="1"
 #include <thrust/event.h>
 #include <thrust/host_vector.h>
 
@@ -173,7 +173,7 @@ Thrustには`copy`や`transform`といった、STLのような関数が用意さ
 
 これらを踏まえて、以下のように実装してみます。
 
-```cuda title="double.cu"
+```cuda title="double.cu" linenums="1"
 #include <thrust/async/copy.h>
 #include <thrust/async/transform.h>
 #include <thrust/device_vector.h>
@@ -228,7 +228,7 @@ thrust::device_event Double(thrust::host_vector<float>& floats, thrust::host_vec
 
 あとは、`main`関数で各配列を作って、`Double`関数に渡して、結果が正しいか確認するだけです。
 
-```cpp title="main.cpp"
+```cpp title="main.cpp" linenums="1"
 #include "double.h"
 
 #include <cassert>
@@ -307,8 +307,8 @@ Thrustのリポジトリをご覧になるとわかるのですが、なんと�
 
 
 ## 参考文献
-1. https://developer.nvidia.com/blog/separate-compilation-linking-cuda-device-code/
-2. https://github.com/NVIDIA/thrust/blob/main/thrust/system/cuda/detail/future.inl
-3. https://github.com/NVIDIA/thrust/blob/main/thrust/execution_policy.h
-4. https://github.com/ROCmSoftwarePlatform/rocThrust
-5. https://github.com/NVIDIA/thrust/releases/tag/1.9.4
+1. [Separate Compilation and Linking of CUDA C++ Device Code](https://developer.nvidia.com/blog/separate-compilation-linking-cuda-device-code/)
+2. [thrust/system/cuda/detail/future.inl](https://github.com/NVIDIA/thrust/blob/main/thrust/system/cuda/detail/future.inl)
+3. [thrust/execution_policy.h](https://github.com/NVIDIA/thrust/blob/main/thrust/execution_policy.h)
+4. [rocThrust](https://github.com/ROCmSoftwarePlatform/rocThrust)
+5. [Thrust 1.9.4](https://github.com/NVIDIA/thrust/releases/tag/1.9.4)

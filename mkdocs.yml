@@ -1,7 +1,8 @@
 site_name: 私の愛した数式
 site_url: https://sukeya.github.io/
 repo_url: https://github.com/sukeya/sukeya.github.io
-edit_uri: blob/main/docs/
+repo_name: sukeya/sukeya.github.io
+edit_uri: edit/main/docs/
 nav:
   - '概要': index.md
   - OSS:
@@ -11,13 +12,22 @@ nav:
     - 'Apple Magic Keyboardの設定': ./blog/config-apple-magic-keyboard-in-ubuntu.md
     - 'Alembicの使い方': ./blog/how-to-use-alembic.md
     - 'perf_event_paranoidを変更できない時の対処法': ./blog/cannot-change-perf-event-paranoid.md
+  - 'CUDAプログラミングガイド':
+    - 'プログラミングモデル': ./cuda_programming_guide/programming_model.md
 not_in_nav: |
   thrust.md
   memo.md
 theme:
   name: material
+  favicon: img/blog_logo.png
+  icon:
+    repo: fontawesome/brands/github
   features:
     - content.code.copy
+    - content.action.edit
+    - content.action.view
+    - toc.integrate
+    - navigation.top
 markdown_extensions:
   - pymdownx.highlight:
       anchor_linenums: true
@@ -26,3 +36,10 @@ markdown_extensions:
   - pymdownx.inlinehilite
   - pymdownx.snippets
   - pymdownx.superfences
+plugins:
+  - git-revision-date-localized:
+      enable_creation_date: true
+      type: iso_date
+  - git-committers:
+      repository: sukeya/sukeya.github.io
+      branch: main
