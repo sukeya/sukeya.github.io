@@ -18,7 +18,7 @@
       
       
       <link rel="icon" href="../../img/blog_logo.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.34">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.35">
     
     
       
@@ -369,17 +369,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#ubuntu-2204" class="md-nav__link">
     <span class="md-ellipsis">
-      やり方
+      Ubuntu 22.04の場合
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="やり方">
+    <nav class="md-nav" aria-label="Ubuntu 22.04の場合">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_1" class="md-nav__link">
     <span class="md-ellipsis">
       キーボードの設定
     </span>
@@ -400,6 +400,48 @@
   <a href="#xmodmap" class="md-nav__link">
     <span class="md-ellipsis">
       xmodmapの設定
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ubuntu-2404" class="md-nav__link">
+    <span class="md-ellipsis">
+      Ubuntu 24.04の場合
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Ubuntu 24.04の場合">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      キーボードの設定
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xmodmap_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      xmodmapの設定
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mozc_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Mozcの設定
     </span>
   </a>
   
@@ -523,8 +565,8 @@
 <h1 id="apple-magic-keyboard">Apple Magic Keyboardの設定</h1>
 <p>参考の記事が消えた時に備えて、Appleのテンキー付き日本語Magic Keyboardの設定方法をここに残しておきます。
 システム言語を英語とします。</p>
-<h2 id="_1">やり方</h2>
-<h3 id="_2">キーボードの設定</h3>
+<h2 id="ubuntu-2204">Ubuntu 22.04の場合</h2>
+<h3 id="_1">キーボードの設定</h3>
 <ol>
 <li>
 <p>以下のコマンドを打つ。
@@ -610,11 +652,79 @@
 </tr>
 </tbody>
 </table>
+<p>設定が逆なのはかなと英数がキーボード上の位置と逆なため。</p>
 <h3 id="xmodmap">xmodmapの設定</h3>
 <p><code>.Xmodmap</code>に以下の行を書いて<code>xmodmap .Xmodmap</code>を実行すると、<code>Shift</code>と<code>_</code>でバックスラッシュを打てるようになる。
 もちろん、<code>_</code>を押せば<code>_</code>が出る。
 <div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>keycode 97 = underscore backslash underscore backslash
 </span></code></pre></div></p>
+<h2 id="ubuntu-2404">Ubuntu 24.04の場合</h2>
+<h3 id="_2">キーボードの設定</h3>
+<p>Ubuntu 22.04のキーボードの設定と同じように設定する。</p>
+<h3 id="xmodmap_1">xmodmapの設定</h3>
+<p>かな、英数、Caps Lockが正しく認識されなかったため、<code>xmodmap</code>で以下のように変更する。</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>keycode 97 = underscore backslash underscore backslash
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>keycode 130 = Hiragana Hiragana Hiragana Hiragana
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>keycode 131 = Eisu_toggle Eisu_toggle Eisu_toggle Eisu_toggle
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>keycode 66 = Caps_Lock Caps_Lock Caps_Lock Caps_Lock
+</span></code></pre></div>
+<h3 id="mozc_1">Mozcの設定</h3>
+<p><code>IBus</code>用の<code>Mozc</code>と<code>Mozc</code>のGUIユーティリティをインストールする。</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>sudo apt install ibus-mozc mozc-utils-gui
+</span></code></pre></div>
+<p>その後、設定のキーボードの「Add Input Source...」から「Japanese (Mozc)」を追加する。
+そして、以下のようにキーマップを変更する。</p>
+<table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>Key</th>
+<th>Command</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DirectInput</td>
+<td>Hiragana</td>
+<td>Set input mode to Hiragana</td>
+</tr>
+<tr>
+<td>Precomposition</td>
+<td>Hiragana</td>
+<td>Set input mode to Hiragana</td>
+</tr>
+<tr>
+<td>Composition</td>
+<td>Hiragana</td>
+<td>Set input mode to Hiragana</td>
+</tr>
+<tr>
+<td>Conversion</td>
+<td>Hiragana</td>
+<td>Set input mode to Hiragana</td>
+</tr>
+<tr>
+<td>DirectInput</td>
+<td>Eisu</td>
+<td>Deactivate IME</td>
+</tr>
+<tr>
+<td>Precomposition</td>
+<td>Eisu</td>
+<td>Deactivate IME</td>
+</tr>
+<tr>
+<td>Composition</td>
+<td>Eisu</td>
+<td>Deactivate IME</td>
+</tr>
+<tr>
+<td>Conversion</td>
+<td>Eisu</td>
+<td>Deactivate IME</td>
+</tr>
+</tbody>
+</table>
 <h2 id="_3">参考</h2>
 <ol>
 <li><a href="https://takacity.blog.fc2.com/blog-entry-252.html">MacBook AirでUbuntuキーボードレイアウトを設定する</a></li>
@@ -641,7 +751,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date">2024-08-31</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date">2024-09-18</span>
   </span>
 
     
@@ -726,7 +836,7 @@
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.copy", "content.action.edit", "toc.integrate", "navigation.top"], "search": "../../assets/javascripts/workers/search.07f07601.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.copy", "content.action.edit", "toc.integrate", "navigation.top"], "search": "../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
       <script src="../../assets/javascripts/bundle.56dfad97.min.js"></script>
