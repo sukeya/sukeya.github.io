@@ -39,10 +39,10 @@ markdown_extensions:
   - pymdownx.snippets
   - pymdownx.superfences
   - toc:
-    permalink: true
-    slugify: !!python/object/apply:pymdownx.slugs.slugify
-      kwds:
-        case: lower
+      permalink: true
+      slugify: !!python/object/apply:pymdownx.slugs.slugify
+        kwds:
+          case: lower
 plugins:
   - git-revision-date-localized:
       enable_creation_date: true
