@@ -7,7 +7,7 @@ nav:
   - '概要': index.md
   - OSS:
     - platanus: /platanus/
-  - 'ブログ':
+  - '記事':
     - 'Thrustの非同期実行': ./articles/thrust-async.md
     - 'Apple Magic Keyboardの設定': ./articles/config-apple-magic-keyboard-in-ubuntu.md
     - 'Alembicの使い方': ./articles/how-to-use-alembic.md
