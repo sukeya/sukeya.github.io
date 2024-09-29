@@ -26,6 +26,7 @@ theme:
     - content.action.edit
     - toc.integrate
     - navigation.top
+    - navigation.indexes
 markdown_extensions:
   - admonition
   - footnotes
@@ -37,6 +38,11 @@ markdown_extensions:
   - pymdownx.inlinehilite
   - pymdownx.snippets
   - pymdownx.superfences
+  - toc:
+    permalink: true
+    slugify: !!python/object/apply:pymdownx.slugs.slugify
+      kwds:
+        case: lower
 plugins:
   - git-revision-date-localized:
       enable_creation_date: true
