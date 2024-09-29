@@ -8,10 +8,10 @@ nav:
   - OSS:
     - platanus: /platanus/
   - 'ブログ':
-    - 'Thrustの非同期実行': ./blog/thrust-async.md
-    - 'Apple Magic Keyboardの設定': ./blog/config-apple-magic-keyboard-in-ubuntu.md
-    - 'Alembicの使い方': ./blog/how-to-use-alembic.md
-    - 'perf_event_paranoidを変更できない時の対処法': ./blog/cannot-change-perf-event-paranoid.md
+    - 'Thrustの非同期実行': ./articles/thrust-async.md
+    - 'Apple Magic Keyboardの設定': ./articles/config-apple-magic-keyboard-in-ubuntu.md
+    - 'Alembicの使い方': ./articles/how-to-use-alembic.md
+    - 'perf_event_paranoidを変更できない時の対処法': ./articles/cannot-change-perf-event-paranoid.md
   - 'CUDAプログラミングガイド 日本語解説': /cuda_programming_guide_jp/
 not_in_nav: |
   thrust.md
