@@ -2,30 +2,30 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://sukeya.github.io/</loc>
-         <lastmod>2024-09-23</lastmod>
+         <lastmod>2024-09-29</lastmod>
     </url>
     <url>
-         <loc>https://sukeya.github.io/blog/cannot-change-perf-event-paranoid/</loc>
-         <lastmod>2024-09-23</lastmod>
+         <loc>https://sukeya.github.io/articles/cannot-change-perf-event-paranoid/</loc>
+         <lastmod>2024-09-29</lastmod>
     </url>
     <url>
-         <loc>https://sukeya.github.io/blog/config-apple-magic-keyboard-in-ubuntu/</loc>
-         <lastmod>2024-09-23</lastmod>
+         <loc>https://sukeya.github.io/articles/config-apple-magic-keyboard-in-ubuntu/</loc>
+         <lastmod>2024-09-29</lastmod>
     </url>
     <url>
-         <loc>https://sukeya.github.io/blog/how-to-use-alembic/</loc>
-         <lastmod>2024-09-23</lastmod>
+         <loc>https://sukeya.github.io/articles/how-to-use-alembic/</loc>
+         <lastmod>2024-09-29</lastmod>
     </url>
     <url>
-         <loc>https://sukeya.github.io/blog/memo/</loc>
-         <lastmod>2024-09-23</lastmod>
+         <loc>https://sukeya.github.io/articles/memo/</loc>
+         <lastmod>2024-09-29</lastmod>
     </url>
     <url>
-         <loc>https://sukeya.github.io/blog/thrust-async/</loc>
-         <lastmod>2024-09-23</lastmod>
+         <loc>https://sukeya.github.io/articles/thrust-async/</loc>
+         <lastmod>2024-09-29</lastmod>
     </url>
     <url>
-         <loc>https://sukeya.github.io/blog/thrust/</loc>
-         <lastmod>2024-09-23</lastmod>
+         <loc>https://sukeya.github.io/articles/thrust/</loc>
+         <lastmod>2024-09-29</lastmod>
     </url>
 </urlset>
