@@ -62,7 +62,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#perf_event_paranoid" class="md-skip">
+        <a href="#perf_event_paranoidを変更できない時の対処法" class="md-skip">
           Skip to content
         </a>
       
@@ -238,6 +238,10 @@
   
     
     
+      
+        
+      
+    
     
     
     <li class="md-nav__item md-nav__item--nested">
@@ -303,6 +307,16 @@
   
     
     
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
     
     
     <li class="md-nav__item md-nav__item--active md-nav__item--nested">
@@ -316,7 +330,7 @@
             
   
   <span class="md-ellipsis">
-    ブログ
+    記事
   </span>
   
 
@@ -326,7 +340,7 @@
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
-            ブログ
+            記事
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -446,7 +460,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#前提" class="md-nav__link">
     <span class="md-ellipsis">
       前提
     </span>
@@ -455,7 +469,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#やり方" class="md-nav__link">
     <span class="md-ellipsis">
       やり方
     </span>
@@ -464,7 +478,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#解説" class="md-nav__link">
     <span class="md-ellipsis">
       解説
     </span>
@@ -473,7 +487,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#参考文献" class="md-nav__link">
     <span class="md-ellipsis">
       参考文献
     </span>
@@ -540,15 +554,15 @@
   
 
 
-<h1 id="perf_event_paranoid">perf_event_paranoidを変更できない時の対処法</h1>
+<h1 id="perf_event_paranoidを変更できない時の対処法">perf_event_paranoidを変更できない時の対処法<a class="headerlink" href="#perf_event_paranoidを変更できない時の対処法" title="Permanent link">&para;</a></h1>
 <p>この記事は<code>perf</code>を使いたいが、何らかの理由で<code>/proc/sys/kernel/perf_event_paranoid</code>を変更できない方向けです。Ubuntu 22.04で検証済みです。</p>
-<h2 id="_1">前提</h2>
+<h2 id="前提">前提<a class="headerlink" href="#前提" title="Permanent link">&para;</a></h2>
 <p>以下を仮定します。</p>
 <ul>
 <li>特権(sudoを使える)を持っている</li>
 <li>perfをインストール済み</li>
 </ul>
-<h2 id="_2">やり方</h2>
+<h2 id="やり方">やり方<a class="headerlink" href="#やり方" title="Permanent link">&para;</a></h2>
 <p>まず、<code>perf</code>があるディレクトリに移動します。シンボリックリンクでも構いません。</p>
 <div class="language-sh highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># which perf</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>/usr/bin/perf
@@ -572,13 +586,13 @@
 </span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="c1"># getcap perf</span>
 </span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>perf<span class="w"> </span><span class="nv">cap_perfmon</span><span class="o">=</span>ep
 </span></code></pre></div>
-<h2 id="_3">解説</h2>
+<h2 id="解説">解説<a class="headerlink" href="#解説" title="Permanent link">&para;</a></h2>
 <p>Linuxでは、特権をケーパビリティ(capabilities)と呼ばれる、異なる単位に分割していて、非特権ユーザーのプロセスやファイルに対してスレッド毎に個別に有効または無効に出来ます。</p>
 <p><code>CAP_PERFMON</code>というケーパビリティを持った非特権プロセスはパフォーマンスモニタリングに関して特権を持つプロセスとして扱われます。<code>CAP_PERFMON</code>はパフォーマンスモニタリングのために必要な最小限の特権しか持たず、モニタリングのための安全な方法を提供します。</p>
 <p>より詳しく調べたい時は必要な特権を指定します。例えば、<code>/proc/kallsyms</code>ファイルからカーネル空間のメモリアドレスを読みたい時は<code>CAP_SYSLOG</code>ケーパビリティを指定します。</p>
 <p><code>=ep</code>はファイルへのケーパビリティの設定で、スレッド起動時に<code>CAP_PERFMON</code>を有効にするという設定らしいです。</p>
 <p>Linux v5.9以前では<code>CAP_SYS_PTRACE</code>が必要でしたが、それ以降では必要ありません。</p>
-<h2 id="_4">参考文献</h2>
+<h2 id="参考文献">参考文献<a class="headerlink" href="#参考文献" title="Permanent link">&para;</a></h2>
 <ol>
 <li><a href="https://www.kernel.org/doc/html/latest/admin-guide/perf-security.html#privileged-perf-users-groups">Perf events and tool security</a></li>
 <li><a href="https://manpages.ubuntu.com/manpages/bionic/ja/man7/capabilities.7.html">capabilities - Linux のケーパビリティ (capability) の概要</a></li>
@@ -690,7 +704,7 @@
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.copy", "content.action.edit", "toc.integrate", "navigation.top"], "search": "../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.copy", "content.action.edit", "toc.integrate", "navigation.top", "navigation.indexes"], "search": "../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
       <script src="../../assets/javascripts/bundle.d6f25eb3.min.js"></script>

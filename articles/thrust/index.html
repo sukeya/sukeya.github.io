@@ -60,7 +60,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#_1" class="md-skip">
+        <a href="#紹介" class="md-skip">
           Skip to content
         </a>
       
@@ -236,6 +236,10 @@
   
     
     
+      
+        
+      
+    
     
     
     <li class="md-nav__item md-nav__item--nested">
@@ -299,6 +303,16 @@
   
     
     
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
     
     
     <li class="md-nav__item md-nav__item--nested">
@@ -312,7 +326,7 @@
             
   
   <span class="md-ellipsis">
-    ブログ
+    記事
   </span>
   
 
@@ -322,7 +336,7 @@
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
-            ブログ
+            記事
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -463,13 +477,13 @@
   <h1>Thrustの使い方</h1>
 
 <p><a href="https://github.com/NVIDIA/thrust">Thrust</a>を使う機会があったので、<a href="https://docs.nvidia.com/cuda/thrust/index.html">ドキュメント</a>を簡単に翻訳する。</p>
-<h2 id="_1">紹介</h2>
+<h2 id="紹介">紹介<a class="headerlink" href="#紹介" title="Permanent link">&para;</a></h2>
 <p>ThrustとはSTLに基づいた、CUDAのためのC++テンプレートライブラリである。
 Thrustによって、CUDA Cと完全な互換性がある高水準のインターフェイスを通して、最小限の労力で高パフォーマンスな並列アプリケーションを実装することができる。</p>
-<h3 id="_2">インストール</h3>
+<h3 id="インストール">インストール<a class="headerlink" href="#インストール" title="Permanent link">&para;</a></h3>
 <p>CUDAツールキットをインストールすると、Thrustのヘッダファイルも標準のCUDAインクルードディレクトリにコピーされる。
 Thrustはテンプレートライブラリなので、これ以上することはない。</p>
-<h2 id="vectors">Vectors</h2>
+<h2 id="vectors">Vectors<a class="headerlink" href="#vectors" title="Permanent link">&para;</a></h2>
 <p>Thrustは2つのvectorコンテナ、<code>host_vector</code>と<code>device_vector</code>を提供している。
 名前が示すように、<code>device_vector</code>はGPUのメモリにある一方で、<code>host_vector</code>はホストメモリに保存される。
 Thrustのvectorコンテナは<code>std::vector</code>に似ている。
@@ -559,9 +573,9 @@ Thrustはこれらの操作を行ういくつかの方法を提供している�
 <p><code>copy</code>関数はホストかデバイスの要素の範囲を別のホストかデバイスのvectorにコピーする。
 <code>thrust::fill</code>関数は単に範囲内の要素に特定の値を入れる。
 <code>sequence</code>関数は等間隔の値の列を作成するために使うことができる。</p>
-<h3 id="21-thrust">2.1 Thrustの名前空間</h3>
+<h3 id="21-thrustの名前空間">2.1 Thrustの名前空間<a class="headerlink" href="#21-thrustの名前空間" title="Permanent link">&para;</a></h3>
 <p>Thrustの名前空間は<code>thrust</code>。</p>
-<h3 id="22">2.2 イテレータと静的ディスパッチ</h3>
+<h3 id="22-イテレータと静的ディスパッチ">2.2 イテレータと静的ディスパッチ<a class="headerlink" href="#22-イテレータと静的ディスパッチ" title="Permanent link">&para;</a></h3>
 <p>生のポインターをThrustの関数に引数として渡すこともできる。
 ただし、デバイスメモリへのポインターは<code>thrust::device_ptr</code>で包まなければならない。
 例えば、
@@ -615,7 +629,7 @@ Thrustはそのようなコンテナのデバイスの実装は提供してい�
 </span><span id="__span-4-24"><a id="__codelineno-4-24" name="__codelineno-4-24" href="#__codelineno-4-24"></a>}
 </span></code></pre></div></p>
 <p>Thrustは<code>counting_iterator</code>や<code>zip_iterator</code>といった、装飾的なイテレータの集まりも提供する。</p>
-<h2 id="3">3. アルゴリズム</h2>
+<h2 id="3-アルゴリズム">3. アルゴリズム<a class="headerlink" href="#3-アルゴリズム" title="Permanent link">&para;</a></h2>
 <p>Thrustはたくさんのありふれた並列アルゴリズムを提供している。
 これらのアルゴリズムの多くはSTLの直接的な類似を持ち、同じSTL関数が存在する時は同じ名前を使う(例: <code>thrust::sort</code>と<code>std::sort</code>)。</p>
 <p>Thrustの全てのアルゴリズムはホストとデバイスの両方に対する実装を持つ。
@@ -623,7 +637,7 @@ Thrustはそのようなコンテナのデバイスの実装は提供してい�
 同様に、デバイスイテレータが範囲を定義するために使われている時、デバイスの実装が呼ばれる。</p>
 <p>ホストとデバイス間でデータをコピーできる<code>thrust::copy</code>という例外はあるが、Thrustアルゴリズムへの全てのイテレータの引数は同じ場所(全てホスト上か全てデバイス上)にあるべきだ。
 この要件を破った時、エラーメッセージが作られる。</p>
-<h3 id="31">3.1 変形</h3>
+<h3 id="31-変形">3.1 変形<a class="headerlink" href="#31-変形" title="Permanent link">&para;</a></h3>
 <p>完全なリストは<a href="https://thrust.github.io/doc/group__transformations.html">ここ</a>。</p>
 <p>以下のソースコードはいくつかの変形アルゴリズムを示している。
 <code>thrust::negate</code>や<code>thrust::modulus</code>などのありふれたfunctorは<code>thrust/functional.h</code>に定義されている。</p>
@@ -681,10 +695,10 @@ Thrustはそのようなコンテナのデバイスの実装は提供してい�
 <p>複雑な計算は、簡単な計算に分解して何回かに分けて全体を計算するより、複雑な計算を1回でまとめて全体を計算するほうが早い。
 例えば、配列<code>a</code>, <code>b</code>, <code>x</code>に対して、<code>a * x + b</code>を計算するなら、<code>a * x</code>を計算して<code>b</code>を足すより<code>a[i] * x[i] + b[i]</code>を計算するほうが早い。</p>
 <p><code>thrust::transform</code>は1つか2つの入力引数しか持たないが、<a href="https://github.com/NVIDIA/thrust/blob/master/examples/arbitrary_transformation.cu">この例</a>を使うと2つより多い入力でも1回で出来る。</p>
-<h3 id="32-reductions">3.2 Reductions</h3>
+<h3 id="32-reductions">3.2 Reductions<a class="headerlink" href="#32-reductions" title="Permanent link">&para;</a></h3>
 <p>特に気を付けることはない。
 詳細は<a href="http://thrust.github.com/doc/group__reductions.html">ドキュメント</a>を参照。</p>
-<h3 id="33-prefix-sums">3.3 Prefix-Sums</h3>
+<h3 id="33-prefix-sums">3.3 Prefix-Sums<a class="headerlink" href="#33-prefix-sums" title="Permanent link">&para;</a></h3>
 
 
 
@@ -792,7 +806,7 @@ Thrustはそのようなコンテナのデバイスの実装は提供してい�
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.copy", "content.action.edit", "toc.integrate", "navigation.top"], "search": "../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.copy", "content.action.edit", "toc.integrate", "navigation.top", "navigation.indexes"], "search": "../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
       <script src="../../assets/javascripts/bundle.d6f25eb3.min.js"></script>

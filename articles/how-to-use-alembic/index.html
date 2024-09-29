@@ -64,7 +64,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#alembic" class="md-skip">
+        <a href="#alembicの使い方" class="md-skip">
           Skip to content
         </a>
       
@@ -240,6 +240,10 @@
   
     
     
+      
+        
+      
+    
     
     
     <li class="md-nav__item md-nav__item--nested">
@@ -305,6 +309,16 @@
   
     
     
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
     
     
     <li class="md-nav__item md-nav__item--active md-nav__item--nested">
@@ -318,7 +332,7 @@
             
   
   <span class="md-ellipsis">
-    ブログ
+    記事
   </span>
   
 
@@ -328,7 +342,7 @@
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
-            ブログ
+            記事
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -427,7 +441,7 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#alembic_1" class="md-nav__link">
+  <a href="#alembicとは" class="md-nav__link">
     <span class="md-ellipsis">
       Alembicとは
     </span>
@@ -436,7 +450,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#ライブラリの構成" class="md-nav__link">
     <span class="md-ellipsis">
       ライブラリの構成
     </span>
@@ -446,7 +460,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#ファイルの入出力について" class="md-nav__link">
     <span class="md-ellipsis">
       ファイルの入出力について
     </span>
@@ -455,7 +469,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#abccorelayer" class="md-nav__link">
+  <a href="#abccorelayerで出来ること" class="md-nav__link">
     <span class="md-ellipsis">
       AbcCoreLayerで出来ること
     </span>
@@ -469,7 +483,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
+  <a href="#主な概念" class="md-nav__link">
     <span class="md-ellipsis">
       主な概念
     </span>
@@ -610,7 +624,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
+  <a href="#主なスキーマオブジェクト" class="md-nav__link">
     <span class="md-ellipsis">
       主なスキーマオブジェクト
     </span>
@@ -640,7 +654,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
+  <a href="#面" class="md-nav__link">
     <span class="md-ellipsis">
       面
     </span>
@@ -649,7 +663,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
+  <a href="#法線" class="md-nav__link">
     <span class="md-ellipsis">
       法線
     </span>
@@ -715,7 +729,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_7" class="md-nav__link">
+  <a href="#使用例" class="md-nav__link">
     <span class="md-ellipsis">
       使用例
     </span>
@@ -725,7 +739,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#_8" class="md-nav__link">
+  <a href="#ポリゴンメッシュの書き込み" class="md-nav__link">
     <span class="md-ellipsis">
       ポリゴンメッシュの書き込み
     </span>
@@ -734,7 +748,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#_9" class="md-nav__link">
+  <a href="#ポリゴンメッシュの読み込み" class="md-nav__link">
     <span class="md-ellipsis">
       ポリゴンメッシュの読み込み
     </span>
@@ -748,7 +762,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_10" class="md-nav__link">
+  <a href="#参考文献" class="md-nav__link">
     <span class="md-ellipsis">
       参考文献
     </span>
@@ -836,15 +850,15 @@
   
 
 
-<h1 id="alembic">Alembicの使い方</h1>
+<h1 id="alembicの使い方">Alembicの使い方<a class="headerlink" href="#alembicの使い方" title="Permanent link">&para;</a></h1>
 <p>この記事はAlembicのv1.8.3を参照しています。
 意味がわからなくても最後まで目を通してから、もう一度読むことをお勧めします。
 私が理解している<code>PolyMesh</code>(ポリゴンメッシュ)と<code>Xform</code>(メッシュの変形)に関連する項目のみ取り上げます。</p>
 <p>また、<a href="https://i-saint.hatenablog.com/entry/2016/02/09/215542">alembic for realtime rendering</a>やAlembic初期のドキュメント<a href="https://code.google.com/archive/p/alembic/wikis/AlembicPoint9UsersGuide.wiki">alembic - AlembicPoint9UsersGuide.wiki</a>を読むと良いかもしれません。</p>
-<h2 id="alembic_1">Alembicとは</h2>
+<h2 id="alembicとは">Alembicとは<a class="headerlink" href="#alembicとは" title="Permanent link">&para;</a></h2>
 <p>Alembicはレンダリングや物理シミュレーションなどを行う3DCGソフトウェア間でやりとり出来る、
 時間ごとの物体の幾何情報を保存したオープンソースのファイル形式である。</p>
-<h2 id="_1">ライブラリの構成</h2>
+<h2 id="ライブラリの構成">ライブラリの構成<a class="headerlink" href="#ライブラリの構成" title="Permanent link">&para;</a></h2>
 <p>Alembicは以下のように機能毎にディレクトリと名前空間が分けられている。
 以下の表に必要なものだけを抜粋した。</p>
 <table>
@@ -881,11 +895,11 @@
 </tr>
 </tbody>
 </table>
-<h3 id="_2">ファイルの入出力について</h3>
+<h3 id="ファイルの入出力について">ファイルの入出力について<a class="headerlink" href="#ファイルの入出力について" title="Permanent link">&para;</a></h3>
 <p>OgawaはHDF5よりシングルスレッドだと平均で5倍、マルチスレッドだと同じ操作を行った場合と比較して25倍速く読み込む。
 また、ファイルサイズが平均で5-15%小さくなり、小さいオブジェクトが多いほどファイルサイズも小さくなる。
 特に理由がなければ、Ogawaを使うことをお勧めする。</p>
-<h3 id="abccorelayer">AbcCoreLayerで出来ること</h3>
+<h3 id="abccorelayerで出来ること">AbcCoreLayerで出来ること<a class="headerlink" href="#abccorelayerで出来ること" title="Permanent link">&para;</a></h3>
 <p>以下の表に列挙する。</p>
 <table>
 <thead>
@@ -927,28 +941,28 @@
 </table>
 <p>また、Alembicファイルは追記が出来ないため、<code>Points</code>など時系列で保存できない場合は時系列順にファイルに名前を付けて、この機能で読み込むと良い。</p>
 <p>AbcCoreLayerは<code>MetaData</code>を適切に設定するために、<code>Util.h</code>内に<code>SetPrune</code>と<code>SetReplace</code>という便利な関数を提供しているらしい。</p>
-<h2 id="_3">主な概念</h2>
+<h2 id="主な概念">主な概念<a class="headerlink" href="#主な概念" title="Permanent link">&para;</a></h2>
 <p>Alembicでは、入力時に使うクラスには<code>I</code>が、出力時に使うものには<code>O</code>が名前の先頭に付く。
 ここでは区別する必要がないため、省略する。</p>
-<h3 id="archive"><code>Archive</code></h3>
+<h3 id="archive"><code>Archive</code><a class="headerlink" href="#archive" title="Permanent link">&para;</a></h3>
 <p>ディスク上の実際のファイル。
 すべてのシーンデータを持つトップレベルのコンテナ。
 1つの<code>Object</code>を持つ。</p>
-<h3 id="object"><code>Object</code></h3>
+<h3 id="object"><code>Object</code><a class="headerlink" href="#object" title="Permanent link">&para;</a></h3>
 <p>Alembicの階層の主な単位。
 <code>Object</code>は<code>Archive</code>の<code>Object</code>をルートとした多分木になっており、親と子供たちを取得することが出来る。
 1つの<code>CompoundProperty</code>を持つ。
 <code>ObjectHeader</code>と呼ばれるメタデータを持ち、<code>SchemaObject</code>を判定するために使われる。</p>
-<h3 id="schema"><code>Schema</code></h3>
+<h3 id="schema"><code>Schema</code><a class="headerlink" href="#schema" title="Permanent link">&para;</a></h3>
 <p>ポリゴンメッシュような、ある複雑なオブジェクトを実装するために作られた<code>CompoundProperty</code>。</p>
-<h4 id="schemaobject"><code>SchemaObject</code></h4>
+<h4 id="schemaobject"><code>SchemaObject</code><a class="headerlink" href="#schemaobject" title="Permanent link">&para;</a></h4>
 <p><code>Schema</code>を<code>CompundProperty</code>として持つ<code>Object</code>のこと。</p>
-<h3 id="property">Property</h3>
+<h3 id="property">Property<a class="headerlink" href="#property" title="Permanent link">&para;</a></h3>
 <p>SimpleとCompoundの2種類の型がある。
 値を取得するには<code>SampleSelector</code>という、ある時点の時刻を表すクラスを与える必要がある。</p>
-<h4 id="simple-property">Simple Property</h4>
+<h4 id="simple-property">Simple Property<a class="headerlink" href="#simple-property" title="Permanent link">&para;</a></h4>
 <p>ScalarとArrayの2種類ある。</p>
-<h5 id="scalarproperty"><code>ScalarProperty</code></h5>
+<h5 id="scalarproperty"><code>ScalarProperty</code><a class="headerlink" href="#scalarproperty" title="Permanent link">&para;</a></h5>
 <p>型と要素の数が固定され、コンパイル時に決まる複数のSampleを持つ。
 例として、以下がある。</p>
 <ul>
@@ -963,7 +977,7 @@
 </li>
 </ul>
 <p>ScalarPropertyの最大の長さは256である。</p>
-<h5 id="typedarrayproperty"><code>TypedArrayProperty</code></h5>
+<h5 id="typedarrayproperty"><code>TypedArrayProperty</code><a class="headerlink" href="#typedarrayproperty" title="Permanent link">&para;</a></h5>
 <p>時刻毎の<code>Sample</code>を持つ<code>Property</code>。
 <code>ArrayProperty</code>もあるが、主に使うのはこっちの方。
 テンプレートパラメータに値の型(正確には<a href="https://github.com/alembic/alembic/blob/master/lib/Alembic/Abc/TypedPropertyTraits.h">TypedPropertyTraits.h</a>で定義された型)が入っている。
@@ -976,9 +990,9 @@
 <li>流体シミュレーションの粒子のリスト</li>
 </ul>
 <p>ただし、同じSampleを保存しない。</p>
-<h4 id="compoundproperty"><code>CompoundProperty</code></h4>
+<h4 id="compoundproperty"><code>CompoundProperty</code><a class="headerlink" href="#compoundproperty" title="Permanent link">&para;</a></h4>
 <p>(<code>CompoundProperty</code>を含む)複数のPropertyを持つProperty。</p>
-<h3 id="sample">Sample</h3>
+<h3 id="sample">Sample<a class="headerlink" href="#sample" title="Permanent link">&para;</a></h3>
 <p>ある時刻の生のデータ。
 Propertyと同様に、SampleもScalarとArrayの2種類ある。
 例として、以下がある。</p>
@@ -987,7 +1001,7 @@ Propertyと同様に、SampleもScalarとArrayの2種類ある。
 <li><code>V3fArraySample</code> (要素が1つの<code>Imath::Vec3f</code>(3つの32ビットの浮動小数点数)の配列)</li>
 <li><code>M44fArraySample</code> (要素が1つの<code>Imath::M44f</code>(16個の32ビットの浮動小数点数)の配列)</li>
 </ul>
-<h3 id="timesampling"><code>TimeSampling</code></h3>
+<h3 id="timesampling"><code>TimeSampling</code><a class="headerlink" href="#timesampling" title="Permanent link">&para;</a></h3>
 <p>Propertyが持つ時間を管理するクラス。
 時間の配列と<code>TimeSamplingType</code>を持つ。
 <code>TimeSamplingType</code>の種類は以下の通り。</p>
@@ -1013,7 +1027,7 @@ Propertyと同様に、SampleもScalarとArrayの2種類ある。
 </tr>
 </tbody>
 </table>
-<h3 id="sampleselector"><code>SampleSelector</code></h3>
+<h3 id="sampleselector"><code>SampleSelector</code><a class="headerlink" href="#sampleselector" title="Permanent link">&para;</a></h3>
 <p>Property内のSampleを取得するために使うクラス。
 <code>TimeSampling</code>が持つ時間の配列のインデックスを直接与えるか、時刻を与えることで作る。
 時刻を渡す場合、追加で<code>TimeIndexType</code>フラグを渡すこともできる。
@@ -1040,11 +1054,11 @@ Propertyと同様に、SampleもScalarとArrayの2種類ある。
 </tr>
 </tbody>
 </table>
-<h2 id="_4">主なスキーマオブジェクト</h2>
-<h3 id="polymesh">PolyMesh</h3>
+<h2 id="主なスキーマオブジェクト">主なスキーマオブジェクト<a class="headerlink" href="#主なスキーマオブジェクト" title="Permanent link">&para;</a></h2>
+<h3 id="polymesh">PolyMesh<a class="headerlink" href="#polymesh" title="Permanent link">&para;</a></h3>
 <p>ポリゴンメッシュを管理するスキーマオブジェクト。
 時刻毎に頂点、面、頂点や面の法線を持ち、UV、頂点ごとの速度、AABBも持つことが出来る。</p>
-<h4 id="polymeshschema">PolyMeshSchema</h4>
+<h4 id="polymeshschema">PolyMeshSchema<a class="headerlink" href="#polymeshschema" title="Permanent link">&para;</a></h4>
 <p><code>PolyMesh</code>のスキーマで、<code>PolyMesh</code>クラスの<code>getSchema</code>メンバ関数で取得できる。</p>
 <p>このクラスの<code>getTopologyVariance</code>メンバ関数でポリゴンメッシュが変化するか判定できる。
 以下は戻り値とその意味の表である。
@@ -1072,7 +1086,7 @@ Propertyと同様に、SampleもScalarとArrayの2種類ある。
 </tbody>
 </table>
 <p><code>XformSchema</code>と同じように、<code>getValue</code>メンバ関数である時刻のポリゴンメッシュを取得できるが、いくつか注意点がある。</p>
-<h5 id="_5">面</h5>
+<h5 id="面">面<a class="headerlink" href="#面" title="Permanent link">&para;</a></h5>
 <p>Alembicでは、任意の多角形を持つことが出来る。
 つまり、三角形や四角形を持つポリゴンメッシュをAlembicに保存できる。
 このことを実現するために、面を以下のリストで表現している。</p>
@@ -1087,7 +1101,7 @@ Propertyと同様に、SampleもScalarとArrayの2種類ある。
 <li>[3, 4]</li>
 </ol>
 <p>1つ目のリストを持つPropertyは<code>getFaceIndicesProperty</code>メンバ関数で取得でき、2つ目のリストを持つPropertyは<code>getFaceIndicesProperty</code>メンバ関数で取得できる。</p>
-<h5 id="_6">法線</h5>
+<h5 id="法線">法線<a class="headerlink" href="#法線" title="Permanent link">&para;</a></h5>
 <p>実は法線とUVはこれまで説明してきたクラスのどれでもない。
 法線は<code>TypedGeomParam</code>というSchemaに似たようなクラスのインスタンスで、<code>PolyMeshSchema</code>クラスの<code>getNormalsParam</code>メンバ関数で取得できる。
 法線の値の意味は<code>TypedGeomParam</code>クラスの<code>getScope</code>の戻り値によって異なり、以下の通り。</p>
@@ -1118,20 +1132,20 @@ Propertyと同様に、SampleもScalarとArrayの2種類ある。
 </tbody>
 </table>
 <p>法線の値の取得は以下の例を参照。</p>
-<h3 id="xform">Xform</h3>
+<h3 id="xform">Xform<a class="headerlink" href="#xform" title="Permanent link">&para;</a></h3>
 <p>変形を管理するスキーマオブジェクト。
 子に変形させる<code>PolyMesh</code>や自身を持つ。
 <code>Xform</code>が親子である場合、親が変形させた後に子供が変形させる(テストを見る限り、この変形しか見当たらなかった)。
 変形の順序は<code>getInheritsXforms</code>関数で判定できる。</p>
-<h4 id="xformschema">XformSchema</h4>
+<h4 id="xformschema">XformSchema<a class="headerlink" href="#xformschema" title="Permanent link">&para;</a></h4>
 <p><code>Xform</code>のスキーマで、<code>Xform</code>クラスの<code>getSchema</code>メンバ関数で取得できる。</p>
-<h4 id="xformsample">XformSample</h4>
+<h4 id="xformsample">XformSample<a class="headerlink" href="#xformsample" title="Permanent link">&para;</a></h4>
 <p><code>XformSchema</code>クラスの<code>getValue</code>メンバ関数で<code>XformSample</code>を取得できる。
 <code>XformSample</code>は<code>XformOp</code>のリストを持つ。
 <code>getNumOps</code>メンバ関数で総数を取得し、<code>operator[]</code>メンバ関数でインスタンスを取得する。</p>
 <p>直に値を取得することもできるが、操作が追加された順に取り出さなければならないため、用心して使う事。</p>
 <p><code>getNumOpChannels</code>メンバ関数で自身が持つ<code>XformOp</code>の<code>channel</code>の総数がわかる。</p>
-<h4 id="xformop">XformOp</h4>
+<h4 id="xformop">XformOp<a class="headerlink" href="#xformop" title="Permanent link">&para;</a></h4>
 <p><code>XformOp</code>は平行移動、回転、拡大縮小、線形変換を表す。
 操作の種類は<code>getType</code>メンバ関数で判定できる。
 列挙値と意味は以下の通り。</p>
@@ -1202,8 +1216,8 @@ Propertyと同様に、SampleもScalarとArrayの2種類ある。
 </tbody>
 </table>
 <p>行列は行優先で格納される。</p>
-<h2 id="_7">使用例</h2>
-<h3 id="_8">ポリゴンメッシュの書き込み</h3>
+<h2 id="使用例">使用例<a class="headerlink" href="#使用例" title="Permanent link">&para;</a></h2>
+<h3 id="ポリゴンメッシュの書き込み">ポリゴンメッシュの書き込み<a class="headerlink" href="#ポリゴンメッシュの書き込み" title="Permanent link">&para;</a></h3>
 <p>各ディレクトリには、そのライブラリが公開している全てをインクルードした<code>All.h</code>という名前のヘッダーがある。
 なので、以下のようにインクルードすればよい。</p>
 <div class="language-cpp highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1">// Alembic Includes</span>
@@ -1266,7 +1280,7 @@ Propertyと同様に、SampleもScalarとArrayの2種類ある。
 <p>Alembicのオブジェクトはスコープから出るときに自動的に破棄される。
 なので、特に何もしなくて良い。</p>
 <p>プログラム全体は参考文献の2にある。</p>
-<h3 id="_9">ポリゴンメッシュの読み込み</h3>
+<h3 id="ポリゴンメッシュの読み込み">ポリゴンメッシュの読み込み<a class="headerlink" href="#ポリゴンメッシュの読み込み" title="Permanent link">&para;</a></h3>
 <p>インクルードするヘッダーと名前空間は前例を参照。</p>
 <p>読み込み用アーカイブを作成する。
 <div class="language-cpp highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">auto</span><span class="w"> </span><span class="n">archive_reader</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Alembic</span><span class="o">::</span><span class="n">AbcCoreOgawa</span><span class="o">::</span><span class="n">ReadArchive</span><span class="p">();</span>
@@ -1308,7 +1322,7 @@ Propertyと同様に、SampleもScalarとArrayの2種類ある。
 <p>取得するだけなら、以下のように簡潔に書ける。
 <div class="language-cpp highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="n">mesh_samp</span><span class="p">.</span><span class="n">getPositions</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">get</span><span class="p">()[</span><span class="mi">0</span><span class="p">];</span>
 </span></code></pre></div></p>
-<h2 id="_10">参考文献</h2>
+<h2 id="参考文献">参考文献<a class="headerlink" href="#参考文献" title="Permanent link">&para;</a></h2>
 <ol>
 <li><a href="http://docs.alembic.io/python/examples.html#properties">Introduction &mdash; Alembic 1.7.0 documentation</a></li>
 <li><a href="https://github.com/alembic/alembic/blob/master/lib/Alembic/AbcGeom/Tests/PolyMeshTest.cpp">alembic/lib/Alembic/AbcGeom/Tests/PolyMeshTest.cpp</a></li>
@@ -1424,7 +1438,7 @@ Propertyと同様に、SampleもScalarとArrayの2種類ある。
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.copy", "content.action.edit", "toc.integrate", "navigation.top"], "search": "../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["content.code.copy", "content.action.edit", "toc.integrate", "navigation.top", "navigation.indexes"], "search": "../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
       <script src="../../assets/javascripts/bundle.d6f25eb3.min.js"></script>
