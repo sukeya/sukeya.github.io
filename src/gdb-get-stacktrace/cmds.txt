@@ -1,0 +1,7 @@
+set pagination off
+catch signal SIGABRT SIGSEGV
+commands 1
+  bt
+end
+r
+q

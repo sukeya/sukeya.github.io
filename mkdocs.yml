@@ -12,6 +12,7 @@ nav:
     - 'Apple Magic Keyboardの設定': ./articles/config-apple-magic-keyboard-in-ubuntu.md
     - 'Alembicの使い方': ./articles/how-to-use-alembic.md
     - 'perf_event_paranoidを変更できない時の対処法': ./articles/cannot-change-perf-event-paranoid.md
+    - 'gdbでのスタックトレースの自動取得': ./articles/gdb-get-stacktrace.md
   - 'CUDAプログラミングガイド 日本語解説': /cuda_programming_guide_jp/
 not_in_nav: |
   thrust.md
