@@ -20,7 +20,7 @@
     
     
       
-        <title>行優先行列を行優先でベクトルに変換する時、イテレータを`std::contiguous_iterator`にする方法 - 私の愛した数式</title>
+        <title>`Eigen`で行優先の行列を行優先のベクトルに変換する時、ベクトルのイテレータを`std::contiguous_iterator`にする方法 - 私の愛した数式</title>
       
     
     
@@ -62,7 +62,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#行優先行列を行優先でベクトルに変換する時イテレータをstdcontiguous_iteratorにする方法" class="md-skip">
+        <a href="#eigenで行優先の行列を行優先のベクトルに変換する時ベクトルのイテレータをstdcontiguous_iteratorにする方法" class="md-skip">
           Skip to content
         </a>
       
@@ -98,7 +98,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              行優先行列を行優先でベクトルに変換する時、イテレータを`std::contiguous_iterator`にする方法
+              `Eigen`で行優先の行列を行優先のベクトルに変換する時、ベクトルのイテレータを`std::contiguous_iterator`にする方法
             
           </span>
         </div>
@@ -473,7 +473,7 @@
           
   
   <span class="md-ellipsis">
-    行優先行列を行優先でベクトルに変換する時、イテレータを`std::contiguous_iterator`にする方法
+    `Eigen`で行優先の行列を行優先のベクトルに変換する時、ベクトルのイテレータを`std::contiguous_iterator`にする方法
   </span>
   
 
@@ -484,7 +484,7 @@
         
   
   <span class="md-ellipsis">
-    行優先行列を行優先でベクトルに変換する時、イテレータを`std::contiguous_iterator`にする方法
+    `Eigen`で行優先の行列を行優先のベクトルに変換する時、ベクトルのイテレータを`std::contiguous_iterator`にする方法
   </span>
   
 
@@ -591,7 +591,7 @@
   
 
 
-<h1 id="行優先行列を行優先でベクトルに変換する時イテレータをstdcontiguous_iteratorにする方法">行優先行列を行優先でベクトルに変換する時、イテレータを<code>std::contiguous_iterator</code>にする方法<a class="headerlink" href="#行優先行列を行優先でベクトルに変換する時イテレータをstdcontiguous_iteratorにする方法" title="Permanent link">&para;</a></h1>
+<h1 id="eigenで行優先の行列を行優先のベクトルに変換する時ベクトルのイテレータをstdcontiguous_iteratorにする方法"><code>Eigen</code>で行優先の行列を行優先のベクトルに変換する時、ベクトルのイテレータを<code>std::contiguous_iterator</code>にする方法<a class="headerlink" href="#eigenで行優先の行列を行優先のベクトルに変換する時ベクトルのイテレータをstdcontiguous_iteratorにする方法" title="Permanent link">&para;</a></h1>
 <p>この記事は私が<code>Eigen</code>に立てた<a href="https://gitlab.com/libeigen/eigen/-/issues/2840">イシュー</a>が解決される見込みがないので、埋もれる前に残しておくつもりで書きました。</p>
 <h2 id="問題点">問題点<a class="headerlink" href="#問題点" title="Permanent link">&para;</a></h2>
 <p><code>Eigen</code>では行列と配列のイテレータが<code>std::contiguous_iterator</code>コンセプトを満たすようになりました<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup><sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup><sup id="fnref:3"><a class="footnote-ref" href="#fn:3">3</a></sup>。
