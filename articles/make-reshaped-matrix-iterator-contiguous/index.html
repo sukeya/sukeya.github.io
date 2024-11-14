@@ -8,7 +8,7 @@
       
       
       
-        <link rel="canonical" href="https://sukeya.github.io/articles/memo/">
+        <link rel="canonical" href="https://sukeya.github.io/articles/make-reshaped-matrix-iterator-contiguous/">
       
       
       
@@ -18,7 +18,7 @@
     
     
       
-        <title>メモ - 私の愛した数式</title>
+        <title>行優先行列を行優先でベクトルに変換する時、イテレータをstd::contiguous_iteratorにする方法 - 私の愛した数式</title>
       
     
     
@@ -60,7 +60,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#メモ" class="md-skip">
+        <a href="#行優先行列を行優先でベクトルに変換する時イテレータをstdcontiguous_iteratorにする方法" class="md-skip">
           Skip to content
         </a>
       
@@ -96,7 +96,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              メモ
+              行優先行列を行優先でベクトルに変換する時、イテレータをstd::contiguous_iteratorにする方法
             
           </span>
         </div>
@@ -489,7 +489,7 @@
                   
 
   
-    <a href="https://github.com/sukeya/sukeya.github.io/blob/main/docs/articles/memo.md" title="Edit this page" class="md-content__button md-icon">
+    <a href="https://github.com/sukeya/sukeya.github.io/blob/main/docs/articles/make-reshaped-matrix-iterator-contiguous.md" title="Edit this page" class="md-content__button md-icon">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -497,77 +497,61 @@
   
 
 
-<h1 id="メモ">メモ<a class="headerlink" href="#メモ" title="Permanent link">&para;</a></h1>
-<p>小ネタ集です。</p>
-<h2 id="blenderでalembicを出力した場合">BlenderでAlembicを出力した場合<a class="headerlink" href="#blenderでalembicを出力した場合" title="Permanent link">&para;</a></h2>
-<ul>
-<li>速度は出力されない</li>
-<li>剛体運動はXformSampleに記録される</li>
-<li>ソフトボディの運動はXformSampleに記録されない</li>
-<li>ソフトボディと剛体がある時、例え剛体であっても各フレームごとのポリゴンメッシュの情報(点、法線、面)が出力される。</li>
-</ul>
-<h2 id="thrust">Thrust<a class="headerlink" href="#thrust" title="Permanent link">&para;</a></h2>
-<ul>
-<li>oneTBBをデバイスとして使う場合、コンパイルオプション<code>-expt-extended-lambda</code>をnvccに渡してもラムダ式をデバイスコードで使うことはできない。</li>
-<li>入れ子になった<code>host_vector</code>と<code>device_vector</code>はお互いにコピーできない(コンパイルエラーになる)。</li>
-</ul>
-<h2 id="c">C++<a class="headerlink" href="#c" title="Permanent link">&para;</a></h2>
-<ul>
-<li><a href="https://mikio.hatenablog.com/entry/2021/07/13/224907">C++標準async+futureとスレッドプールの性能比較</a></li>
-<li>ユーザー定義とdefault宣言で定義されたコピーコンストラクタをマクロで切り替えることはできない。</li>
-<li><code>struct A final {}</code>は合法。</li>
-<li>ラムダ関数は静的な変数を自動的にキャプチャする。</li>
-<li>以下のような再帰的な構造体は合法。
-<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>template &lt;int D&gt;
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>struct A
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>{
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    static_assert(D &gt; 1);
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    double d;
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    A&lt;D-1&gt; a;
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>};
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>template &lt;&gt;
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>struct A&lt;1&gt;
-</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>{
-</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>    int d;
-</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>};
-</span></code></pre></div></li>
-<li>テンプレートクラスの静的なメンバ定数は<code>inline</code>にすると明示的に実体を定義せずに済む。</li>
-<li>メンバ変数に<code>const</code>を付けると<code>default</code>宣言されたムーブ代入演算子が削除される。</li>
-</ul>
-<h3 id="boost">Boost<a class="headerlink" href="#boost" title="Permanent link">&para;</a></h3>
-<ul>
-<li>Boost.TestをCMakeの<code>find_package</code>で見つけたい時は、<code>components</code>に<code>unit_test_framework</code>を指定しないといけない。</li>
-</ul>
-<h2 id="git">Git<a class="headerlink" href="#git" title="Permanent link">&para;</a></h2>
-<ul>
-<li>git push --force-with-lease</li>
-<li><code>git rm</code>でサブモジュールを消せる。</li>
-<li>fast-forwardでのマージを取り消したい時は、<code>git reflog --keep (ブランチ名)@{番号}</code>とすれば良い。</li>
-<li>最新のコミットしか要らないリポジトリをクローンしたい時、<code>--depth 1</code>をつければ良い。</li>
-<li>追跡していないファイルを消したい時は<code>git clean</code>。</li>
-<li>追跡しているファイルを全てステージングしたい時は<code>git add -u</code>。</li>
-</ul>
-<h2 id="petc">PETc<a class="headerlink" href="#petc" title="Permanent link">&para;</a></h2>
-<h3 id="petscのcの機能を使うには">PETScのC++の機能を使うには<a class="headerlink" href="#petscのcの機能を使うには" title="Permanent link">&para;</a></h3>
-<p>PETScには<code>PetscCallThrow</code>という、エラーが発生すると<code>std::runtime_error</code>を投げる関数がある。
-この関数は<code>PETSC_CLANGUAGE_CXX</code>というマクロが定義されていないと使えない。
-他にもC++用の関数があるかもしれないので定義することをお勧めする。
-ちなみに、ヘッダーをインクルードする時は<code>extern "C"</code>をつけない。</p>
-<h3 id="petscのconfigureの実行オプション">PETScのconfigureの実行オプション<a class="headerlink" href="#petscのconfigureの実行オプション" title="Permanent link">&para;</a></h3>
-<p><a href="https://petsc.org/release/install/install/">公式サイト</a>に用途に応じて使うオプションが示されているが、どんなオプションがあるのか示されていない。
-どんなオプションがあるのか調べるための一番手っ取り早い方法は、<a href="https://gitlab.com/petsc/petsc/-/tree/main/config/examples">CIのテスト</a>を見ることである。
-地道な方法はソースコードを見ることだが、<code>BuildSystem</code>があまりに複雑なので時間がかかるだろう。
-個人的には<a href="https://gitlab.com/petsc/petsc/-/tree/main/config/BuildSystem/config/packages">package</a>を見ると、ライブラリ毎のオプションがどういう風に使われているかわかるので、ここを見ることをお勧めする。</p>
+<h1 id="行優先行列を行優先でベクトルに変換する時イテレータをstdcontiguous_iteratorにする方法">行優先行列を行優先でベクトルに変換する時、イテレータを<code>std::contiguous_iterator</code>にする方法<a class="headerlink" href="#行優先行列を行優先でベクトルに変換する時イテレータをstdcontiguous_iteratorにする方法" title="Permanent link">&para;</a></h1>
+<p>この記事は私が<code>Eigen</code>に立てた<a href="https://gitlab.com/libeigen/eigen/-/issues/2840">イシュー</a>が解決される見込みがないので、埋もれる前に残しておくつもりで書きました。</p>
+<h2 id="問題点">問題点<a class="headerlink" href="#問題点" title="Permanent link">&para;</a></h2>
+<p><code>Eigen</code>では行列と配列のイテレータが<code>std::contiguous_iterator</code>コンセプトを満たすようになりました<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup><sup id="fnref:2"><a class="footnote-ref" href="#fn:2">2</a></sup><sup id="fnref:3"><a class="footnote-ref" href="#fn:3">3</a></sup>。
+ただし、とある条件を満たす必要があり、<code>reshaped</code>メンバ関数で行列をベクトルに変換する場合は変形後のベクトルと変形前の行列の格納順が一致しなくてはいけません。
+<code>reshaped</code>で返されるベクトルの格納順はそのベクトルが行ベクトルなら行優先、列ベクトルなら列優先です<sup id="fnref:5"><a class="footnote-ref" href="#fn:5">5</a></sup>。
+しかし、変形後のベクトルの格納順はたとえ明示的に<code>Eigen::StorageOptions::RowMajor</code>を渡しても必ず列ベクトルを返すため<sup id="fnref:6"><a class="footnote-ref" href="#fn:6">6</a></sup>、変形前の行列が行優先の場合だと不一致になってしまいます。</p>
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;span&gt;</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Eigen/Dense&quot;</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span><span class="n">Eigen</span><span class="o">::</span><span class="n">Matrix3f</span><span class="w"> </span><span class="n">m</span><span class="p">;</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">span</span><span class="o">&lt;</span><span class="k">const</span><span class="w"> </span><span class="kt">float</span><span class="p">,</span><span class="w"> </span><span class="mi">9</span><span class="o">&gt;</span><span class="p">(</span><span class="n">m</span><span class="p">.</span><span class="n">reshaped</span><span class="o">&lt;</span><span class="n">Eigen</span><span class="o">::</span><span class="n">StorageOptions</span><span class="o">::</span><span class="n">RowMajor</span><span class="o">&gt;</span><span class="p">().</span><span class="n">begin</span><span class="p">(),</span><span class="w"> </span><span class="mi">9</span><span class="p">);</span><span class="w"> </span><span class="c1">// エラー</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="p">}</span>
+</span></code></pre></div>
+<h2 id="解決策">解決策<a class="headerlink" href="#解決策" title="Permanent link">&para;</a></h2>
+<p><code>Eigen</code>には<code>Eigen::fix</code>という、関数によって構築されるオブジェクトの整数テンプレート引数にコンパイル時整数を指定することができる関数が用意されています<sup id="fnref:4"><a class="footnote-ref" href="#fn:4">4</a></sup>。
+この関数を使って、以下のように行数と列数を指定すると変形後のベクトルは行ベクトルとなり、行優先の行列を変形しても格納順が一致します。</p>
+<div class="language-cpp highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;span&gt;</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;Eigen/Dense&quot;</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="n">Eigen</span><span class="o">::</span><span class="n">Matrix3f</span><span class="w"> </span><span class="n">m</span><span class="p">;</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">span</span><span class="o">&lt;</span><span class="k">const</span><span class="w"> </span><span class="kt">float</span><span class="p">,</span><span class="w"> </span><span class="mi">9</span><span class="o">&gt;</span><span class="p">(</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">        </span><span class="n">m</span><span class="p">.</span><span class="n">reshaped</span><span class="o">&lt;</span><span class="n">Eigen</span><span class="o">::</span><span class="n">StorageOptions</span><span class="o">::</span><span class="n">RowMajor</span><span class="o">&gt;</span><span class="p">(</span><span class="n">Eigen</span><span class="o">::</span><span class="n">fix</span><span class="o">&lt;</span><span class="mi">1</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="n">Eigen</span><span class="o">::</span><span class="n">fix</span><span class="o">&lt;</span><span class="mi">9</span><span class="o">&gt;</span><span class="p">).</span><span class="n">begin</span><span class="p">(),</span><span class="w"> </span><span class="mi">9</span><span class="p">);</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="p">}</span>
+</span></code></pre></div>
 <h2 id="参考">参考<a class="headerlink" href="#参考" title="Permanent link">&para;</a></h2>
+<div class="footnote">
+<hr />
 <ol>
-<li><a href="https://github.com/NVIDIA/thrust/releases/tag/1.9.4">Thrust 1.9.4 リリースノート</a></li>
-<li><a href="https://oneapi-src.github.io/oneTBB/main/tbb_userguide/Predefined_Node_Types.html">Predefined Node Types (oneTBB Documentation)</a></li>
-<li><a href="https://stackoverflow.com/questions/17041317/undo-git-fast-forward-merge">Undo git fast forward merge</a></li>
-<li><a href="https://wandbox.org/permlink/NiQFySYiXqODLaVr">テンプレート変数がラムダ関数にキャプチャされることによるエラーの例</a></li>
-<li><a href="https://wandbox.org/permlink/VXCWD2IQlLIdz5wT">再帰的な構造体の例</a></li>
+<li id="fn:1">
+<p><a href="https://gitlab.com/libeigen/eigen/-/merge_requests/1636">allow pointer_based_stl_iterator to conform to the contiguous_iterator concept if we are in c++20</a>&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+<li id="fn:2">
+<p><a href="https://gitlab.com/libeigen/eigen/-/blob/master/Eigen/src/Core/Matrix.h#L50">Eigen/src/Core/Matrix.h</a>&#160;<a class="footnote-backref" href="#fnref:2" title="Jump back to footnote 2 in the text">&#8617;</a></p>
+</li>
+<li id="fn:3">
+<p><a href="https://gitlab.com/libeigen/eigen/-/blob/master/Eigen/src/Core/Array.h#L20">Eigen/src/Core/Array.h</a>&#160;<a class="footnote-backref" href="#fnref:3" title="Jump back to footnote 3 in the text">&#8617;</a></p>
+</li>
+<li id="fn:4">
+<p><a href="https://libeigen.gitlab.io/docs/group__Core__Module.html#gac01f234bce100e39e6928fdc470e5194">Eigen::fix</a>&#160;<a class="footnote-backref" href="#fnref:4" title="Jump back to footnote 4 in the text">&#8617;</a></p>
+</li>
+<li id="fn:5">
+<p><a href="https://gitlab.com/libeigen/eigen/-/blob/master/Eigen/src/Core/Reshaped.h#L63">Eigen/src/Core/Reshaped</a>&#160;<a class="footnote-backref" href="#fnref:5" title="Jump back to footnote 5 in the text">&#8617;</a></p>
+</li>
+<li id="fn:6">
+<p><a href="https://gitlab.com/libeigen/eigen/-/blob/master/Eigen/src/plugins/ReshapedMethods.inc#L117">Eigen/src/plugins/ReshapedMethods.inc</a>&#160;<a class="footnote-backref" href="#fnref:6" title="Jump back to footnote 6 in the text">&#8617;</a></p>
+</li>
 </ol>
+</div>
 
 
 
@@ -590,7 +574,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date">2023-10-02</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date">2024-11-14</span>
   </span>
 
     
@@ -600,7 +584,7 @@
     <span class="md-icon" title="Created">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date">2023-10-02</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date">2024-11-14</span>
   </span>
 
     
