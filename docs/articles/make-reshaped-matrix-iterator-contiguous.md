@@ -1,4 +1,4 @@
-# 行優先行列を行優先でベクトルに変換する時、イテレータを`std::contiguous_iterator`にする方法
+# `Eigen`で行優先の行列を行優先のベクトルに変換する時、ベクトルのイテレータを`std::contiguous_iterator`にする方法
 
 この記事は私が`Eigen`に立てた[イシュー](https://gitlab.com/libeigen/eigen/-/issues/2840)が解決される見込みがないので、埋もれる前に残しておくつもりで書きました。
 
