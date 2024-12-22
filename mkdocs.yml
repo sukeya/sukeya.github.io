@@ -14,6 +14,7 @@ nav:
     - 'perf_event_paranoidを変更できない時の対処法': ./articles/cannot-change-perf-event-paranoid.md
     - 'gdbでのスタックトレースの自動取得': ./articles/gdb-get-stacktrace.md
     - '`Eigen`で行優先の行列を行優先のベクトルに変換する時、ベクトルのイテレータを`std::contiguous_iterator`にする方法': ./articles/make-reshaped-matrix-iterator-contiguous.md
+    - '`oneTBB`の使い方': ./articles/how_to_use_onetbb.md
   - 'CUDAプログラミングガイド 日本語解説': /cuda_programming_guide_jp/
 not_in_nav: |
   thrust.md
