@@ -716,6 +716,7 @@
 <h1 id="onetbbの使い方">oneTBBの使い方<a class="headerlink" href="#onetbbの使い方" title="Permanent link">&para;</a></h1>
 <p>C++ Advent Calendar 2024 22日目の記事です。
 今回は意外と少なかったoneTBB(旧intel TBB)の使い方について書きます。</p>
+<p>書ききれていない部分は年内に書こうと思います。</p>
 <h2 id="onetbbとは">oneTBBとは<a class="headerlink" href="#onetbbとは" title="Permanent link">&para;</a></h2>
 <p><a href="https://github.com/uxlfoundation/oneTBB">oneTBB</a>とはintelが中心となって開発している、お手軽マルチスレッディングライブラリです。
 C++20ではセマフォやバリアといった多数の同期処理に関する機能が追加されましたが、これらを使ってマルチスレッドなプログラムを書くのは慣れてないとなかなか大変だと思います。
@@ -731,9 +732,9 @@ oneTBBでは<code>for</code>文や<code>reduce</code>、<code>sort</code>とい�
 <p><code>parallel_for</code>には指定しない関数オーバーロードもありますが、並列実行されるとは限らないため省略します<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup>。</p>
 </details>
 <p>これは例えば</p>
-<p>$$
+<div class="arithmatex">\[
 \sum_{n = 1}^{\infty} \frac{1}{n^2}
-$$</p>
+\]</div>
 <p>の計算のように、各要素の計算は時間がかからないが要素数が多い場合、スレッド間の同期処理によるオーバーヘッドを減らすために導入されています。</p>
 <p>いくつか種類がありますが<sup id="fnref:3"><a class="footnote-ref" href="#fn:3">3</a></sup>、<code>blocked_range</code>を知っていれば大体のケースは問題ないでしょう。</p>
 <div class="language-cpp highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">namespace</span><span class="w"> </span><span class="nn">oneapi</span><span class="o">::</span><span class="nn">tbb</span><span class="w"> </span><span class="p">{</span>
@@ -1179,6 +1180,10 @@ intelは最近あまり良い話題がありませんが、何らかの形で恩
     
     
       <script src="../../assets/javascripts/bundle.88dd0f4e.min.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
       
     
   </body>
