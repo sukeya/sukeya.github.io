@@ -3,6 +3,7 @@
 C++ Advent Calendar 2024 22日目の記事です。
 今回は意外と少なかったoneTBB(旧intel TBB)の使い方について書きます。
 
+書ききれていない部分は年内に書こうと思います。
 
 ## oneTBBとは
 [oneTBB](https://github.com/uxlfoundation/oneTBB)とはintelが中心となって開発している、お手軽マルチスレッディングライブラリです。
