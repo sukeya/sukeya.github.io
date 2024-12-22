@@ -36,7 +36,7 @@ $$
 
 いくつか種類がありますが[^3]、`blocked_range`を知っていれば大体のケースは問題ないでしょう。
 
-```cpp
+```cpp title="blocked_range"
 namespace oneapi::tbb {
 template<typename Value>
 class blocked_range {
@@ -79,7 +79,7 @@ class blocked_range {
 
 
 ### `parallel_for`
-```cpp
+```cpp title="parallel_for"
 namespace oneapi::tbb {
   template<typename Range, typename Body>
   void parallel_for(const Range& range, const Body& body);
@@ -101,7 +101,7 @@ for文のように、各要素に対して`body`を並列に実行する関数�
 
 
 ### `parallel_reduce`
-```cpp
+```cpp title="parallel_reduce"
 namespace oneapi::tbb {
   template<typename Range, typename Value, typename Func, typename Reduction>
   Value parallel_reduce(const Range& range, const Value& identity, const Func& func, const Reduction& reduction);
