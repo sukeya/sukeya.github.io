@@ -10,7 +10,7 @@ int main() {
 
     oneapi::tbb::parallel_for(Range(1, v.size() + 1), [&v](const Range& r){
         for (auto i = r.begin(); i != r.end(); ++i) {
-            v[i] = 1.0 / (i * i);
+            v[i - 1] = 1.0 / (i * i);
         }
     });
 
