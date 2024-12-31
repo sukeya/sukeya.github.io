@@ -81,8 +81,8 @@ class blocked_range {
 ### `parallel_for`
 ```cpp title="oneapi/tbb/parallel_for.h"
 namespace oneapi::tbb {
-  template<typename Range, typename Body>
-  void parallel_for(const Range& range, const Body& body);
+    template<typename Range, typename Body>
+    void parallel_for(const Range& range, const Body& body);
 }
 ```
 
@@ -103,8 +103,8 @@ for文のように、各要素に対して`body`を並列に実行する関数�
 ### `parallel_reduce`
 ```cpp title="oneapi/tbb/parallel_reduce.h"
 namespace oneapi::tbb {
-  template<typename Range, typename Value, typename Func, typename Reduction>
-  Value parallel_reduce(const Range& range, const Value& identity, const Func& func, const Reduction& reduction);
+    template<typename Range, typename Value, typename Func, typename Reduction>
+    Value parallel_reduce(const Range& range, const Value& identity, const Func& func, const Reduction& reduction);
 }
 ```
 
@@ -140,15 +140,92 @@ namespace oneapi::tbb {
 
 
 ## 複雑な並列処理
-年内に書きます。
+pushし忘れていたので年明けに`parallel_for_each`を追記します。
 
 ### `parallel_for_each`
+
 ### `parallel_pipeline`
+```cpp title="oneapi/tbb/parallel_pipeline.h"
+namespace oneapi::tbb {
+    void parallel_pipeline(size_t max_number_of_live_tokens, const filter<void,void>& filter_chain);
+}
+```
+
+この関数は工場の流れ作業のように、`filter_chain`に与えられた関数を実行します。
+詳しい説明の前に具体例を見た方が早いでしょう。
+
+```cpp title="src/how_to_use_onetbb/parallel_pipeline.cpp" linenums="1"
+--8<-- "./src/how_to_use_onetbb/parallel_pipeline.cpp"
+```
+
+見ての通り、`filter_chain`には`oneapi::tbb::make_filter`[^8]で作成した`filter`を渡します。
+別のフィルターを後ろにつけるには`&`で繋げます。
+
+フィルター間で受け渡しされる値をトークンとすると、`max_number_of_live_tokens`は並列実行可能なトークンの最大数です[^11]。
+
+#### `make_filter`
+```cpp title="oneapi/tbb/parallel_pipeline.h"
+namespace oneapi::tbb {
+    template<typename InputType, typename OutputType, typename Body>
+    filter<InputType, OutputType> make_filter(filter_mode mode, const Body& body);
+}
+```
+
+`InputType`には前のフィルターから受け取る値の型を、`OutputType`には後ろのフィルターに渡す値の型を書きます。
+ない場合は`void`です。
+
+`mode`には以下の表の値を指定します。[^9]
+すべて`oneapi::tbb`名前空間の下にあります。
+
+|`mode`|意味|
+|--|--|
+| `parallel` | 並列実行 |
+| `serial_in_order` | 順番通りに逐次実行 |
+| `serial_out_of_order` | 順不同に逐次実行 |
+
+`body`は最初のフィルターでない限り、`[...](InputType&&) -> OutputType {...}`を渡せば良いです(`body`には右辺値が渡されます[^10])。
+最初のフィルターの場合、`[...](oneapi::tbb::flow_control& fc) -> OutputType {...}`を渡せば良いです。
+ただし、関数内で`fc.stop()`を呼んでパイプラインを終わらせる必要があります。
 
 ## その他
-年内に書きます。
-
 ### `parallel_sort`
+```cpp title="oneapi/tbb/parallel_sort.h"
+namespace oneapi::tbb {
+    // (1)
+    template<typename RandomAccessIterator>
+    void parallel_sort(RandomAccessIterator begin, RandomAccessIterator end);
+
+    // (2)
+    template<typename RandomAccessIterator, typename Compare>
+    void parallel_sort(RandomAccessIterator begin, RandomAccessIterator end, const Compare& comp);
+
+    // (3)
+    template <typename Container>
+    void parallel_sort(Container&& c) {
+        parallel_sort(std::begin(c), std::end(c));
+    }
+
+    // (4)
+    template <typename Container, typename Compare>
+    void parallel_sort(Container&& c, const Compare& comp) {
+        parallel_sort(std::begin(c), std::end(c), comp);
+    }
+}
+```
+
+与えられた半開区間`[begin, end)`またはコンテナ`c`を、`std::less`または`comp`を用いて並列にソートする関数。
+イテレータ`RandomAccessIterator`はランダムアクセスイテレータで、値はムーブ可能でなければならない。
+また、比較オブジェクト`comp`は`bool operator()(const T&, const T&)`(`T`は値型)を実装していなければならない。
+
+## FAQ
+### Parallel STLがあるからTBB要らないんじゃない？
+実はGNU、LLVMどちらも内部でTBBを使っています。
+
+実際はGNUはLLVMの実装を使っていて、フラグでTBBを使うようにしています[^12]。
+LLVMの方もデフォルトでは逐次実行ですが、TBBを使うフラグを用意しています[^13]。
+
+簡単な計算ならPSTLで済ました方が簡単だと思いますが、LLVMのように実際は逐次実行の可能性もあるため、どのようにビルドしたかまで調べる必要があります。
+上で紹介したような複雑なループを並列実行したい場合や`std::for_each`の中で`std::for_each`を実行したい場合はoneTBBを使った方が良いかなと思います。
 
 ## 余談
 `parallel_reduce`の大量の`std::set`をマージするという例は実は私がコードを書いていた中で出てきた問題でした。
@@ -166,3 +243,9 @@ intelは最近あまり良い話題がありませんが、何らかの形で恩
 [^5]: [Body requirements](https://github.com/uxlfoundation/oneTBB/blob/master/include/oneapi/tbb/parallel_for.h#L213)
 [^6]: [parallel_reduce](https://uxlfoundation.github.io/oneAPI-spec/spec/elements/oneTBB/source/algorithms/functions/parallel_reduce_func.html)
 [^7]: [Parallel Reduction for rvalues](https://uxlfoundation.github.io/oneTBB/main/reference/rvalue_reduce.html)
+[^8]: [make_filter](https://github.com/uxlfoundation/oneTBB/blob/master/include/oneapi/tbb/parallel_pipeline.h#L90)
+[^9]: [filter_mode](https://github.com/uxlfoundation/oneTBB/blob/master/include/oneapi/tbb/parallel_pipeline.h#L38)
+[^10]: [Bodyに右辺値が渡される箇所](https://github.com/uxlfoundation/oneTBB/blob/master/include/oneapi/tbb/detail/_pipeline_filters.h#L242)
+[^11]: [現在のトークン数が最大数を超えてないか比較している箇所](https://github.com/uxlfoundation/oneTBB/blob/master/src/tbb/parallel_pipeline.cpp#L283)
+[^12]: [GNU C++ ライブラリがPSTLの内部でTBBを使うようにフラグを設定している箇所](https://github.com/gcc-mirror/gcc/blob/81d4707a00a2d74a9caf2d806e5b0ebe13e1247c/libstdc%2B%2B-v3/include/bits/c%2B%2Bconfig#L927)
+[^13]: [PSTL_PARALLEL_BACKENDで並列処理のライブラリを切り替えられます](https://github.com/llvm/llvm-project/blob/ddef380cd6c30668cc6f6d952b4c045f724f8d57/pstl/CMakeLists.txt#L23)。[議論の中にも出てきました](https://discourse.llvm.org/t/parallel-stl/56381/2)。LLVMに環境依存の依存関係を作りたくないのが理由？
