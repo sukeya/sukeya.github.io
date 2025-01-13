@@ -122,7 +122,6 @@ namespace oneapi::tbb {
 ```
 
 多数の`std::set`をマージすることも出来ます。[^7]
-**実行していないので、間違っているかもしれません。**
 
 ```cpp title="src/how_to_use_onetbb/parallel_reduce_rvalue.cpp" linenums="1"
 --8<-- "./src/how_to_use_onetbb/parallel_reduce_rvalue.cpp"

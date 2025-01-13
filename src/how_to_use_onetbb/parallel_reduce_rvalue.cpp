@@ -19,7 +19,7 @@ int main() {
         auto k = (i - 1) * 1e2 + j;
         s.insert(1.0 / (k + k));
       }
-      v[i] = std::move(s);
+      v[i - 1] = std::move(s);
     }
 
     Set merged = oneapi::tbb::parallel_reduce(
@@ -31,6 +31,9 @@ int main() {
               local_sum.swap(v[i]);
             }
             local_sum.merge(v[i]);
+            if (not v[i].empty()) {
+              std::cout << "something is wrong!\n";
+            }
         }
         return std::move(local_sum);
       },
@@ -39,6 +42,9 @@ int main() {
           x.swap(y);
         }
         x.merge(y);
+        if (not y.empty()) {
+          std::cout << "something is wrong!\n";
+        }
         return std::move(x);
       }
     );
