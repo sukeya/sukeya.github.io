@@ -2,6 +2,7 @@
 #include <iostream>
 #include <set>
 #include <vector>
+#include <stdexcept>
 
 #include <oneapi/tbb/blocked_range.h>
 #include <oneapi/tbb/parallel_reduce.h>
@@ -32,7 +33,7 @@ int main() {
             }
             local_sum.merge(v[i]);
             if (not v[i].empty()) {
-              std::cout << "something is wrong!\n";
+              throw std::runtime_error("something is wrong!\n");
             }
         }
         return std::move(local_sum);
@@ -43,7 +44,7 @@ int main() {
         }
         x.merge(y);
         if (not y.empty()) {
-          std::cout << "something is wrong!\n";
+          throw std::runtime_error("something is wrong!\n");
         }
         return std::move(x);
       }
