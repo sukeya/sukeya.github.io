@@ -87,7 +87,7 @@ namespace oneapi::tbb {
 ```
 
 for文のように、各要素に対して`body`を並列に実行する関数です。
-`Body`型にも要件がありますが[^5]、`[...](const Range& r) -> void {...}`で十分です。
+`Body`型にも要件がありますが[^5]、`[...](const Range& r) {...}`で十分です。
 
 以下は`parallel_for`を使った簡単な例です。
 
@@ -140,9 +140,61 @@ namespace oneapi::tbb {
 
 
 ## 複雑な並列処理
-pushし忘れていたので年明けに`parallel_for_each`を追記します。
+この節で登場する関数は一部シングルスレッドで動作します。
+紹介しておいてなんですが、なるべく使わない方が良いと思います。
 
 ### `parallel_for_each`
+```cpp title="oneapi/tbb/parallel_for_each.h"
+namespace oneapi::tbb {
+    // (1)
+    template<typename InputIterator, typename Body>
+    void parallel_for_each( InputIterator first, InputIterator last, Body body );
+
+    // (2)
+    template<typename Container, typename Body>
+    void parallel_for_each( Container& c, Body body );
+
+    // (3)
+    template<typename Container, typename Body>
+    void parallel_for_each( const Container& c, Body body );
+}
+```
+
+この関数はループ回数がわからないけど、各要素を並列処理したいという時に使います。
+一見便利に見えますが、要素アクセスがシングルスレッドで動作するので注意しましょう。
+
+テンプレートパラメーター`InputIterator`は[入力イテレータ](https://cpprefjp.github.io/reference/iterator/input_iterator.html)でなければいけません。
+`body`は`InputIterator`が[前方向イテレータ]かどうかでwell-definedな引数が決まります。
+説明のため
+
+```cpp
+using value_type = typename std::iterator_traits<InputIterator>::value_type;
+```
+
+とすると、
+
+1. `InputIterator`が前方向イテレータでない場合
+
+```cpp
+[...](const value_type& item) {...}
+[...](value_type&& item) {...}
+```
+
+を`body`に渡せます。
+
+2. `InputIterator`が前方向イテレータの場合
+1に加えて
+```cpp
+[...](value_type& item) {...}
+```
+
+も`body`に渡せます。
+
+オーバーロードの2と3は`parallel_for_each(std::begin(c), std::end(c), body)`と同じです。
+
+```cpp title="src/how_to_use_onetbb/parallel_for_each.cpp" linenums="1"
+--8<-- "./src/how_to_use_onetbb/parallel_for_each.cpp"
+```
 
 ### `parallel_pipeline`
 ```cpp title="oneapi/tbb/parallel_pipeline.h"
