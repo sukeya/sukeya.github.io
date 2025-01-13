@@ -3,7 +3,6 @@
 C++ Advent Calendar 2024 22日目の記事です。
 今回は意外と少なかったoneTBB(旧intel TBB)の使い方について書きます。
 
-書ききれていない部分は年内に書こうと思います。
 
 ## oneTBBとは
 [oneTBB](https://github.com/uxlfoundation/oneTBB)とはintelが中心となって開発している、お手軽マルチスレッディングライブラリです。
@@ -72,7 +71,7 @@ class blocked_range {
 
 !!! note
 
-    気をつける点は`begin`がイテレータではなく`Value`型の値を返すことです。
+    `begin`の戻り値はイテレータではなく`Value`型の値です。
     間違えやすい上によく使うので、注意しましょう。
 
 以下の関数では、渡された`Range`型のインスタンスを分割して、各スレッドで分割後の範囲を実行しています。
@@ -164,7 +163,7 @@ namespace oneapi::tbb {
 一見便利に見えますが、要素アクセスがシングルスレッドで動作するので注意しましょう。
 
 テンプレートパラメーター`InputIterator`は[入力イテレータ](https://cpprefjp.github.io/reference/iterator/input_iterator.html)でなければいけません。
-`body`は`InputIterator`が[前方向イテレータ]かどうかでwell-definedな引数が決まります。
+`body`は`InputIterator`が[前方向イテレータ](https://cpprefjp.github.io/reference/iterator/forward_iterator.html)かどうかでwell-definedな引数が決まります。
 説明のため
 
 ```cpp
@@ -173,22 +172,15 @@ using value_type = typename std::iterator_traits<InputIterator>::value_type;
 
 とすると、
 
-1. `InputIterator`が前方向イテレータでない場合
-
+1. `InputIterator`が前方向イテレータでない場合、以下のラムダ式を`body`に渡せます。
 ```cpp
 [...](const value_type& item) {...}
 [...](value_type&& item) {...}
 ```
-
-を`body`に渡せます。
-
-2. `InputIterator`が前方向イテレータの場合
-1に加えて
+2. `InputIterator`が前方向イテレータの場合、1に加えて以下のラムダ式も`body`に渡せます。
 ```cpp
 [...](value_type& item) {...}
 ```
-
-も`body`に渡せます。
 
 オーバーロードの2と3は`parallel_for_each(std::begin(c), std::end(c), body)`と同じです。
 
@@ -271,18 +263,27 @@ namespace oneapi::tbb {
 
 ## FAQ
 ### Parallel STLがあるからTBB要らないんじゃない？
-実はGNU、LLVMどちらも内部でTBBを使っています。
+簡単な並列処理ならPSTLを使ったほうが楽だと思いますが、TBBを直に使う方がより複雑な並列処理ができます。
+実装の詳細までは知りませんが、TBBではちゃんと設定しないと`parallel_for`の中で他の並列処理を呼ぶと正しく処理してくれません。なので、そういう処理を行う際は必要になるかなと思います。
 
-実際はGNUはLLVMの実装を使っていて、フラグでTBBを使うようにしています[^12]。
-LLVMの方もデフォルトでは逐次実行ですが、TBBを使うフラグを用意しています[^13]。
+あと説明していませんでしたが、TBBにはFlow Graphという命令並列な並列処理を行う機能があります。
+また、タスクの中断時の挙動の設定やエラー処理もTBBにはあるので、こういう機能で差別化できているかなと思います。
 
-簡単な計算ならPSTLで済ました方が簡単だと思いますが、LLVMのように実際は逐次実行の可能性もあるため、どのようにビルドしたかまで調べる必要があります。
-上で紹介したような複雑なループを並列実行したい場合や`std::for_each`の中で`std::for_each`を実行したい場合はoneTBBを使った方が良いかなと思います。
 
 ## 余談
 `parallel_reduce`の大量の`std::set`をマージするという例は実は私がコードを書いていた中で出てきた問題でした。
 `oneTBB`にイシューを立てたところ、`Body`を使った方法を親切に教えてもらいました。
 intelは最近あまり良い話題がありませんが、何らかの形で恩返し出来たらなと思います。
+
+
+### PSTLの実装について
+実はGNU、LLVMどちらも内部でTBBを使っています。
+具体的には、GNUはLLVMの実装を使っていて、フラグでTBBを使うようにしており[^12]、
+LLVMの方もデフォルトでは逐次実行ですが、TBBを使うフラグを用意しています[^13]。
+
+LLVMの実装の理由は環境依存の依存関係を作りたくないからのようですが、使う際は逐次実行の可能性もあるため、どのようにビルドしたかまで調べる必要があります。
+気持ちはわかるんですが、こんなことされるとPSTL使いたくないなと思ってしまいました。
+
 
 ## 参考
 - [oneAPI Threading Building Blocks (oneTBB)](https://uxlfoundation.github.io/oneTBB/index.html)
@@ -300,4 +301,4 @@ intelは最近あまり良い話題がありませんが、何らかの形で恩
 [^10]: [Bodyに右辺値が渡される箇所](https://github.com/uxlfoundation/oneTBB/blob/master/include/oneapi/tbb/detail/_pipeline_filters.h#L242)
 [^11]: [現在のトークン数が最大数を超えてないか比較している箇所](https://github.com/uxlfoundation/oneTBB/blob/master/src/tbb/parallel_pipeline.cpp#L283)
 [^12]: [GNU C++ ライブラリがPSTLの内部でTBBを使うようにフラグを設定している箇所](https://github.com/gcc-mirror/gcc/blob/81d4707a00a2d74a9caf2d806e5b0ebe13e1247c/libstdc%2B%2B-v3/include/bits/c%2B%2Bconfig#L927)
-[^13]: [PSTL_PARALLEL_BACKENDで並列処理のライブラリを切り替えられます](https://github.com/llvm/llvm-project/blob/ddef380cd6c30668cc6f6d952b4c045f724f8d57/pstl/CMakeLists.txt#L23)。[議論の中にも出てきました](https://discourse.llvm.org/t/parallel-stl/56381/2)。LLVMに環境依存の依存関係を作りたくないのが理由？
+[^13]: [PSTL_PARALLEL_BACKENDで並列処理のライブラリを切り替えられます](https://github.com/llvm/llvm-project/blob/ddef380cd6c30668cc6f6d952b4c045f724f8d57/pstl/CMakeLists.txt#L23)。[議論の中にも出てきました](https://discourse.llvm.org/t/parallel-stl/56381/2)。
