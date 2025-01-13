@@ -682,6 +682,21 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="余談">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pstlの実装について" class="md-nav__link">
+    <span class="md-ellipsis">
+      PSTLの実装について
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -755,7 +770,6 @@
 <h1 id="onetbbの使い方">oneTBBの使い方<a class="headerlink" href="#onetbbの使い方" title="Permanent link">&para;</a></h1>
 <p>C++ Advent Calendar 2024 22日目の記事です。
 今回は意外と少なかったoneTBB(旧intel TBB)の使い方について書きます。</p>
-<p>書ききれていない部分は年内に書こうと思います。</p>
 <h2 id="onetbbとは">oneTBBとは<a class="headerlink" href="#onetbbとは" title="Permanent link">&para;</a></h2>
 <p><a href="https://github.com/uxlfoundation/oneTBB">oneTBB</a>とはintelが中心となって開発している、お手軽マルチスレッディングライブラリです。
 C++20ではセマフォやバリアといった多数の同期処理に関する機能が追加されましたが、これらを使ってマルチスレッドなプログラムを書くのは慣れてないとなかなか大変だと思います。
@@ -809,7 +823,7 @@ oneTBBでは<code>for</code>文や<code>reduce</code>、<code>sort</code>とい�
 コンストラクタで範囲を指定しましょう。</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>気をつける点は<code>begin</code>がイテレータではなく<code>Value</code>型の値を返すことです。
+<p><code>begin</code>の戻り値はイテレータではなく<code>Value</code>型の値です。
 間違えやすい上によく使うので、注意しましょう。</p>
 </div>
 <p>以下の関数では、渡された<code>Range</code>型のインスタンスを分割して、各スレッドで分割後の範囲を実行しています。</p>
@@ -1087,27 +1101,68 @@ oneTBBでは<code>for</code>文や<code>reduce</code>、<code>sort</code>とい�
 <p>この関数はループ回数がわからないけど、各要素を並列処理したいという時に使います。
 一見便利に見えますが、要素アクセスがシングルスレッドで動作するので注意しましょう。</p>
 <p>テンプレートパラメーター<code>InputIterator</code>は<a href="https://cpprefjp.github.io/reference/iterator/input_iterator.html">入力イテレータ</a>でなければいけません。
-<code>body</code>は<code>InputIterator</code>が[前方向イテレータ]かどうかでwell-definedな引数が決まります。
+<code>body</code>は<code>InputIterator</code>が<a href="https://cpprefjp.github.io/reference/iterator/forward_iterator.html">前方向イテレータ</a>かどうかでwell-definedな引数が決まります。
 説明のため</p>
 <div class="language-cpp highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">using</span><span class="w"> </span><span class="n">value_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">typename</span><span class="w"> </span><span class="nc">std</span><span class="o">::</span><span class="n">iterator_traits</span><span class="o">&lt;</span><span class="n">InputIterator</span><span class="o">&gt;::</span><span class="n">value_type</span><span class="p">;</span>
 </span></code></pre></div>
 <p>とすると、</p>
 <ol>
-<li><code>InputIterator</code>が前方向イテレータでない場合</li>
-</ol>
+<li><code>InputIterator</code>が前方向イテレータでない場合、以下のラムダ式を<code>body</code>に渡せます。
 <div class="language-cpp highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="p">[...](</span><span class="k">const</span><span class="w"> </span><span class="n">value_type</span><span class="o">&amp;</span><span class="w"> </span><span class="n">item</span><span class="p">)</span><span class="w"> </span><span class="p">{...}</span>
 </span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="p">[...](</span><span class="n">value_type</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">item</span><span class="p">)</span><span class="w"> </span><span class="p">{...}</span>
-</span></code></pre></div>
-<p>を<code>body</code>に渡せます。</p>
-<ol>
-<li><code>InputIterator</code>が前方向イテレータの場合
-1に加えて
+</span></code></pre></div></li>
+<li><code>InputIterator</code>が前方向イテレータの場合、1に加えて以下のラムダ式も<code>body</code>に渡せます。
 <div class="language-cpp highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="p">[...](</span><span class="n">value_type</span><span class="o">&amp;</span><span class="w"> </span><span class="n">item</span><span class="p">)</span><span class="w"> </span><span class="p">{...}</span>
 </span></code></pre></div></li>
 </ol>
-<p>も<code>body</code>に渡せます。</p>
 <p>オーバーロードの2と3は<code>parallel_for_each(std::begin(c), std::end(c), body)</code>と同じです。</p>
-<div class="language-cpp highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">src/how_to_use_onetbb/parallel_for_each.cpp</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-11-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1"></a>
+<div class="language-cpp highlight"><table class="highlighttable"><tr><th colspan="2" class="filename"><span class="filename">src/how_to_use_onetbb/parallel_for_each.cpp</span></th></tr><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-11-1"> 1</a></span>
+<span class="normal"><a href="#__codelineno-11-2"> 2</a></span>
+<span class="normal"><a href="#__codelineno-11-3"> 3</a></span>
+<span class="normal"><a href="#__codelineno-11-4"> 4</a></span>
+<span class="normal"><a href="#__codelineno-11-5"> 5</a></span>
+<span class="normal"><a href="#__codelineno-11-6"> 6</a></span>
+<span class="normal"><a href="#__codelineno-11-7"> 7</a></span>
+<span class="normal"><a href="#__codelineno-11-8"> 8</a></span>
+<span class="normal"><a href="#__codelineno-11-9"> 9</a></span>
+<span class="normal"><a href="#__codelineno-11-10">10</a></span>
+<span class="normal"><a href="#__codelineno-11-11">11</a></span>
+<span class="normal"><a href="#__codelineno-11-12">12</a></span>
+<span class="normal"><a href="#__codelineno-11-13">13</a></span>
+<span class="normal"><a href="#__codelineno-11-14">14</a></span>
+<span class="normal"><a href="#__codelineno-11-15">15</a></span>
+<span class="normal"><a href="#__codelineno-11-16">16</a></span>
+<span class="normal"><a href="#__codelineno-11-17">17</a></span>
+<span class="normal"><a href="#__codelineno-11-18">18</a></span>
+<span class="normal"><a href="#__codelineno-11-19">19</a></span>
+<span class="normal"><a href="#__codelineno-11-20">20</a></span>
+<span class="normal"><a href="#__codelineno-11-21">21</a></span>
+<span class="normal"><a href="#__codelineno-11-22">22</a></span>
+<span class="normal"><a href="#__codelineno-11-23">23</a></span>
+<span class="normal"><a href="#__codelineno-11-24">24</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2"></a>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;oneapi/tbb/parallel_for_each.h&gt;</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4"></a>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5"></a><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6"></a><span class="w">    </span><span class="k">using</span><span class="w"> </span><span class="n">Range</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">oneapi</span><span class="o">::</span><span class="n">tbb</span><span class="o">::</span><span class="n">blocked_range</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="o">&gt;</span><span class="p">;</span>
+</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7"></a>
+</span><span id="__span-11-8"><a id="__codelineno-11-8" name="__codelineno-11-8"></a><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">v</span><span class="p">;</span>
+</span><span id="__span-11-9"><a id="__codelineno-11-9" name="__codelineno-11-9"></a><span class="w">    </span><span class="n">v</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="mf">1e6</span><span class="p">);</span>
+</span><span id="__span-11-10"><a id="__codelineno-11-10" name="__codelineno-11-10"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="n">size</span><span class="p">();</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-11-11"><a id="__codelineno-11-11" name="__codelineno-11-11"></a><span class="w">      </span><span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
+</span><span id="__span-11-12"><a id="__codelineno-11-12" name="__codelineno-11-12"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-11-13"><a id="__codelineno-11-13" name="__codelineno-11-13"></a>
+</span><span id="__span-11-14"><a id="__codelineno-11-14" name="__codelineno-11-14"></a><span class="w">    </span><span class="n">oneapi</span><span class="o">::</span><span class="n">tbb</span><span class="o">::</span><span class="n">parallel_for_each</span><span class="p">(</span><span class="n">v</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span><span class="w"> </span><span class="p">[</span><span class="o">&amp;</span><span class="n">v</span><span class="p">](</span><span class="kt">double</span><span class="o">&amp;</span><span class="w"> </span><span class="n">d</span><span class="p">){</span>
+</span><span id="__span-11-15"><a id="__codelineno-11-15" name="__codelineno-11-15"></a><span class="w">      </span><span class="n">d</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">d</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">d</span><span class="p">;</span>
+</span><span id="__span-11-16"><a id="__codelineno-11-16" name="__codelineno-11-16"></a><span class="w">    </span><span class="p">});</span>
+</span><span id="__span-11-17"><a id="__codelineno-11-17" name="__codelineno-11-17"></a>
+</span><span id="__span-11-18"><a id="__codelineno-11-18" name="__codelineno-11-18"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="n">size</span><span class="p">();</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-11-19"><a id="__codelineno-11-19" name="__codelineno-11-19"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-11-20"><a id="__codelineno-11-20" name="__codelineno-11-20"></a><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</span><span id="__span-11-21"><a id="__codelineno-11-21" name="__codelineno-11-21"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-11-22"><a id="__codelineno-11-22" name="__codelineno-11-22"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-11-23"><a id="__codelineno-11-23" name="__codelineno-11-23"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span><span id="__span-11-24"><a id="__codelineno-11-24" name="__codelineno-11-24"></a><span class="p">}</span>
 </span></code></pre></div></td></tr></table></div>
 <h3 id="parallel_pipeline"><code>parallel_pipeline</code><a class="headerlink" href="#parallel_pipeline" title="Permanent link">&para;</a></h3>
 <div class="language-cpp highlight"><span class="filename">oneapi/tbb/parallel_pipeline.h</span><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="k">namespace</span><span class="w"> </span><span class="nn">oneapi</span><span class="o">::</span><span class="nn">tbb</span><span class="w"> </span><span class="p">{</span>
@@ -1301,15 +1356,20 @@ oneTBBでは<code>for</code>文や<code>reduce</code>、<code>sort</code>とい�
 また、比較オブジェクト<code>comp</code>は<code>bool operator()(const T&amp;, const T&amp;)</code>(<code>T</code>は値型)を実装していなければならない。</p>
 <h2 id="faq">FAQ<a class="headerlink" href="#faq" title="Permanent link">&para;</a></h2>
 <h3 id="parallel-stlがあるからtbb要らないんじゃない">Parallel STLがあるからTBB要らないんじゃない？<a class="headerlink" href="#parallel-stlがあるからtbb要らないんじゃない" title="Permanent link">&para;</a></h3>
-<p>実はGNU、LLVMどちらも内部でTBBを使っています。</p>
-<p>実際はGNUはLLVMの実装を使っていて、フラグでTBBを使うようにしています<sup id="fnref:12"><a class="footnote-ref" href="#fn:12">12</a></sup>。
-LLVMの方もデフォルトでは逐次実行ですが、TBBを使うフラグを用意しています<sup id="fnref:13"><a class="footnote-ref" href="#fn:13">13</a></sup>。</p>
-<p>簡単な計算ならPSTLで済ました方が簡単だと思いますが、LLVMのように実際は逐次実行の可能性もあるため、どのようにビルドしたかまで調べる必要があります。
-上で紹介したような複雑なループを並列実行したい場合や<code>std::for_each</code>の中で<code>std::for_each</code>を実行したい場合はoneTBBを使った方が良いかなと思います。</p>
+<p>簡単な並列処理ならPSTLを使ったほうが楽だと思いますが、TBBを直に使う方がより複雑な並列処理ができます。
+実装の詳細までは知りませんが、TBBではちゃんと設定しないと<code>parallel_for</code>の中で他の並列処理を呼ぶと正しく処理してくれません。なので、そういう処理を行う際は必要になるかなと思います。</p>
+<p>あと説明していませんでしたが、TBBにはFlow Graphという命令並列な並列処理を行う機能があります。
+また、タスクの中断時の挙動の設定やエラー処理もTBBにはあるので、こういう機能で差別化できているかなと思います。</p>
 <h2 id="余談">余談<a class="headerlink" href="#余談" title="Permanent link">&para;</a></h2>
 <p><code>parallel_reduce</code>の大量の<code>std::set</code>をマージするという例は実は私がコードを書いていた中で出てきた問題でした。
 <code>oneTBB</code>にイシューを立てたところ、<code>Body</code>を使った方法を親切に教えてもらいました。
 intelは最近あまり良い話題がありませんが、何らかの形で恩返し出来たらなと思います。</p>
+<h3 id="pstlの実装について">PSTLの実装について<a class="headerlink" href="#pstlの実装について" title="Permanent link">&para;</a></h3>
+<p>実はGNU、LLVMどちらも内部でTBBを使っています。
+具体的には、GNUはLLVMの実装を使っていて、フラグでTBBを使うようにしており<sup id="fnref:12"><a class="footnote-ref" href="#fn:12">12</a></sup>、
+LLVMの方もデフォルトでは逐次実行ですが、TBBを使うフラグを用意しています<sup id="fnref:13"><a class="footnote-ref" href="#fn:13">13</a></sup>。</p>
+<p>LLVMの実装の理由は環境依存の依存関係を作りたくないからのようですが、使う際は逐次実行の可能性もあるため、どのようにビルドしたかまで調べる必要があります。
+気持ちはわかるんですが、こんなことされるとPSTL使いたくないなと思ってしまいました。</p>
 <h2 id="参考">参考<a class="headerlink" href="#参考" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://uxlfoundation.github.io/oneTBB/index.html">oneAPI Threading Building Blocks (oneTBB)</a></li>
@@ -1355,7 +1415,7 @@ intelは最近あまり良い話題がありませんが、何らかの形で恩
 <p><a href="https://github.com/gcc-mirror/gcc/blob/81d4707a00a2d74a9caf2d806e5b0ebe13e1247c/libstdc%2B%2B-v3/include/bits/c%2B%2Bconfig#L927">GNU C++ ライブラリがPSTLの内部でTBBを使うようにフラグを設定している箇所</a>&#160;<a class="footnote-backref" href="#fnref:12" title="Jump back to footnote 12 in the text">&#8617;</a></p>
 </li>
 <li id="fn:13">
-<p><a href="https://github.com/llvm/llvm-project/blob/ddef380cd6c30668cc6f6d952b4c045f724f8d57/pstl/CMakeLists.txt#L23">PSTL_PARALLEL_BACKENDで並列処理のライブラリを切り替えられます</a>。<a href="https://discourse.llvm.org/t/parallel-stl/56381/2">議論の中にも出てきました</a>。LLVMに環境依存の依存関係を作りたくないのが理由？&#160;<a class="footnote-backref" href="#fnref:13" title="Jump back to footnote 13 in the text">&#8617;</a></p>
+<p><a href="https://github.com/llvm/llvm-project/blob/ddef380cd6c30668cc6f6d952b4c045f724f8d57/pstl/CMakeLists.txt#L23">PSTL_PARALLEL_BACKENDで並列処理のライブラリを切り替えられます</a>。<a href="https://discourse.llvm.org/t/parallel-stl/56381/2">議論の中にも出てきました</a>。&#160;<a class="footnote-backref" href="#fnref:13" title="Jump back to footnote 13 in the text">&#8617;</a></p>
 </li>
 </ol>
 </div>
