@@ -32,14 +32,14 @@ int main() {
             }
             local_sum.merge(v[i]);
         }
-        return local_sum;
+        return std::move(local_sum);
       },
       [](Set&& x, Set&& y) {
         if (x.size() < y.size()) {
           x.swap(y);
         }
         x.merge(y);
-        return x;
+        return std::move(x);
       }
     );
 
