@@ -139,7 +139,7 @@ namespace oneapi::tbb {
 
 ## 複雑な並列処理
 この節で登場する関数は一部シングルスレッドで動作します。
-紹介しておいてなんですが、なるべく使わない方が良いと思います。
+よく考えて使ってください。
 
 ### `parallel_for_each`
 ```cpp title="oneapi/tbb/parallel_for_each.h"
@@ -162,7 +162,7 @@ namespace oneapi::tbb {
 一見便利に見えますが、要素アクセスがシングルスレッドで動作するので注意しましょう。
 
 テンプレートパラメーター`InputIterator`は[入力イテレータ](https://cpprefjp.github.io/reference/iterator/input_iterator.html)でなければいけません。
-`body`は`InputIterator`が[前方向イテレータ](https://cpprefjp.github.io/reference/iterator/forward_iterator.html)かどうかでwell-definedな引数が決まります。
+`body`は`InputIterator`が[前方向イテレータ](https://cpprefjp.github.io/reference/iterator/forward_iterator.html)かどうかでwell-definedな引数が決まります。[^15]
 説明のため
 
 ```cpp
@@ -185,6 +185,40 @@ using value_type = typename std::iterator_traits<InputIterator>::value_type;
 
 ```cpp title="src/how_to_use_onetbb/parallel_for_each.cpp" linenums="1"
 --8<-- "./src/how_to_use_onetbb/parallel_for_each.cpp"
+```
+
+#### ループ中に要素を追加したいとき
+ループ中に要素を追加したいとき、以下のように`body`に引数を追加する必要があります。
+
+```cpp
+[...](ItemType item, oneapi::tbb::feeder<ItemType>& feeder) {...}
+```
+
+`ItemType`は上で説明した`value_type`のいずれかの参照型です。
+ここで追加した`feeder`型の`add`メンバ関数を使って、ループに要素を追加します。[^14]
+
+```cpp title="oneapi/tbb/parallel_for_each.h"
+namespace oneapi::tbb {
+    template<typename Item>
+    class feeder {
+    public:
+        // (1)
+        void add(const Item& item);
+        // (2)
+        void add(Item&& item);
+    };
+} //namespace oneapi::tbb
+```
+
+使うメンバ関数によって、`Item`型は以下の要件を満たす必要があります。
+
+1. コピー構築可能
+2. ムーブ構築可能
+
+以下は、開始から1秒経過するまで何度もタイマーをコンテナに追加して寝続ける例です。
+
+```cpp title="src/how_to_use_onetbb/parallel_for_each_with_feeder.cpp" linenums="1"
+--8<-- "./src/how_to_use_onetbb/parallel_for_each_with_feeder.cpp"
 ```
 
 ### `parallel_pipeline`
@@ -301,3 +335,5 @@ LLVMの実装の理由は環境依存の依存関係を作りたくないから�
 [^11]: [現在のトークン数が最大数を超えてないか比較している箇所](https://github.com/uxlfoundation/oneTBB/blob/master/src/tbb/parallel_pipeline.cpp#L283)
 [^12]: [GNU C++ ライブラリがPSTLの内部でTBBを使うようにフラグを設定している箇所](https://github.com/gcc-mirror/gcc/blob/81d4707a00a2d74a9caf2d806e5b0ebe13e1247c/libstdc%2B%2B-v3/include/bits/c%2B%2Bconfig#L927)
 [^13]: [PSTL_PARALLEL_BACKENDで並列処理のライブラリを切り替えられます](https://github.com/llvm/llvm-project/blob/ddef380cd6c30668cc6f6d952b4c045f724f8d57/pstl/CMakeLists.txt#L23)。[議論の中にも出てきました](https://discourse.llvm.org/t/parallel-stl/56381/2)。
+[^14]: [parallel_for_eachで使われるfeeder](https://oneapi-spec.uxlfoundation.org/specifications/oneapi/latest/elements/onetbb/source/algorithms/functions/feeder)
+[^15]: [parallel_for_each Body semantics and requirements](https://uxlfoundation.github.io/oneTBB/main/reference/parallel_for_each_semantics.html)

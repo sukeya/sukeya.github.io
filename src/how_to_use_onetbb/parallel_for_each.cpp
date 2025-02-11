@@ -11,7 +11,7 @@ int main() {
       v[i] = i;
     }
 
-    oneapi::tbb::parallel_for_each(v.begin(), v.end(), [&v](double& d){
+    oneapi::tbb::parallel_for_each(v.begin(), v.end(), [](double& d){
       d = d * d;
     });
 

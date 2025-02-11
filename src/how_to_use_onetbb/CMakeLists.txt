@@ -5,6 +5,8 @@ project(how_to_use_onetbb LANGUAGES CXX)
 set(
   examples
   parallel_for
+  parallel_for_each
+  parallel_for_each_with_feeder
   parallel_reduce
   parallel_reduce_rvalue
   parallel_pipeline
