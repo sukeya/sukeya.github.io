@@ -33,6 +33,7 @@ theme:
 markdown_extensions:
   - admonition
   - footnotes
+  - pymdownx.blocks.caption
   - pymdownx.highlight:
       anchor_linenums: true
       line_spans: __span
