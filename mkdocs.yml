@@ -15,6 +15,7 @@ nav:
     - 'gdbでのスタックトレースの自動取得': ./articles/gdb-get-stacktrace.md
     - 'Eigenで行優先の行列を行優先のベクトルに変換する時、ベクトルのイテレータを`std::contiguous_iterator`にする方法': ./articles/make-reshaped-matrix-iterator-contiguous.md
     - 'oneTBBの使い方': ./articles/how_to_use_onetbb.md
+    - 'Ubuntu 25.04上のRadeonでRusticlを使う方法': ./articles/how_to_use_rusticl_with_radeon_on_ubuntu.md
     # - 'AMD RDNA4のハードウェアの概要': ./articles/overview_of_RDNA4_hardware.md
   - 'CUDAプログラミングガイド 日本語解説': /cuda_programming_guide_jp/
 not_in_nav: |
