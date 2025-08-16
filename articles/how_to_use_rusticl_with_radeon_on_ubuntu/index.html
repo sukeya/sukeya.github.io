@@ -8,8 +8,10 @@
       
       
       
-        <link rel="canonical" href="https://sukeya.github.io/articles/memo/">
+        <link rel="canonical" href="https://sukeya.github.io/articles/how_to_use_rusticl_with_radeon_on_ubuntu/">
       
+      
+        <link rel="prev" href="../how_to_use_onetbb/">
       
       
       
@@ -18,7 +20,7 @@
     
     
       
-        <title>メモ - 私の愛した数式</title>
+        <title>Ubuntu 25.04上のRadeonでRusticlを使う方法 - 私の愛した数式</title>
       
     
     
@@ -69,7 +71,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#メモ" class="md-skip">
+        <a href="#ubuntu-2504上のradeonでrusticlを使う方法" class="md-skip">
           Skip to content
         </a>
       
@@ -105,7 +107,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              メモ
+              Ubuntu 25.04上のRadeonでRusticlを使う方法
             
           </span>
         </div>
@@ -318,8 +320,10 @@
       
   
   
+    
   
   
+  
     
     
       
@@ -343,11 +347,11 @@
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
           <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
@@ -363,7 +367,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             記事
@@ -535,10 +539,19 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../how_to_use_rusticl_with_radeon_on_ubuntu/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -549,6 +562,7 @@
   
 
       </a>
+      
     </li>
   
 
@@ -599,7 +613,7 @@
 
 
   
-    <a href="https://github.com/sukeya/sukeya.github.io/blob/main/docs/articles/memo.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+    <a href="https://github.com/sukeya/sukeya.github.io/blob/main/docs/articles/how_to_use_rusticl_with_radeon_on_ubuntu.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -607,77 +621,28 @@
   
 
 
-<h1 id="メモ">メモ<a class="headerlink" href="#メモ" title="Permanent link">&para;</a></h1>
-<p>小ネタ集です。</p>
-<h2 id="blenderでalembicを出力した場合">BlenderでAlembicを出力した場合<a class="headerlink" href="#blenderでalembicを出力した場合" title="Permanent link">&para;</a></h2>
-<ul>
-<li>速度は出力されない</li>
-<li>剛体運動はXformSampleに記録される</li>
-<li>ソフトボディの運動はXformSampleに記録されない</li>
-<li>ソフトボディと剛体がある時、例え剛体であっても各フレームごとのポリゴンメッシュの情報(点、法線、面)が出力される。</li>
-</ul>
-<h2 id="thrust">Thrust<a class="headerlink" href="#thrust" title="Permanent link">&para;</a></h2>
-<ul>
-<li>oneTBBをデバイスとして使う場合、コンパイルオプション<code>-expt-extended-lambda</code>をnvccに渡してもラムダ式をデバイスコードで使うことはできない。</li>
-<li>入れ子になった<code>host_vector</code>と<code>device_vector</code>はお互いにコピーできない(コンパイルエラーになる)。</li>
-</ul>
-<h2 id="c">C++<a class="headerlink" href="#c" title="Permanent link">&para;</a></h2>
-<ul>
-<li><a href="https://mikio.hatenablog.com/entry/2021/07/13/224907">C++標準async+futureとスレッドプールの性能比較</a></li>
-<li>ユーザー定義とdefault宣言で定義されたコピーコンストラクタをマクロで切り替えることはできない。</li>
-<li><code>struct A final {}</code>は合法。</li>
-<li>ラムダ関数は静的な変数を自動的にキャプチャする。</li>
-<li>以下のような再帰的な構造体は合法。
-<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>template &lt;int D&gt;
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>struct A
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>{
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    static_assert(D &gt; 1);
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    double d;
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    A&lt;D-1&gt; a;
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>};
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>template &lt;&gt;
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>struct A&lt;1&gt;
-</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>{
-</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>    int d;
-</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>};
-</span></code></pre></div></li>
-<li>テンプレートクラスの静的なメンバ定数は<code>inline</code>にすると明示的に実体を定義せずに済む。</li>
-<li>メンバ変数に<code>const</code>を付けると<code>default</code>宣言されたムーブ代入演算子が削除される。</li>
-</ul>
-<h3 id="boost">Boost<a class="headerlink" href="#boost" title="Permanent link">&para;</a></h3>
-<ul>
-<li>Boost.TestをCMakeの<code>find_package</code>で見つけたい時は、<code>components</code>に<code>unit_test_framework</code>を指定しないといけない。</li>
-</ul>
-<h2 id="git">Git<a class="headerlink" href="#git" title="Permanent link">&para;</a></h2>
-<ul>
-<li>git push --force-with-lease</li>
-<li><code>git rm</code>でサブモジュールを消せる。</li>
-<li>fast-forwardでのマージを取り消したい時は、<code>git reflog --keep (ブランチ名)@{番号}</code>とすれば良い。</li>
-<li>最新のコミットしか要らないリポジトリをクローンしたい時、<code>--depth 1</code>をつければ良い。</li>
-<li>追跡していないファイルを消したい時は<code>git clean</code>。</li>
-<li>追跡しているファイルを全てステージングしたい時は<code>git add -u</code>。</li>
-</ul>
-<h2 id="petc">PETc<a class="headerlink" href="#petc" title="Permanent link">&para;</a></h2>
-<h3 id="petscのcの機能を使うには">PETScのC++の機能を使うには<a class="headerlink" href="#petscのcの機能を使うには" title="Permanent link">&para;</a></h3>
-<p>PETScには<code>PetscCallThrow</code>という、エラーが発生すると<code>std::runtime_error</code>を投げる関数がある。
-この関数は<code>PETSC_CLANGUAGE_CXX</code>というマクロが定義されていないと使えない。
-他にもC++用の関数があるかもしれないので定義することをお勧めする。
-ちなみに、ヘッダーをインクルードする時は<code>extern "C"</code>をつけない。</p>
-<h3 id="petscのconfigureの実行オプション">PETScのconfigureの実行オプション<a class="headerlink" href="#petscのconfigureの実行オプション" title="Permanent link">&para;</a></h3>
-<p><a href="https://petsc.org/release/install/install/">公式サイト</a>に用途に応じて使うオプションが示されているが、どんなオプションがあるのか示されていない。
-どんなオプションがあるのか調べるための一番手っ取り早い方法は、<a href="https://gitlab.com/petsc/petsc/-/tree/main/config/examples">CIのテスト</a>を見ることである。
-地道な方法はソースコードを見ることだが、<code>BuildSystem</code>があまりに複雑なので時間がかかるだろう。
-個人的には<a href="https://gitlab.com/petsc/petsc/-/tree/main/config/BuildSystem/config/packages">package</a>を見ると、ライブラリ毎のオプションがどういう風に使われているかわかるので、ここを見ることをお勧めする。</p>
-<h2 id="参考">参考<a class="headerlink" href="#参考" title="Permanent link">&para;</a></h2>
+<h1 id="ubuntu-2504上のradeonでrusticlを使う方法">Ubuntu 25.04上のRadeonでRusticlを使う方法<a class="headerlink" href="#ubuntu-2504上のradeonでrusticlを使う方法" title="Permanent link">&para;</a></h1>
+<p>RusticlはRustで実装されたオープンソースのOpenCL実装。
+OpenCL 3.0を実装していて、2025年8月現在だと活発に開発されている。</p>
 <ol>
-<li><a href="https://github.com/NVIDIA/thrust/releases/tag/1.9.4">Thrust 1.9.4 リリースノート</a></li>
-<li><a href="https://oneapi-src.github.io/oneTBB/main/tbb_userguide/Predefined_Node_Types.html">Predefined Node Types (oneTBB Documentation)</a></li>
-<li><a href="https://stackoverflow.com/questions/17041317/undo-git-fast-forward-merge">Undo git fast forward merge</a></li>
-<li><a href="https://wandbox.org/permlink/NiQFySYiXqODLaVr">テンプレート変数がラムダ関数にキャプチャされることによるエラーの例</a></li>
-<li><a href="https://wandbox.org/permlink/VXCWD2IQlLIdz5wT">再帰的な構造体の例</a></li>
+<li>MesaのOpenCL実装をインストール。ついでに<code>clinfo</code>も。
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>mesa-opencl-icd<span class="w"> </span>clinfo
+</span></code></pre></div></li>
+<li>インストールが正常に終わると、<code>clinfo</code>コマンドでOpenCL実装のリストとハードウェアのリストを見れるはず。</li>
+<li><code>~/.bashrc</code>に以下を書き込む<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># RusticlのOpenCL実装をすべてのRadeonデバイスに対して有効化</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">RUSTICL_ENABLE</span><span class="o">=</span>radeonsi
+</span></code></pre></div></li>
 </ol>
+<p>3を行わないとCloverという古いOpenCL実装が読み込まれてしまう。</p>
+<div class="footnote">
+<hr />
+<ol>
+<li id="fn:1">
+<p>https://docs.mesa3d.org/envvars.html#envvar-RUSTICL_ENABLE&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
 
 
 
@@ -700,7 +665,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="September 29, 2024 06:13:20 UTC">2024-09-29</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="August 16, 2025 08:20:12 UTC">2025-08-16</span>
   </span>
 
     
@@ -710,7 +675,7 @@
     <span class="md-icon" title="Created">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="October 2, 2023 02:10:59 UTC">2023-10-02</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="August 16, 2025 08:20:12 UTC">2025-08-16</span>
   </span>
 
     
