@@ -11,10 +11,12 @@
         <link rel="canonical" href="https://sukeya.github.io/articles/overview_of_RDNA4_hardware/">
       
       
+        <link rel="prev" href="../how_to_use_rusticl_with_radeon_on_ubuntu/">
+      
       
       
       <link rel="icon" href="../../img/blog_logo.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.17">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.18">
     
     
       
@@ -23,6 +25,9 @@
     
     
       <link rel="stylesheet" href="../../assets/stylesheets/main.7e37652d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
       
       
 
@@ -60,7 +65,14 @@
     body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color);}</style> <script src="../../assets/javascripts/glightbox.min.js"></script></head>
   
   
-    <body dir="ltr">
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -111,6 +123,42 @@
         </div>
       </div>
     </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9zM20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12zm-9.15 3.96h2.3L12 9z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to system preference"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
     
     
       <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
@@ -318,8 +366,10 @@
       
   
   
+    
   
   
+  
     
     
       
@@ -339,15 +389,17 @@
       
         
       
+        
+      
     
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
           <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
@@ -363,7 +415,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             記事
@@ -554,6 +606,107 @@
 
               
             
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    AMD RDNA4のハードウェアの概要
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    AMD RDNA4のハードウェアの概要
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#タスクの単位" class="md-nav__link">
+    <span class="md-ellipsis">
+      タスクの単位
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#compute-unitcu" class="md-nav__link">
+    <span class="md-ellipsis">
+      Compute Unit(CU)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#local-data-sharelds" class="md-nav__link">
+    <span class="md-ellipsis">
+      Local Data Share(LDS)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#work-group" class="md-nav__link">
+    <span class="md-ellipsis">
+      Work-group
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -608,29 +761,39 @@
 
 
 <h1 id="amd-rdna4のハードウェアの概要">AMD RDNA4のハードウェアの概要<a class="headerlink" href="#amd-rdna4のハードウェアの概要" title="Permanent link">&para;</a></h1>
-<p>この記事は<a href="https://www.amd.com/content/dam/amd/en/documents/radeon-tech-docs/instruction-set-architectures/rdna4-instruction-set-architecture.pdf">AMD "RDNA4" Instruction Set Architecture Reference Guide</a>の1章1.2節「ハードウェアの概要」の自分用のメモ書きです。</p>
-<h2 id="用語">用語<a class="headerlink" href="#用語" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th>用語</th>
-<th>説明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Work-group Processor(WGP)</td>
-<td>スカラーまたはベクターALU、メモリ、LDS、スカラーキャッシュを含む、シェーダー計算ハードウェアの最小単位。ある文脈では、"Double Compute Unit"や"Compute Unit Pair"と呼ばれる</td>
-</tr>
-</tbody>
-</table>
-<h2 id="_1"><a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>この記事は<a href="https://www.amd.com/content/dam/amd/en/documents/radeon-tech-docs/instruction-set-architectures/rdna4-instruction-set-architecture.pdf">AMD "RDNA4" Instruction Set Architecture Reference Guide</a>の1章1.2節「ハードウェアの概要」に基づいて自分が理解できるように書き直した。</p>
+<p>GPGPUに必要な事柄に絞って解説する。
+RDNA4ではプロセッサーはWork-Group Processor(WGP)と呼ばれる、メモリや演算装置を含んだハードウェアからなる。
+各WGPは互いに独立に動作する。
+WGPの内部について詳しく見ていく。</p>
 <figure>
-  <a class="glightbox" href="../img/overview_of_RDNA4_hardware/overview.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="AMD RDNA4のブロック図" src="../img/overview_of_RDNA4_hardware/overview.png" width="auto" /></a>
+  <a class="glightbox" href="../img/overview_of_RDNA4_hardware/shared_memory_hierarchy.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="共有メモリ階層" src="../img/overview_of_RDNA4_hardware/shared_memory_hierarchy.png" width="auto" /></a>
 <br />
-<figcaption>AMD RDNA4のブロック図</figcaption>
+<figcaption>共有メモリ階層</figcaption>
 </figure>
-<h2 id="work-group-processor">Work-Group Processor<a class="headerlink" href="#work-group-processor" title="Permanent link">&para;</a></h2>
+<h2 id="タスクの単位">タスクの単位<a class="headerlink" href="#タスクの単位" title="Permanent link">&para;</a></h2>
+<p>AMDとNVIDIAでは、用語が異なるため整理する。
+AMDでは仕事の最小分割単位をwork-itemと呼び、CUDAでのthreadに相当する。
+また、単一のRDNA4プロセッサー上で並列に実行できる32個または64個のwork-itemの集まりをWaveと呼ぶ。</p>
+<h2 id="compute-unitcu">Compute Unit(CU)<a class="headerlink" href="#compute-unitcu" title="Permanent link">&para;</a></h2>
+<p>WGPの内部には2つのCompute Unit(CU)があり、1つのCUには2つのSIMDがある。
+SIMDには以下のハードウェアがある:
+- 1 x Scalar ALU (SALU):  wave毎に1つの値を操作し、すべての制御フロー(if/else、ループ)を管理する。
+- 32 x Vector ALU (VALU):  各work-item上で同じ算術操作を行う</p>
+<p>さらに、これらのALUにはデータとアドレスを保存できるGeneral Purpose Register(GPR)があり、機能が異なる。
+- SALU: 各wave内のwork-itemに共有される、32ビットのレジスター(Scalar GPR, SGPR)が128バイト x 32個ある。
+- VALU: wave内の各work-itemが持つ32ビットのレジスター(Vector GPR, VGPR)が1536バイト x 32個ある。</p>
+<p>また、条件分岐をサポートするために、各waveは各work-itemがアクティブか眠っているかを示すEXECuteマスクを持っている。
+アクティブなwork-itemはベクター命令をを実行し、眠っているものはNOPとして命令を実行する。
+EXECマスクはSALUまたはVALUの比較によって、いつでも書き換えられる。</p>
+<h2 id="local-data-sharelds">Local Data Share(LDS)<a class="headerlink" href="#local-data-sharelds" title="Permanent link">&para;</a></h2>
+<p>2つのCU間でデータを共有できるメモリがあり、これをLocal Data Share(LDS)という。
+LDSはWGP毎に1つあり、大きさが128kBで低レイテンシーでアクセスできる。
+LDSは4バイトの512エントリーを持つ、64個のバンクに分割されていて、順不同なアトミック命令を速くするために64個の整数アトミックユニットを含んでいる。</p>
+<h2 id="work-group">Work-group<a class="headerlink" href="#work-group" title="Permanent link">&para;</a></h2>
+<p>キャッシュまたはLDSを通してデータを共有したり、バリアで同期できるwaveの集まりをWork-groupと呼ぶ。
+work-group内のwaveはすべて同じWGP上で動く。</p>
+<p>work-groupは1つあたり最大64kBのLDSのメモリを確保できる。</p>
 
 
 
@@ -653,7 +816,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 29, 2025 16:02:55 UTC">2025-06-29</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="August 31, 2025 16:20:40 UTC">2025-08-31</span>
   </span>
 
     
