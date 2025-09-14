@@ -16,6 +16,7 @@ WGPの内部について詳しく見ていく。
 AMDとNVIDIAでは、用語が異なるため整理する。
 AMDでは仕事の最小分割単位をwork-itemと呼び、CUDAでのthreadに相当する。
 また、単一のRDNA4プロセッサー上で並列に実行できる32個または64個のwork-itemの集まりをWave(またはWavefront)と呼ぶ。
+後方互換性のために64個版のWaveがサポートされており、2サイクルで実行される。
 
 ## Compute Unit(CU)
 WGPの内部には2つのCompute Unit(CU)があり、1つのCUには2つのSIMDがある。
