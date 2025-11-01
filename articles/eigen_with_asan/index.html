@@ -5,13 +5,11 @@
       
       
       
-        <link rel="canonical" href="https://sukeya.github.io/articles/overview_of_RDNA4_hardware/">
+        <link rel="canonical" href="https://sukeya.github.io/articles/eigen_with_asan/">
       
       
-        <link rel="prev" href="../how_to_use_rusticl_with_radeon_on_ubuntu/">
+        <link rel="prev" href="../overview_of_RDNA4_hardware/">
       
-      
-        <link rel="next" href="../eigen_with_asan/">
       
       
       <link rel="icon" href="../../img/blog_logo.png">
@@ -19,7 +17,7 @@
     
     
       
-        <title>AMD RDNA4のハードウェアの概要 - 私の愛した数式</title>
+        <title>Address sanitizerとEigenを一緒に使うとき - 私の愛した数式</title>
       
     
     
@@ -81,7 +79,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#amd-rdna4のハードウェアの概要" class="md-skip">
+        <a href="#address-sanitizerとeigenを一緒に使うとき" class="md-skip">
           Skip to content
         </a>
       
@@ -117,7 +115,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              AMD RDNA4のハードウェアの概要
+              Address sanitizerとEigenを一緒に使うとき
             
           </span>
         </div>
@@ -612,6 +610,29 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../overview_of_RDNA4_hardware/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    AMD RDNA4のハードウェアの概要
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -629,7 +650,7 @@
   
   
   <span class="md-ellipsis">
-    AMD RDNA4のハードウェアの概要
+    Address sanitizerとEigenを一緒に使うとき
     
   </span>
   
@@ -642,7 +663,7 @@
   
   
   <span class="md-ellipsis">
-    AMD RDNA4のハードウェアの概要
+    Address sanitizerとEigenを一緒に使うとき
     
   </span>
   
@@ -665,36 +686,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#タスクの単位" class="md-nav__link">
+  <a href="#理由" class="md-nav__link">
     <span class="md-ellipsis">
-      タスクの単位
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#compute-unitcu" class="md-nav__link">
-    <span class="md-ellipsis">
-      Compute Unit(CU)
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#local-data-sharelds" class="md-nav__link">
-    <span class="md-ellipsis">
-      Local Data Share(LDS)
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#work-group" class="md-nav__link">
-    <span class="md-ellipsis">
-      Work-group
+      理由
     </span>
   </a>
   
@@ -713,29 +707,6 @@
   
 </nav>
       
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../eigen_with_asan/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Address sanitizerとEigenを一緒に使うとき
-    
-  </span>
-  
-
-      </a>
     </li>
   
 
@@ -786,7 +757,7 @@
 
 
   
-    <a href="https://github.com/sukeya/sukeya.github.io/blob/main/docs/articles/overview_of_RDNA4_hardware.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+    <a href="https://github.com/sukeya/sukeya.github.io/blob/main/docs/articles/eigen_with_asan.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"></path></svg>
     </a>
@@ -794,51 +765,18 @@
   
 
 
-<h1 id="amd-rdna4のハードウェアの概要">AMD RDNA4のハードウェアの概要<a class="headerlink" href="#amd-rdna4のハードウェアの概要" title="Permanent link">¶</a></h1>
-<p>この記事は<a href="https://www.amd.com/content/dam/amd/en/documents/radeon-tech-docs/instruction-set-architectures/rdna4-instruction-set-architecture.pdf">AMD "RDNA4" Instruction Set Architecture Reference Guide</a>の1章1.2節「ハードウェアの概要」に基づいて自分が理解できるように書き直した。</p>
-<p>GPGPUに必要な事柄に絞って解説する。
-RDNA4ではプロセッサーはWork-Group Processor(WGP)と呼ばれる、メモリや演算装置を含んだハードウェアからなる。
-各WGPは互いに独立に動作する。
-WGPの内部について詳しく見ていく。</p>
-<figure>
-  <a class="glightbox" data-type="image" data-width="auto" data-height="auto" href="../img/overview_of_RDNA4_hardware/shared_memory_hierarchy.png" data-desc-position="bottom"><img alt="共有メモリ階層" src="../img/overview_of_RDNA4_hardware/shared_memory_hierarchy.png" width="auto"></a>
-<br>
-<figcaption>共有メモリ階層</figcaption>
-</figure>
-<h2 id="タスクの単位">タスクの単位<a class="headerlink" href="#タスクの単位" title="Permanent link">¶</a></h2>
-<p>AMDとNVIDIAでは、用語が異なるため整理する。
-AMDでは仕事の最小分割単位をwork-itemと呼び、CUDAでのthreadに相当する。
-また、単一のRDNA4プロセッサー上で並列に実行できる32個または64個のwork-itemの集まりをWave(またはWavefront)と呼ぶ。
-後方互換性のために64個版のWaveがサポートされており、2サイクルで実行される。</p>
-<h2 id="compute-unitcu">Compute Unit(CU)<a class="headerlink" href="#compute-unitcu" title="Permanent link">¶</a></h2>
-<p>WGPの内部には2つのCompute Unit(CU)があり、1つのCUには2つのSIMDがある。
-SIMDには以下のハードウェアがある:</p>
-<ul>
-<li>1 x Scalar ALU (SALU):  wave毎に1つの値を操作し、すべての制御フロー(if/else、ループ)を管理する。</li>
-<li>32 x Vector ALU (VALU):  各work-item上で同じ算術操作を行う</li>
-</ul>
-<p>さらに、これらのALUにはデータとアドレスを保存できるGeneral Purpose Register(GPR)があり、機能が異なる。</p>
-<ul>
-<li>SALU: 各wave内のwork-itemに共有される、4バイト単位のレジスター(Scalar GPR, SGPR)が128バイト x 32個ある。</li>
-<li>VALU: wave内の各work-itemが持つ、4バイト単位のレジスター(Vector GPR, VGPR)が1536バイト x 32個ある。waveが32個なら16ブロック、64個なら8ブロック毎に確保される(つまり512 x 4バイト単位で確保される)。</li>
-</ul>
-<p>VGPRはWaveの各work-itemに必要な分だけレジスターを確保する。
-また、条件分岐をサポートするために、各waveは各work-itemがアクティブか眠っているかを示すEXECuteマスクを持っている。
-アクティブなwork-itemはベクター命令をを実行し、眠っているものはNOPとして命令を実行する。
-EXECマスクはSALUまたはVALUの比較によって、いつでも書き換えられる。</p>
-<h2 id="local-data-sharelds">Local Data Share(LDS)<a class="headerlink" href="#local-data-sharelds" title="Permanent link">¶</a></h2>
-<p>2つのCU間でデータを共有できるメモリがあり、これをLocal Data Share(LDS)という。
-LDSはWGP毎に1つあり、大きさが128kBで低レイテンシーでアクセスできる。
-LDSは4バイトの512エントリーを持つ、64個のバンクに分割されていて、順不同なアトミック命令を速くするために64個の整数アトミックユニットを含んでいる。</p>
-<h2 id="work-group">Work-group<a class="headerlink" href="#work-group" title="Permanent link">¶</a></h2>
-<p>キャッシュまたはLDSを通してデータを共有したり、バリアで同期できるwaveの集まりをWork-groupと呼ぶ。
-work-group内のwaveはすべて同じWGP上で動く。</p>
-<p>work-groupは1つあたり最大64kBのLDSのメモリを確保できる。</p>
+<h1 id="address-sanitizerとeigenを一緒に使うとき">Address sanitizerとEigenを一緒に使うとき<a class="headerlink" href="#address-sanitizerとeigenを一緒に使うとき" title="Permanent link">¶</a></h1>
+<p><code>EIGEN_MAX_ALIGN_BYTES</code>マクロを<code>0</code>と定義すること。</p>
+<h2 id="理由">理由<a class="headerlink" href="#理由" title="Permanent link">¶</a></h2>
+<p><code>Eigen</code>では、<code>EIGEN_MAX_ALIGN_BYTES</code>マクロと<code>EIGEN_MAX_STATIC_ALIGN_BYTES</code>マクロによって、それぞれ動的または静的に確保されたデータのメモリアラインメントの最大値を指定することができる。
+<code>EIGEN_MAX_STATIC_ALIGN_BYTES &lt;= EIGEN_MAX_ALIGN_BYTES</code>でなければならず、成り立たない場合は自動的に<code>EIGEN_MAX_STATIC_ALIGN_BYTES = EIGEN_MAX_ALIGN_BYTES</code>とされる。
+もし、どちらも指定されなければアーキテクチャやコンパイラ、OSによって自動的に計算される。</p>
+<p><code>Eigen</code>はバイナリ互換性のためにベクトル化が無効化されていても強制的にメモリアラインメントを指定するため、Address sanitizerと一緒に使う時は<code>0</code>を指定してアラインメントを無効にする必要がある。</p>
 <h2 id="参考">参考<a class="headerlink" href="#参考" title="Permanent link">¶</a></h2>
-<ol>
-<li><a href="https://www.amd.com/content/dam/amd/en/documents/radeon-tech-docs/instruction-set-architectures/rdna4-instruction-set-architecture.pdf">AMD "RDNA4" Instruction Set Architecture Reference Guide</a></li>
-<li><a href="https://qiita.com/Koya_/items/28446be12252edc06137">GPUアーキテクチャとGPUプログラミングの話が面白かった</a></li>
-</ol>
+<ul>
+<li><a href="https://libeigen.gitlab.io/eigen/docs-5.0/TopicPreprocessorDirectives.html">Preprocessor directives</a></li>
+<li><a href="https://gitlab.com/libeigen/eigen/-/blob/master/Eigen/src/Core/util/ConfigureVectorization.h">Eigen/src/Core/util/ConfigureVectorization.h</a></li>
+</ul>
 
 
 
@@ -861,7 +799,7 @@ work-group内のwaveはすべて同じWGP上で動く。</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"></path></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="September 14, 2025 09:10:49 UTC">2025-09-14</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="November 1, 2025 08:40:42 UTC">2025-11-01</span>
   </span>
 
     
@@ -871,7 +809,7 @@ work-group内のwaveはすべて同じWGP上で動く。</p>
     <span class="md-icon" title="Created">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"></path></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="June 29, 2025 16:02:55 UTC">2025-06-29</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="November 1, 2025 08:40:42 UTC">2025-11-01</span>
   </span>
 
     
