@@ -1,4 +1,4 @@
-# Expression templatesについて
+# Expression templatesのダングリング対策について
 
 本記事では、expression templatesの概要を述べ、欠点の一つであるダングリングする可能性に対処する方法を示します。
 

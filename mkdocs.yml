@@ -18,7 +18,7 @@ nav:
     - 'Ubuntu 25.04上のRadeonでRusticlを使う方法': ./articles/how_to_use_rusticl_with_radeon_on_ubuntu.md
     - 'AMD RDNA4のハードウェアの概要': ./articles/overview_of_RDNA4_hardware.md
     - 'Address sanitizerとEigenを一緒に使うとき': ./articles/eigen_with_asan.md
-    - 'Expression templatesについて': ./articles/expression_templates.md
+    - 'Expression templatesのダングリング対策について': ./articles/expression_templates.md
   - 'CUDAプログラミングガイド 日本語解説': /cuda_programming_guide_jp/
 not_in_nav: |
   thrust.md
