@@ -27,8 +27,8 @@ SIMDには以下のハードウェアがある:
 
 さらに、これらのALUにはデータとアドレスを保存できるGeneral Purpose Register(GPR)があり、機能が異なる。
 
-- SALU: 各wave内のwork-itemに共有される、4バイト単位のレジスター(Scalar GPR, SGPR)が128バイト x 32個ある。
-- VALU: wave内の各work-itemが持つ、4バイト単位のレジスター(Vector GPR, VGPR)が1536バイト x 32個ある。waveが32個なら16ブロック、64個なら8ブロック毎に確保される(つまり512 x 4バイト単位で確保される)。
+- VALU: 1536本のVGPRを持ち、各VGPRはwave内の各lane(work-item)に対応する32bit値を保持する。そのため、Wave32なら1VGPR=128バイト、Wave64なら論理的には256バイト相当になる。
+- SALU: wave全体で共有される32bitスカラレジスタ(SGPR)を使用する。SGPRはVGPRと異なりlaneごとの値を持たず、1 SGPR = 4バイトである。
 
 VGPRはWaveの各work-itemに必要な分だけレジスターを確保する。
 また、条件分岐をサポートするために、各waveは各work-itemがアクティブか眠っているかを示すEXECuteマスクを持っている。
